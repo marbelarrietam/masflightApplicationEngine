@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "importHelpers": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -9,13 +10,23 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports":true,
     "target": "es5",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2018",
+      "es2017",
       "dom"
     ]
-  }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "files": [
+      "src/app/app.module.ts",
+      "node_modules/jqwidgets-scripts/jqwidgets-ts/angular_jqxbargauge.ts",
+      "node_modules/jqwidgets-scripts/jqwidgets-ts/angular_jqxgrid.ts",
+      "node_modules/jqwidgets-scripts/jqwidgets-ts/angular_jqxtreegrid.ts"
+  ]
 }

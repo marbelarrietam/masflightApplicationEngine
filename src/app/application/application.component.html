@@ -1,0 +1,31 @@
+<!--Header-->
+<div *ngIf="!globals.isFullscreen" class="msf-menu-header">
+    <div class="msf-menu-header-image-container">
+        <img (click)="goHome()" style="cursor:pointer;" src="../../assets/images/logo_global_peqe.png" class="msf-menu-logo">
+        <img src="../../assets/images/ajustes.png" class="msf-menu-ajustes-icon">
+    </div>
+    <div class="msf-header-icons">
+        <div *ngIf="globals.currentUser" style="margin-right:5px;" class="msf-inline msf-vertical-middle">
+            <button mat-icon-button style="margin-right: 70px" [matMenuTriggerFor]="userMenu">
+                {{globals.currentUser}}
+                <mat-icon>person</mat-icon>
+            </button>
+        </div>
+        <mat-menu #userMenu="matMenu">
+            <button mat-menu-item (click)="logOut()">
+                    <mat-icon>settings</mat-icon>
+                    <span>Log out</span>
+                </button>
+        </mat-menu>
+
+    </div>
+</div>
+
+<!--body-->
+<div class="msf-menu-body">
+
+
+    <!--container-->
+    <div>
+
+    </div>
