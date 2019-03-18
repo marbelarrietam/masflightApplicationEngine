@@ -7,6 +7,8 @@ import { Columns } from '../model/Columns';
 import { ApplicationService } from '../services/application.service';
 import { Globals } from '../globals/Globals';
 import { Functions } from '../model/Functions';
+import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+import 'codemirror/mode/sql/sql';
 
 
 @Component({
@@ -18,6 +20,7 @@ import { Functions } from '../model/Functions';
 
 
 export class WebServicesComponent implements OnInit {
+  @ViewChild('codeEditor') codeEditor: CodemirrorComponent;
   public searchText : string;
   public searchView : string;
   public searchColumn : string;
@@ -31,7 +34,7 @@ export class WebServicesComponent implements OnInit {
   selectSentence : string;
   selectedColumns : string;
   fromSentence : string;
-  whereSentence : string;
+  whereSentence : string = "id=:id_airline and name=:name and group='a' order by name";
   groupBySentence : string;
   dataSourceForm = new FormGroup({
     tablesValidator:new FormControl("name", [Validators.required]),
@@ -46,173 +49,10 @@ export class WebServicesComponent implements OnInit {
   selectTables: QueryWS = new QueryWS();
   selectViews: QueryWS = new QueryWS();
   selectconcat: QueryWS = new QueryWS();
-  tables: any[];
+  tables: any[] = [];
 
-  views: any[] =[
-    {
-       name:"View_1",
-       columns:[
-          {
-             name:"id",
-             type:"",
-             functions:{
+  views: any[] =[];
 
-             }
-          },
-          {
-             name:"label",
-             type:"",
-             functions:{
-
-             }
-          },
-          {
-             name:"year",
-             type:"",
-             functions:{
-
-             }
-          }
-       ]
-    },
-    {
-       name:"View_2",
-       columns:[
-          {
-             name:"id",
-             type:"",
-             functions:{
-
-             }
-          },
-          {
-             name:"label",
-             type:"",
-             functions:{
-
-             }
-          },
-          {
-             name:"year",
-             type:"",
-             functions:{
-
-             }
-          }
-       ]
-    },
-    {
-       name:"View_3",
-       columns:[
-          {
-             name:"id",
-             type:"",
-             functions:{
-
-             }
-          },
-          {
-             name:"label",
-             type:"",
-             functions:{
-
-             }
-          },
-          {
-             name:"year",
-             type:"",
-             functions:{
-
-             }
-          }
-       ]
-    },
-    {
-       name:"View_4",
-       columns:[
-          {
-             name:"id",
-             type:"",
-             functions:{
-
-             }
-          },
-          {
-             name:"label",
-             type:"",
-             functions:{
-
-             }
-          },
-          {
-             name:"year",
-             type:"",
-             functions:{
-
-             }
-          }
-       ]
-    },
-    {
-       name:"View_5",
-       columns:[
-          {
-             name:"id",
-             type:"",
-             functions:{
-
-             }
-          },
-          {
-             name:"label",
-             type:"",
-             functions:{
-
-             }
-          },
-          {
-             name:"year",
-             type:"",
-             functions:{
-
-             }
-          }
-       ]
-    },
-    {
-       name:"View_6",
-       columns:[
-          {
-             name:"id",
-             type:"",
-             functions:{
-
-             }
-          },
-          {
-             name:"label",
-             type:"",
-             functions:{
-
-             }
-          },
-          {
-             name:"year",
-             type:"",
-             functions:{
-
-             }
-          }
-       ]
-    },
-
- ]
-
-
-/* getValue() {
-  console.log(this.editor.value)
-  console.log(eval(this.editor.value));
-} */
   constructor(private router: Router, public globals: Globals, private service: ApplicationService) { }
 
   ngOnInit() {
@@ -225,7 +65,13 @@ export class WebServicesComponent implements OnInit {
   }
 
   handlerSuccessTables(_this, data){
-    _this.tables = data;
+    for (let i = 0; i<data.length;i++){
+      if (data[i].type == "table"){
+        _this.tables.push(data[i]);
+      }else if (data[i].type == "view"){
+        _this.views.push(data[i]);
+      }
+    }
     _this.globals.isLoading = false;
   }
 
@@ -286,7 +132,9 @@ export class WebServicesComponent implements OnInit {
     let selectedTables = [];
     for (let i = 0; i <this.selectconcat.tables.length; i++){
       let table = this.selectconcat.tables[i];
+      if(table.alias){
       selectedTables.push(table.name+' '+table.alias);
+      }else{selectedTables.push(table.name+' '+table.alias);}
       for(let j= 0; j<table.columns.length;j++){
         let column = table.columns[j];
         if(column.groupBy){
@@ -295,7 +143,7 @@ export class WebServicesComponent implements OnInit {
         if(column.selected){
           let valueAux
           if(!column.groupBy){
-            valueAux=table.alias+'.'+column.name;
+            table.alias ? valueAux=table.alias+'.'+column.name : valueAux=column.name;
           }else{valueAux=column.name}
         if(column.type=='value'){
           let value = valueAux;
@@ -378,6 +226,18 @@ export class WebServicesComponent implements OnInit {
     if(item.type=="aggregate"){
       item.functions = new Functions();
     }
+  }
+
+  options = {
+    lineNumbers: true,
+    theme: 'material',
+    mode: { name: 'text/x-mariadb' },
+    lineSeparator: 'string'
+  };
+
+  cursorPos: { line: number, ch: number } = { line: 0, ch: 0 };
+  cursorMoved() {
+    this.cursorPos = (this.codeEditor.codeMirror as any).getCursor();
   }
 
   addNewArgument(){

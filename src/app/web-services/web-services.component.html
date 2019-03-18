@@ -68,10 +68,6 @@
                     <div style="margin-top: 30px;">
                         <span style="color:#01abec;">Select View(s)</span>
                         <div class="selected-containers">
-                            <!-- <div style="display: flex; justify-content: flex-start" class="selected-objects" *ngFor="let view of selectViews.tables">
-                                    <span>{{view.name}} </span>
-                                    <button style="background-color: transparent; border: none; color:white" (click)="deleteFromSelectView(view)">x</button>
-                                </div> -->
                             <div style="margin-top:10px; width: 100%;" *ngFor="let view of selectViews.tables">
                                 <div style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 30px; line-height: 30px; color: white; font-size:12px;">
                                     <div style="width:50%;; margin-right: 10px;">{{view.name}}</div>
@@ -189,19 +185,8 @@
                 <div style="margin-bottom: 5px;"><span style="color:#01abec">Select </span>{{selectSentence}}</div>
                 <div style="margin-bottom: 5px;"><span style="color:#01abec">From </span>{{fromSentence}}</div>
                 <div style="margin-bottom: 5px;"><span style="color:#01abec">Where: </span></div>
-                <mat-form-field>
-                    <textarea matInput [(ngModel)]="whereSentence"></textarea>
-                </mat-form-field>
-                <!-- <div ace-editor
-                [(text)]="text"
-                [mode]="'sql'"
-                [theme]="'eclipse'"
-                [options]="options"
-                [readOnly]="false"
-                [autoUpdateContent]="true"
-                [durationBeforeCallback]="1000"
-                (textChanged)="onChange($event)"
-                style="min-height: 200px; width:100%; overflow: auto;"></div> -->
+                <ngx-codemirror #codeEditor [(ngModel)]="whereSentence" [options]="options" (cursorActivity)="cursorMoved()">
+                </ngx-codemirror>
                 <div style="margin-top:20px;overflow: hidden; display: flex; flex-direction: row; flex-flow: row wrap">
                     <div style="width:60%; margin-right: 3%">
                         <div class="titles-large">Table(s)</div>

@@ -75,7 +75,7 @@ export class LoginScreenComponent implements OnInit {
         _this.username = response.username;
         _this.authenticated = true;
       }
-      _this.router.navigate(['/welcome']);
+      _this.router.navigate(['/application']);
     } else {
       _this.utils.showAlert ('warning', data.errorMessage);
       _this.credentials = {};
@@ -123,7 +123,7 @@ export class LoginScreenComponent implements OnInit {
 
   handleLogin(_this,data){
     _this.loggedIn = true;
-    _this.router.navigate(["/welcome"]);
+    _this.router.navigate(["/application"]);
   }
   errorLogin(_this,result){
     console.log(result);
