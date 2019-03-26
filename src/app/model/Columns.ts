@@ -2,15 +2,17 @@ import { Functions } from './Functions';
 
 export class Columns{
   "name": string;
-  "type": string;
+  "typePresentation": string;
   "functions": Functions;
   "selected": boolean;
-  "groupBy": boolean;
+  "groupBy": number;
+  "aggregationFunction": string;
 
   constructor(){
     this.name = '';
-    this.type = '';
-    this.groupBy = false;
+    this.aggregationFunction = '';
+    this.typePresentation = 'value';
+    this.groupBy = 0;
     this.functions = new Functions();
   }
 }

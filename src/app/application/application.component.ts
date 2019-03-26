@@ -45,11 +45,15 @@ export class ApplicationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.validateAdmin();
     this.globals.clearVariables();
+    this.globals.currentApplication = 'create';
 
   }
 
-
+  getOption(option: string){
+    this.globals.currentApplication = option;
+  }
   validateAdmin(){
     this.service.getUserLoggedin(this, this.handleLogin, this.errorLogin);
   }

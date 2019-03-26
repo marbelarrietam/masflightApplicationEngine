@@ -68,6 +68,7 @@ div {
     overflow-y: scroll;
     margin-top: 10px;
     width: 90%;
+    padding-left: 10px;
     background-color: #1e1e1e;
 }
 
@@ -78,9 +79,6 @@ div {
     flex-wrap: wrap;
 }
 
-.container-arg::-webkit-scrollbar {
-    display: none;
-}
 
 .scroll-type {
     display: block;
@@ -89,9 +87,6 @@ div {
     max-height: 110px;
 }
 
-.scroll-type::-webkit-scrollbar {
-    display: none;
-}
 
 .selected-objects {
     background-color: #333333;
@@ -128,8 +123,12 @@ mat-select {
     color: white;
 }
 
-.mat-form-field-appearance-legacy .mat-form-field-underline {
+.box-container .mat-form-field-appearance-legacry .mat-form-field-underline {
     display: none;
+}
+
+.search-input .mat-form-field-appearance-legacry .mat-form-field-underline {
+  display: none;
 }
 
 .mat-form-field {
@@ -173,7 +172,8 @@ mat-select {
 }
 
 .argument-container {
-    padding-bottom: 80px;
+    padding-bottom: 15px;
+    margin-top: 25px;
 }
 
 .mat-radio-inner-circle {

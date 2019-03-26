@@ -42,6 +42,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { WebServicesComponent } from './web-services/web-services.component';
 import { FilterPipe } from './web-services/pipe-filter';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+import { AllWebServicesComponent } from './all-web-services/all-web-services.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { CodemirrorModule } from '@ctrl/ngx-codemirror';
     jqxTreeGridComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    MsfLoadingComponent
+    MsfLoadingComponent,
+    AllWebServicesComponent
   ],
   imports: [
     BrowserModule,

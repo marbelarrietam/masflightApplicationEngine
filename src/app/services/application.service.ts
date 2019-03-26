@@ -16,8 +16,8 @@ export class ApplicationService {
 
   utils: Utils;
 
-  // host = "http://localhost:8887";
-  host = "";
+  host = "http://localhost:8889";
+  //host = "";
 
   //host1 = "http://localhost:8886";
   host1 = "http://69.64.45.220:8886";
@@ -27,6 +27,13 @@ export class ApplicationService {
     this.host = this.globals.baseUrl;
     this.host1 = this.globals.baseUrl2;
   }
+
+  checkWSName(_this,successHandler,errorHandler,name){
+    let url= this.globals.baseUrl+'/checkName?name='+name;
+    // let url='http://localhost:8887/checkEmail?email='+email;
+    this.http.get(_this,url,successHandler,errorHandler,null);
+  }
+
 
   getTracking(_this, successHandler, errorHandler) {
     let params = this.utils.getUrlParameters(_this.globals.currentOption);
@@ -306,6 +313,19 @@ export class ApplicationService {
     let url = this.host + "/getMetaDataTables";
     this.http.get(_this, url, handlerSucess, handlerError, null);
   }
+
+  getWebServices(_this, handlerSucess, handlerError){
+    _this.globals.isLoading = true;
+    let url = this.host + "/getWebServices";
+    this.http.get(_this, url, handlerSucess, handlerError, null);
+  }
+
+  saveWebServices(_this, data, handlerSuccess, handlerError){
+    _this.globals.isLoading = true;
+    let url = this.host + "/saveWebServices";
+    this.http.post(_this, url, data, handlerSuccess, handlerError);
+  }
+
 
 
 }

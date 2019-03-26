@@ -1,5 +1,4 @@
 export class Functions {
-  "name": string;
   "sum":boolean;
   "max":boolean;
   "min":boolean;
@@ -8,7 +7,6 @@ export class Functions {
   "std":boolean;
 
   constructor(){
-    this.name = '';
     this.sum=false;
     this.max=false;
     this.min=false;

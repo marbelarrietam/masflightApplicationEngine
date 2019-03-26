@@ -1,11 +1,11 @@
 export class QueryArgument {
-  "name":string;
+  "label":string;
   "type":string;
   "required":boolean;
 
   constructor(){
-    this.name = '';
-    this.type = '';
-    this.required = false;
+    this.label = '';
+    this.type = 'string';
+    this.required = true;
   }
 }
