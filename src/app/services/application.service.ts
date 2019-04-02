@@ -327,5 +327,14 @@ export class ApplicationService {
   }
 
 
+  deleteWebServices(_this, id, handlerSuccess, handlerError){
+    let url = this.host + "/deleteWebServices?id="+id;
+    this.http.post(_this, url, id, handlerSuccess, handlerError);
+  }
+
+  testWebService(_this, name, data, handlerSuccess, handlerError){
+    let url = this.host + "/engineWebServices/"+name;
+    this.http.post(_this,url,data,handlerSuccess,handlerError);
+  }
 
 }

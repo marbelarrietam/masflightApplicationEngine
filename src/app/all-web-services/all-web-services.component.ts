@@ -4,6 +4,7 @@ import { ApplicationService } from "../services/application.service";
 import { Globals } from "../globals/Globals";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { MessageComponent } from '../message/message.component';
 
 @Component({
   selector: 'app-all-web-services',
@@ -66,5 +67,28 @@ export class AllWebServicesComponent implements OnInit {
     }
 
     return arrayTables.join(", ");
+  }
+  testWebService(element){
+    this.globals.currentWebService = element;
+    this.globals.currentApplication = 'test';
+  }
+
+  edit(element){
+    console.log(element);
+    this.globals.currentWebService = element;
+    this.globals.currentApplication = 'create';
+
+  }
+
+  deleteWebServices(element){
+    this.globals.currentWebService = element;;
+    let id = this.globals.currentWebService.id;
+    this.service.deleteWebServices(this, id, this.handleSuccessDelete, this.handlerError);
+  }
+
+  handleSuccessDelete(_this, data){
+    let index = _this.webServices.findIndex(d => d === _this.globals.currentWebService);
+    _this.webServices.splice(index, 1);
+    _this.dataSource = new MatTableDataSource(_this.webServices);
   }
 }

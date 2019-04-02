@@ -3,6 +3,7 @@ import {Option} from '../model/Option';
 import { MatSort, MatTab } from '@angular/material';
 import { Observable } from 'rxjs';
 import { AmChart, AmChartsService } from '@amcharts/amcharts3-angular';
+import { QueryWS } from '../model/QueryWS';
 @Injectable()
 export class Globals {
   currentOption: any;
@@ -30,6 +31,7 @@ export class Globals {
   moreResults : boolean = false;
   moreResultsBtn : boolean = true;
   currentApplication : any;
+  currentWebService: QueryWS;
   minDate:any;
   maxDate:any;
   welcome:any;

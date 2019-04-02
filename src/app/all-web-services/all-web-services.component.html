@@ -1,6 +1,6 @@
 <div class="general-container">
     <div class="msf-menu-header" style="height: 30px; display: flex; flex-direction: row; flex-wrap: wrap">
-        <div class="ws-title" style="flex: 1;">Web Services</div>
+        <div class="ws-title" style="flex: 1;">Web Services Summary</div>
     </div>
     <mat-card class="msf-container-table msf-center-container">
         <div style="display: flex; flex-direction: column;">
@@ -31,8 +31,13 @@
                 </ng-container>
 
                 <ng-container matColumnDef="columnEdit">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Edition</th>
-                    <td mat-cell *matCellDef="let element"> edit</td>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                    <td mat-cell style="text-align: center" *matCellDef="let element">
+                        <button style="margin-right: 5px" class="button-table" mat-flat-button class="flat-button button-publish" (click)="testWebService(element)">Test</button>
+                        <button style="margin-right: 5px" class="button-table" mat-flat-button class="flat-button button-publish" (click)="edit(element)">Edit</button>
+                        <button class="button-table" mat-flat-button class="flat-button button-publish" (click)="deleteWebServices(element)">Delete</button>
+
+                    </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>

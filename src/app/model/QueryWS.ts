@@ -2,6 +2,7 @@ import {Tables} from './Tables';
 import { QueryArgument } from './QueryArgument';
 
 export class QueryWS {
+  "id": string;
   "name": string;
   "tables": Array<Tables>;
   "pageSize": number;

@@ -1,5 +1,6 @@
 <div class="msf-menu-header" style="height: 85px; display: flex; flex-direction: row; flex-wrap: wrap">
-    <div class="ws-title" style="flex: 1;">Create a new Web Service</div>
+    <div *ngIf="!globals.currentWebService" class="ws-title" style="flex: 1;">Create a new Web Service</div>
+    <div *ngIf="globals.currentWebService" class="ws-title" style="flex: 1;">Edit {{globals.currentWebService.name}}</div>
     <div style="flex: 1;"><button mat-flat-button class="flat-button button-publish" (click)="saveWebService()">Publish</button></div>
 
 </div>
@@ -113,31 +114,81 @@
                 <div style="width: 65%;padding-top: 30px">
                     <div style="margin-bottom: 18px" class="box-titles">Summary</div>
                     <mat-divider></mat-divider>
-                    <div *ngIf="selectconcat.tables.length">
+                    <div *ngIf="selectconcat.tables.length" style="overflow-y: scroll; max-height: 300px">
                         <div *ngFor="let item of tableSelected.columns">
-                            <div *ngIf="item.selected" style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px">
+                            <div *ngIf="item.selected" style="display: flex;margin-top: 5px;margin-bottom: 5px">
                                 <div style="width:20%; color: white; line-height: 30px">{{item.name}}</div>
                                 <mat-select class="select-column" autocomplete="off" (selectionChange)="type(item)" name="tables" [(ngModel)]="item.typePresentation" required>
                                     <mat-option value="value">Value</mat-option>
                                     <mat-option value="aggregate">Aggregate</mat-option>
                                 </mat-select>
-                                <div *ngIf="item.typePresentation=='aggregate'">
-                                    <mat-checkbox class="agr-functions" [(ngModel)]="item.functions.sum" (change)=addFunction($event)>Sum
-                                    </mat-checkbox>
-                                    <mat-checkbox class="agr-functions" [(ngModel)]="item.functions.max" (change)=addFunction($event)>Max
-                                    </mat-checkbox>
-                                    <mat-checkbox class="agr-functions" [(ngModel)]="item.functions.min" (change)=addFunction($event)>Min
-                                    </mat-checkbox>
-                                    <mat-checkbox class="agr-functions" [(ngModel)]="item.functions.avg" (change)=addFunction($event)>Avg
-                                    </mat-checkbox>
-                                    <mat-checkbox class="agr-functions" [(ngModel)]="item.functions.count" (change)=addFunction($event)>
-                                        Count</mat-checkbox>
-                                    <mat-checkbox class="agr-functions" [(ngModel)]="item.functions.std" (change)=addFunction($event)>Std Deviation
-                                    </mat-checkbox>
+                                <mat-form-field *ngIf="item.typePresentation=='value'" [floatLabel]="'never'" style="width:20%; margin-right: 20px">
+                                    <input matInput [(ngModel)]="item.alias">
+                                    <mat-placeholder class="placeholder">write an alias</mat-placeholder>
+                                </mat-form-field>
+                                <div *ngIf="item.typePresentation=='aggregate'" style="display: flex;flex-direction: column;">
+                                    <div style="display: flex;flex-direction: column;">
+
+                                        <div style="display: flex;flex-direction: row; margin: 5px;">
+                                            <mat-checkbox style="width:40%;" class="agr-functions" [(ngModel)]="item.functionsAux.sum" (change)=addFunction(item)>Sum
+                                            </mat-checkbox>
+                                            <mat-form-field [floatLabel]="'never'" style="width:40%; margin-right: 20px">
+                                                <input matInput [(ngModel)]="item.functionsAux.aliasSum">
+                                                <mat-placeholder class="placeholder">write an alias</mat-placeholder>
+                                            </mat-form-field>
+                                        </div>
+                                        <mat-divider></mat-divider>
+
+                                        <div style="display: flex;flex-direction: row; margin: 5px;">
+                                            <mat-checkbox class="agr-functions" [(ngModel)]="item.functionsAux.max" (change)=addFunction($event)>Max
+                                            </mat-checkbox>
+                                            <mat-form-field [floatLabel]="'never'" style="width:40%; margin-right: 20px">
+                                                <input matInput [(ngModel)]="item.functionsAux.aliasMax">
+                                                <mat-placeholder class="placeholder">write an alias</mat-placeholder>
+                                            </mat-form-field>
+                                        </div>
+                                        <mat-divider></mat-divider>
+                                        <div style="display: flex;flex-direction: row; margin: 5px;">
+                                            <mat-checkbox class="agr-functions" [(ngModel)]="item.functionsAux.min" (change)=addFunction($event)>Min
+                                            </mat-checkbox>
+                                            <mat-form-field [floatLabel]="'never'" style="width:40%; margin-right: 20px">
+                                                <input matInput [(ngModel)]="item.functionsAux.aliasMin">
+                                                <mat-placeholder class="placeholder">write an alias</mat-placeholder>
+                                            </mat-form-field>
+                                        </div>
+                                        <mat-divider></mat-divider>
+                                        <div style="display: flex;flex-direction: row; margin: 5px;">
+                                            <mat-checkbox class="agr-functions" [(ngModel)]="item.functionsAux.avg" (change)=addFunction($event)>Avg
+                                            </mat-checkbox>
+                                            <mat-form-field [floatLabel]="'never'" style="width:40%; margin-right: 20px">
+                                                <input matInput [(ngModel)]="item.functionsAux.aliasAvg">
+                                                <mat-placeholder class="placeholder">write an alias</mat-placeholder>
+                                            </mat-form-field>
+                                        </div>
+                                        <mat-divider></mat-divider>
+                                        <div style="display: flex;flex-direction: row; margin: 5px;">
+                                            <mat-checkbox class="agr-functions" [(ngModel)]="item.functionsAux.count" (change)=addFunction($event)>
+                                                Count</mat-checkbox>
+                                            <mat-form-field [floatLabel]="'never'" style="width:40%; margin-right: 20px">
+                                                <input matInput [(ngModel)]="item.functionsAux.aliasCount">
+                                                <mat-placeholder class="placeholder">write an alias</mat-placeholder>
+                                            </mat-form-field>
+                                        </div>
+                                        <mat-divider></mat-divider>
+                                        <div style="display: flex;flex-direction: row; margin: 5px;">
+                                            <mat-checkbox class="agr-functions" [(ngModel)]="item.functionsAux.std" (change)=addFunction($event)>Std Deviation
+                                            </mat-checkbox>
+                                            <mat-form-field [floatLabel]="'never'" style="width:40%; margin-right: 20px">
+                                                <input matInput [(ngModel)]="item.functionsAux.aliasStd">
+                                                <mat-placeholder class="placeholder">write an alias</mat-placeholder>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                             </div>
-                            <mat-divider *ngIf="item.selected"></mat-divider>
+                            <mat-divider *ngIf="item.selected" style="margin-top: 10px;margin-bottom: 10px"></mat-divider>
                         </div>
                     </div>
                 </div>
@@ -246,7 +297,7 @@
                         <div style="margin-top: 15px">
                             <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let table of selectconcat.tables">
                                 <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let column of table.columns | filter: searchGroup">
-                                    <mat-checkbox color="primary" ng-true-value=1 ng-false-value=0 [(ngModel)]="column.groupBy" (change)=addGroupBy(table,column)>{{table.alias}}<span *ngIf="table.alias">.</span>{{column.name}}
+                                    <mat-checkbox color="primary" [(ngModel)]="column.groupByBool" (change)=addGroupBy(table,column)>{{table.alias}}<span *ngIf="table.alias">.</span>{{column.name}}
                                     </mat-checkbox>
                                 </div>
                             </div>

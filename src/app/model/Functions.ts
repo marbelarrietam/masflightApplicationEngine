@@ -5,6 +5,12 @@ export class Functions {
   "avg":boolean;
   "count":boolean;
   "std":boolean;
+  "aliasSum":string;
+  "aliasMax":string;
+  "aliasMin":string;
+  "aliasAvg":string;
+  "aliasCount":string;
+  "aliasStd":string;
 
   constructor(){
     this.sum=false;
@@ -13,6 +19,12 @@ export class Functions {
     this.avg=false;
     this.count=false;
     this.std=false;
+    this.aliasSum='';
+    this.aliasMax = '';
+    this.aliasMin = '';
+    this.aliasAvg = '';
+    this.aliasCount = '';
+    this.aliasStd = '';
 
   }
 }

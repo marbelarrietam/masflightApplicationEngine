@@ -43,6 +43,8 @@ import { WebServicesComponent } from './web-services/web-services.component';
 import { FilterPipe } from './web-services/pipe-filter';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { AllWebServicesComponent } from './all-web-services/all-web-services.component';
+import { TestComponent } from './test/test.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,8 @@ import { AllWebServicesComponent } from './all-web-services/all-web-services.com
     ForgotPasswordComponent,
     ResetPasswordComponent,
     MsfLoadingComponent,
-    AllWebServicesComponent
+    AllWebServicesComponent,
+    TestComponent
   ],
   imports: [
     BrowserModule,
@@ -77,6 +80,7 @@ import { AllWebServicesComponent } from './all-web-services/all-web-services.com
     ReactiveFormsModule,
     NgxMaskModule.forRoot(),
     NgSelectModule,
+    NgxJsonViewerModule,
     NgxMaterialTimepickerModule.forRoot(),
     ReactiveFormsModule,
     BrowserAnimationsModule,

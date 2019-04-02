@@ -52,6 +52,7 @@ export class ApplicationComponent implements OnInit {
   }
 
   getOption(option: string){
+    this.globals.currentWebService = null;
     this.globals.currentApplication = option;
   }
   validateAdmin(){

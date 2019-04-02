@@ -22,13 +22,13 @@
           <mat-icon>more_vert</mat-icon>
       </button>
         <mat-menu #adminMenu="matMenu">
-            <button mat-menu-item (click)="getOption('create')">
+            <button *ngIf="globals.currentApplication != 'create'" mat-menu-item (click)="getOption('create')">
                   <mat-icon>settings</mat-icon>
                   <span>Create Web Service</span>
               </button>
-            <button mat-menu-item (click)="getOption('list')">
+            <button *ngIf="globals.currentApplication != 'list'" mat-menu-item (click)="getOption('list')">
                   <mat-icon>settings</mat-icon>
-                  <span>All web services</span>
+                  <span>Web Services Summary</span>
               </button>
         </mat-menu>
 
@@ -41,6 +41,7 @@
 
 <app-web-services *ngIf="globals.currentApplication == 'create'"></app-web-services>
 <app-all-web-services *ngIf="globals.currentApplication == 'list'"></app-all-web-services>
+<app-test *ngIf="globals.currentApplication == 'test'"></app-test>
 <!--container-->
 <div>
 

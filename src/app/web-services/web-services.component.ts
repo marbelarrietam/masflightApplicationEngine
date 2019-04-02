@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  Pipe,
-  NgModule,
-  ViewChild
-} from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { QueryWS } from "../model/QueryWS";
 import {
@@ -25,6 +18,7 @@ import { CodemirrorComponent } from "@ctrl/ngx-codemirror";
 import "codemirror/mode/sql/sql";
 import { MessageComponent } from "../message/message.component";
 import { QueryArgument } from "../model/QueryArgument";
+import { AggregateFucntions } from "../model/AggregateFunctions";
 
 @Component({
   selector: "app-web-services, FilterPipe",
@@ -37,7 +31,10 @@ export class WebServicesComponent implements OnInit {
   public searchView: string;
   public searchColumn: string;
   public searchGroup: string;
-
+  deletedTables: Array<Tables> = new Array();
+  deletedColumns: Array<Columns>= new Array();
+  deletedArguments: Array<QueryArgument> = new Array();
+  deletedAggregates: Array<AggregateFucntions> = new Array();
   selectSentence: string;
   selectedColumns: string;
   fromSentence: string;
@@ -53,6 +50,7 @@ export class WebServicesComponent implements OnInit {
 
   groupBySelected: Array<Columns> = new Array<Columns>();
   tableSelected: Tables = new Tables();
+  selectEdit: QueryWS = new QueryWS();
   selectTables: QueryWS = new QueryWS();
   selectViews: QueryWS = new QueryWS();
   selectconcat: QueryWS = new QueryWS();
@@ -98,8 +96,8 @@ export class WebServicesComponent implements OnInit {
     for (let i = 0; i < this.selectconcat.arguments.length; i++) {
       console.log(this.selectconcat.arguments[i]);
       if (
-        (this.selectconcat.arguments[i]['label']== null) ||
-        (this.selectconcat.arguments[i]['label'] == "")
+        this.selectconcat.arguments[i]["label"] == null ||
+        this.selectconcat.arguments[i]["label"] == ""
       ) {
         value = 1;
       }
@@ -115,26 +113,42 @@ export class WebServicesComponent implements OnInit {
     this.getSelectedColumns();
     let argumentsVerification = this.verifyArguments();
     if (this.configurationForm.valid) {
-      if (argumentsVerification){
-      this.service.saveWebServices(this, this.createQueryJson(), this.handlerSuccessWS, this.handlerErrorSave);
-      }else{
+      if (argumentsVerification) {
+        this.service.saveWebServices(
+          this,
+          this.createQueryJson(),
+          this.handlerSuccessWS,
+          this.handlerErrorSave
+        );
+      } else {
         const dialogRef = this.dialog.open(MessageComponent, {
-          data: { title: "Error", message: "You have missing some arguments names, please check" }
+          data: {
+            title: "Error",
+            message: "You have missing some arguments names, please check"
+          }
         });
       }
-    }else{
+    } else {
       const dialogRef = this.dialog.open(MessageComponent, {
-        data: { title: "Error", message: "You have missing some configurations, please check" }
+        data: {
+          title: "Error",
+          message: "You have missing some configurations, please check"
+        }
       });
     }
   }
 
   handlerSuccessWS(_this) {
     console.log("success");
+    let activity = "created";
+    if (_this.globals.currentWebService) {
+      activity = "edited";
+    }
     const dialogRef = _this.dialog.open(MessageComponent, {
-      data: { title: "Success", message: "Web service was created" }
+      data: { title: "Success", message: "Web service was " + activity }
     });
     _this.globals.isLoading = false;
+    _this.globals.currentApplication = "list";
   }
 
   handlerErrorSave(_this, result) {
@@ -146,21 +160,29 @@ export class WebServicesComponent implements OnInit {
   getQueryString() {
     let queryString =
       "SELECT " + this.selectSentence + " FROM " + this.fromSentence;
-    if (this.groupBySentence) {
-      +" WHERE " + this.whereSentence;
+    if (this.whereSentence) {
+      queryString +=" WHERE " + this.whereSentence;
     }
     if (this.groupBySentence) {
-      +" GROUP BY " + this.groupBySentence;
+      queryString +=" GROUP BY " + this.groupBySentence;
     }
 
+    console.log(queryString);
     return queryString;
   }
 
   createQueryJson() {
     let queryJson = new QueryWS();
+    if (this.selectconcat.id) {
+      queryJson.id = this.selectconcat.id;
+    } else {
+      queryJson.id = null;
+    }
     queryJson.name = this.selectconcat.name;
     queryJson.tables = this.getTablesColumn();
+    queryJson.tables = queryJson.tables.concat(this.deletedTables);
     queryJson.arguments = this.selectconcat.arguments;
+    queryJson.arguments = queryJson.arguments.concat(this.deletedArguments);
     queryJson.whereclause = this.whereSentence;
     queryJson.query = this.getQueryString();
     queryJson.method = this.selectconcat.method;
@@ -174,6 +196,9 @@ export class WebServicesComponent implements OnInit {
     let tables = new Array<Tables>();
     for (let i = 0; i < this.selectconcat.tables.length; i++) {
       let table = new Tables();
+      if (this.selectconcat.tables[i].id) {
+        table.id = this.selectconcat.tables[i].id;
+      }
       table.name = this.selectconcat.tables[i].name;
       this.selectconcat.tables[i].alias
         ? (table.alias = this.selectconcat.tables[i].alias)
@@ -182,40 +207,86 @@ export class WebServicesComponent implements OnInit {
 
       for (let j = 0; j < this.selectconcat.tables[i].columns.length; j++) {
         let columnsItem = this.selectconcat.tables[i].columns[j];
-        if (columnsItem.selected || columnsItem.groupBy) {
+        if (columnsItem.selected || columnsItem.groupByBool) {
           let columnToAdd = new Columns();
+          if (columnsItem.id) {
+            columnToAdd.id = columnsItem.id;
+          } else {
+            columnToAdd.id = null;
+          }
           columnToAdd.name = columnsItem.name;
           columnToAdd.typePresentation = columnsItem.typePresentation;
-          if (columnsItem.groupBy) {
-            columnToAdd.groupBy = 1;
+          console.log(columnsItem);
+          console.log(columnToAdd);
+          columnToAdd.selectedResult = columnsItem.selectedResult;
+          console.log(columnsItem.selectedResult);
+          console.log(columnToAdd.selectedResult);
+          console.log(columnToAdd);
+          if (columnsItem.groupByBool) {
+            columnToAdd.groupBy = "1";
           } else {
-            columnToAdd.groupBy = 0;
+            columnToAdd.groupBy = "0";
           }
           if (columnsItem.typePresentation == "value") {
             columnToAdd.typePresentation = columnsItem.typePresentation;
             table.columns.push(columnToAdd);
           } else if (columnsItem.typePresentation == "aggregate") {
             columnToAdd.typePresentation = columnsItem.typePresentation;
-            if (columnsItem.functions.sum) {
-              columnToAdd.aggregationFunction += "SUM, ";
+            columnToAdd.functions = [];
+            if (columnsItem.functionsAux.sum == true) {
+              let agr = new AggregateFucntions();
+              agr.alias = columnsItem.functionsAux.aliasSum;
+              agr.function = "SUM";
+              agr.selected = true;
+              agr.label = "Sum";
+              columnToAdd.functions.push(agr);
             }
-            if (columnsItem.functions.std) {
-              columnToAdd.aggregationFunction += "STD, ";
+            if (columnsItem.functionsAux.std == true) {
+              let agr = new AggregateFucntions();
+              agr.alias = columnsItem.functionsAux.aliasStd;
+              agr.function = "STD";
+              agr.selected = true;
+              agr.label = "Std";
+              columnToAdd.functions.push(agr);
             }
-            if (columnsItem.functions.min) {
-              columnToAdd.aggregationFunction += "MIN, ";
+            if (columnsItem.functionsAux.min == true) {
+              let agr = new AggregateFucntions();
+              agr.alias = columnsItem.functionsAux.aliasMin;
+              agr.function = "MIN";
+              agr.selected = true;
+              agr.label = "Min";
+              columnToAdd.functions.push(agr);
             }
-            if (columnsItem.functions.max) {
-              columnToAdd.aggregationFunction += "MAX, ";
+            if (columnsItem.functionsAux.max == true) {
+              let agr = new AggregateFucntions();
+              agr.alias = columnsItem.functionsAux.aliasMax;
+              agr.function = "MAX";
+              agr.selected = true;
+              agr.label = "Max";
+              columnToAdd.functions.push(agr);
             }
-            if (columnsItem.functions.avg) {
-              columnToAdd.aggregationFunction += "AVG, ";
+            if (columnsItem.functionsAux.avg == true) {
+              let agr = new AggregateFucntions();
+              agr.alias = columnsItem.functionsAux.aliasAvg;
+              agr.function = "AVG";
+              agr.selected = true;
+              agr.label = "Avg";
+              columnToAdd.functions.push(agr);
             }
-            if (columnsItem.functions.count) {
-              columnToAdd.aggregationFunction += "COUNT";
+            if (columnsItem.functionsAux.count == true) {
+              let agr = new AggregateFucntions();
+              agr.alias = columnsItem.functionsAux.aliasCount;
+              agr.function = "COUNT";
+              agr.selected = true;
+              agr.label = "Count";
+              columnToAdd.functions.push(agr);
             }
             table.columns.push(columnToAdd);
           }
+        }
+        if(!columnsItem.selected && !columnsItem.groupByBool && columnsItem.id){
+          columnsItem.delete = true;
+          table.columns.push(columnsItem);
         }
       }
       tables.push(table);
@@ -231,6 +302,9 @@ export class WebServicesComponent implements OnInit {
         _this.views.push(data[i]);
       }
     }
+    if (_this.globals.currentWebService) {
+      _this.loadWebService();
+    }
     _this.globals.isLoading = false;
   }
 
@@ -238,9 +312,99 @@ export class WebServicesComponent implements OnInit {
     console.log(result);
     _this.globals.isLoading = false;
   }
-  goHome() {
-    this.router.navigate(["/welcome"]);
+
+  loadWebService() {
+    this.selectEdit = this.globals.currentWebService;
+    this.getDataQueryInit();
+    console.log(this.selectconcat);
   }
+  getDataQueryInit() {
+    this.selectconcat.arguments = this.selectEdit.arguments;
+    this.selectconcat.name = this.selectEdit.name;
+    this.selectconcat.id = this.selectEdit.id;
+    this.selectconcat.pageSize = this.selectEdit.pageSize;
+    this.selectconcat.method = this.selectEdit.method;
+    this.selectconcat.description = this.selectEdit.description;
+    this.whereSentence = this.selectEdit.whereclause;
+    for (let i = 0; i < this.tables.length; i++) {
+      for (let j = 0; j < this.selectEdit.tables.length; j++) {
+        if (this.tables[i].name == this.selectEdit.tables[j].name) {
+          this.tables[i].id = this.selectEdit.tables[j].id;
+          this.tables[i].selected = true;
+          this.tables[i].alias = this.selectEdit.tables[j].alias;
+          this.selectTables.tables.push(this.tables[i]);
+          this.selectconcat.tables.push(this.tables[i]);
+          console.log("ASI VAaaa");
+          console.log(this.selectconcat);
+          for (let k = 0; k < this.tables[i].columns.length; k++) {
+            for (let m = 0; m < this.selectEdit.tables[j].columns.length; m++) {
+              if (
+                this.tables[i].columns[k].name ==
+                this.selectEdit.tables[j].columns[m].name
+              ) {
+                console.log("COINCIDEn");
+                console.log(this.tables[i].columns[k].name);
+                console.log(this.selectEdit.tables[j].columns[m].name);
+                let columnsToAdd = this.tables[i].columns[k];
+                let columnsOrigin = this.selectEdit.tables[j].columns[m];
+                columnsToAdd.id = columnsOrigin.id;
+                columnsToAdd.selectedResult = columnsOrigin.selectedResult;
+                columnsToAdd.functionsAux = new Functions();
+                columnsToAdd.functions = columnsOrigin.functions;
+                columnsToAdd.groupBy = columnsOrigin.groupBy;
+                if (columnsToAdd.groupBy == "1") {
+                  columnsToAdd.groupByBool = true;
+                  this.groupBySelected.push(columnsToAdd);
+                } else {
+                  columnsToAdd.groupByBool = false;
+                }
+                columnsToAdd.selected = true;
+                columnsToAdd.typePresentation = columnsOrigin.typePresentation;
+                if (columnsToAdd.typePresentation == "aggregate") {
+                  for (let n = 0; n < columnsToAdd.functions.length; n++) {
+                    if (columnsToAdd.functions[n].function == "SUM") {
+                      columnsToAdd.functionsAux.sum = true;
+                      columnsToAdd.functionsAux.aliasSum =
+                        columnsToAdd.functions[n].alias;
+                    }
+                    if (columnsToAdd.functions[n].function == "MAX") {
+                      columnsToAdd.functionsAux.max = true;
+                      columnsToAdd.functionsAux.aliasSum =
+                        columnsToAdd.functions[n].alias;
+                    }
+                    if (columnsToAdd.functions[n].function == "MIN") {
+                      columnsToAdd.functionsAux.min = true;
+                      columnsToAdd.functionsAux.aliasSum =
+                        columnsToAdd.functions[n].alias;
+                    }
+                    if (columnsToAdd.functions[n].function == "AVG") {
+                      columnsToAdd.functionsAux.avg = true;
+                      columnsToAdd.functionsAux.aliasSum =
+                        columnsToAdd.functions[n].alias;
+                    }
+                    if (columnsToAdd.functions[n].function == "COUNT") {
+                      columnsToAdd.functionsAux.count = true;
+                      columnsToAdd.functionsAux.aliasSum =
+                        columnsToAdd.functions[n].alias;
+                    }
+                    if (columnsToAdd.functions[n].function == "STD") {
+                      columnsToAdd.functionsAux.std = true;
+                      columnsToAdd.functionsAux.aliasSum =
+                        columnsToAdd.functions[n].alias;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    this.tableSelected = this.selectconcat.tables[0];
+    console.log("QUEDA ASI: ------");
+    console.log(this.selectconcat);
+  }
+
 
   addTable(table) {
     if (table.selected) {
@@ -250,6 +414,8 @@ export class WebServicesComponent implements OnInit {
       let index = this.selectTables.tables.findIndex(d => d === table);
       let indexConcat = this.selectconcat.tables.findIndex(d => d === table);
       if (index >= 0 && indexConcat >= 0) {
+        table.delete = true;
+        this.deletedTables.push(table);
         this.selectTables.tables.splice(index, 1);
         this.selectconcat.tables.splice(indexConcat, 1);
       }
@@ -259,26 +425,37 @@ export class WebServicesComponent implements OnInit {
   addGroupBy(table, column) {
     let columnAdd = column;
     console.log(columnAdd);
-    if (column.groupBy) {
+    if (column.groupByBool) {
+      column.groupBy = "1";
       this.groupBySelected.push(columnAdd);
     } else {
       let index = this.groupBySelected.findIndex(d => d === columnAdd);
+      columnAdd.delete = true;
+      this.deletedColumns.push(columnAdd);
       this.groupBySelected.splice(index, 1);
+      column.groupBy = "0";
     }
+    console.log(this.selectconcat.tables);
   }
 
-  addFunction(event) {
-    console.log(this.tableSelected);
-  }
+  addFunction(item, ag) {}
 
   addColumn(column) {
     if (column.selected) {
+      column.selectedResult = '1';
+      console.log(column);
+      console.log(this.selectconcat);
+    }else{
+      column.selectedResult = '0';
+      console.log('en 0')
     }
   }
 
   deleteFromSelectTable(table) {
     let index = this.selectTables.tables.findIndex(d => d === table);
     let indexConcat = this.selectconcat.tables.findIndex(d => d === table);
+    table.delete = true;
+    this.deletedColumns.push(table);
     this.selectTables.tables.splice(index, 1);
     this.selectconcat.tables.splice(indexConcat, 1);
     table.selected = false;
@@ -297,7 +474,7 @@ export class WebServicesComponent implements OnInit {
       }
       for (let j = 0; j < table.columns.length; j++) {
         let column = table.columns[j];
-        if (column.groupBy) {
+        if (column.groupBy == "1") {
           let valueAux;
           table.alias
             ? (valueAux = table.alias + "." + column.name)
@@ -315,28 +492,30 @@ export class WebServicesComponent implements OnInit {
           } else {
             if (column.typePresentation == "aggregate") {
               let value;
-              if (column.functions.max) {
-                value = "MAX(" + valueAux + ")";
+              if (column.functionsAux.max) {
+                value = "MAX(" + valueAux + ") " + column.functionsAux.aliasMax;
                 selected.push(value);
               }
-              if (column.functions.min) {
-                value = "MIN(" + valueAux + ")";
+              if (column.functionsAux.min) {
+                value = "MIN(" + valueAux + ") " + column.functionsAux.aliasMin;
                 selected.push(value);
               }
-              if (column.functions.sum) {
-                value = "SUM(" + valueAux + ")";
+              if (column.functionsAux.sum) {
+                value = "SUM(" + valueAux + ") " + column.functionsAux.aliasSum;
                 selected.push(value);
               }
-              if (column.functions.avg) {
-                value = "AVG(" + valueAux + ")";
+              if (column.functionsAux.avg) {
+                value = "AVG(" + valueAux + ") " + column.functionsAux.aliasAvg;
                 selected.push(value);
               }
-              if (column.functions.std) {
-                value = "STDDEV(" + valueAux + ")";
+              if (column.functionsAux.std) {
+                value =
+                  "STDDEV(" + valueAux + ") " + column.functionsAux.aliasStd;
                 selected.push(value);
               }
-              if (column.functions.count) {
-                value = "COUNT(" + valueAux + ")";
+              if (column.functionsAux.count) {
+                value =
+                  "COUNT(" + valueAux + ") " + column.functionsAux.aliasCount;
                 selected.push(value);
               }
             }
@@ -355,6 +534,8 @@ export class WebServicesComponent implements OnInit {
   deleteFromSelectView(view) {
     let index = this.selectViews.tables.findIndex(d => d === view);
     let indexConcat = this.selectconcat.tables.findIndex(d => d === view);
+    view.delete = true;
+    this.deletedTables.push(view);
     this.selectViews.tables.splice(index, 1);
     this.selectconcat.tables.splice(indexConcat, 1);
     view.selected = false;
@@ -362,6 +543,8 @@ export class WebServicesComponent implements OnInit {
 
   deleteArgument(arg) {
     let index = this.selectconcat.arguments.findIndex(d => d === arg);
+    arg.delete = true;
+    this.deletedArguments.push(arg);
     this.selectconcat.arguments.splice(index, 1);
   }
 
@@ -373,6 +556,8 @@ export class WebServicesComponent implements OnInit {
       let index = this.selectViews.tables.findIndex(d => d === view);
       let indexConcat = this.selectconcat.tables.findIndex(d => d === view);
       if (index >= 0 && indexConcat >= 0) {
+        view.delete = true;
+        this.deletedTables.push(view);
         this.selectViews.tables.splice(index, 1);
         this.selectconcat.tables.splice(indexConcat, 1);
       }
@@ -385,7 +570,7 @@ export class WebServicesComponent implements OnInit {
 
   type(item) {
     if (item.typePresentation == "aggregate") {
-      item.functions = new Functions();
+      item.functionsAux = new Functions();
     }
   }
 
