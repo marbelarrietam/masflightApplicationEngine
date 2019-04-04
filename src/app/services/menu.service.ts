@@ -15,7 +15,7 @@ const httpOptions = {
 export class MenuService {
   SECURITY_HEADER = "Authorization";
   TOKEN_STORAGE_KEY = "token";
-  constructor( private http: HttpClient, private globals:Globals) { 
+  constructor( private http: HttpClient, private globals:Globals) {
   }
 
   getMenu(_this,successHandler, errorHandler){
@@ -41,6 +41,7 @@ export class MenuService {
   }
 
   getUserLoggedin(_this,successHandler, errorHandler){
+    this.globals.isLoading = true;
     let url = _this.globals.baseUrl+ "/secure/getUserloggedin";
     //let url = "http://localhost:8887/secure/getUserloggedin"
     this.get(_this, url, successHandler, errorHandler);
@@ -49,7 +50,8 @@ export class MenuService {
 
   createAuthorizationHeader() {
     httpOptions.headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    httpOptions.headers = httpOptions.headers.append(this.SECURITY_HEADER, localStorage.getItem(this.TOKEN_STORAGE_KEY));
+    // httpOptions.headers = httpOptions.headers.append(this.SECURITY_HEADER, localStorage.getItem(this.TOKEN_STORAGE_KEY));
+    httpOptions.headers = httpOptions.headers.append('Authorization', localStorage.getItem('token'));
   }
 
   get = function (_this,url,successHandler, errorHandler){

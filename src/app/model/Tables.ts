@@ -7,6 +7,8 @@ export class Tables {
   "alias":string;
   "type": string;
   "delete":boolean;
+  "columnsSelected": Array<Columns>;
+  "groupSelected": Array<Columns>;
 
   constructor(){
     this.id = '';
@@ -15,5 +17,7 @@ export class Tables {
     this.alias = '';
     this.type = '';
     this.delete = false;
+    this.columnsSelected = new Array();
+    this.groupSelected = new Array();
   }
 }

@@ -14,6 +14,7 @@ export class Columns{
   "alias": string;
   "selectedResult":string;
   "delete":boolean;
+  "order": number;
 
   constructor(){
     this.name = '';
@@ -26,5 +27,6 @@ export class Columns{
     this.functions = new Array();
     this.delete = false;
     this.selectedResult = '0';
+    this.order = 0;
   }
 }

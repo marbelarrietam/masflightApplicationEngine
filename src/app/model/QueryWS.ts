@@ -11,6 +11,7 @@ export class QueryWS {
   "description": string;
   "method": string;
   "arguments": Array<QueryArgument>;
+  "url": string;
 
   constructor(){
     this.name = '';
@@ -21,6 +22,7 @@ export class QueryWS {
     this.query = '';
     this.description = '';
     this.method = 'GET';
+    this.url = '';
 
   }
 

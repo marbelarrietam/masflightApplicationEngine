@@ -5,9 +5,7 @@ import { ApplicationService } from '../services/application.service';
 import { DataSource } from '@angular/cdk/collections';
 import { QueryArgument } from '../model/QueryArgument';
 import { QueryWS } from '../model/QueryWS';
-import { RequestWS } from '../model/RequestWS';
-import {MatPaginator, MatTableDataSource} from '@angular/material';
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import {MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-test',
@@ -24,6 +22,7 @@ export class TestComponent implements OnInit {
   dataSource;
   data;
   displayedColumns: string[] = [];
+  urlArguments: string = '?';
 
   constructor(public globals: Globals,
     private service: ApplicationService,
@@ -34,20 +33,26 @@ export class TestComponent implements OnInit {
     this.arguments = this.ws.arguments;
   }
 
+   escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+ }
+
   getJsonRequest(){
-    var mapConcat = '{"arguments" :{';
     for (let i = 0; i < this.arguments.length; i++){
-      if (i==0){
-      var aux = `"${this.arguments[i].label}" : "${this.arguments[i].value}"`;
+      this.argumentsJson[this.arguments[i].label] = encodeURIComponent(this.arguments[i].value);
+      if(i==0){
+      this.urlArguments+=`${this.arguments[i].label}=${this.arguments[i].value}`;
       }else{
-        var aux = `, "${this.arguments[i].label}" : "${this.arguments[i].value}"`;
+        this.urlArguments+=`&${this.arguments[i].label}=${this.arguments[i].value}`;
       }
-      mapConcat+= aux;
     }
-    mapConcat+='}}';
-    console.log(mapConcat);
-    this.argumentsJson = JSON.parse(mapConcat);
-    console.log(this.argumentsJson);
+    for(let key in this.argumentsJson){
+    }
   }
 
 
@@ -56,21 +61,36 @@ export class TestComponent implements OnInit {
   }
   test(){
     this.getJsonRequest();
-    this.service.testWebService(this,this.ws.name,this.argumentsJson, this.handlerSucces, this.handlerError);
+    if(this.ws.method=="POST"){
+      this.service.testWebService(this,this.ws.name,this.argumentsJson, this.handlerSucces, this.handlerError);
+    }
+    if(this.ws.method=="GET"){
+      this.service.testWebServicesGet(this,this.ws.name,this.argumentsJson, this.handlerSucces, this.handlerError);
+    }
+  }
+
+  cleanVariables(){
+    this.argumentsJson = {};
+    this.columnsHead = [];
+    this.columns = [];
+    this.dataSource = [];
+    this.data = [];
+    this.displayedColumns = [];
   }
 
   handlerSucces(_this, data){
+    _this.cleanVariables();
     _this.columnsHead = Object.keys(data[0]);
     _this.displayedColumns = _this.columnsHead;
-    console.log(_this.displayedColumns);
     for (let i =0; i < _this.columnsHead.length; i++){
       let col = _this.columnsHead[i];
       let aux = { columnName: col, columnLabel: col};
       _this.columns.push(aux);
-
+    }
+    if(_this.ws.method=='GET'){
+      _this.ws.url=_this.ws.url+_this.urlArguments;
     }
     _this.data = data;
-    console.log(data);
     _this.dataSource = new MatTableDataSource(data);
   }
 

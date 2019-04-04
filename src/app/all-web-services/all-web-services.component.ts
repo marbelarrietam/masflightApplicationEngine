@@ -37,6 +37,12 @@ export class AllWebServicesComponent implements OnInit {
     this.getWebServices();
   }
 
+
+  addWebService(){
+    this.globals.currentURL = null;
+    this.globals.currentWebService = null;
+    this.globals.currentApplication = 'create';
+  }
   getWebServices(){
     this.service.getWebServices(this, this.handlerSuccessWS, this.handlerError);
   }

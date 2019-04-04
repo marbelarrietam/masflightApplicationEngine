@@ -1,10 +1,13 @@
 <div class="msf-menu-header" style="height: 85px; display: flex; flex-direction: row; flex-wrap: wrap">
+    <button style="padding: 30px" mat-icon-button (click)="backToList()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
     <div *ngIf="!globals.currentWebService" class="ws-title" style="flex: 1;">Create a new Web Service</div>
     <div *ngIf="globals.currentWebService" class="ws-title" style="flex: 1;">Edit {{globals.currentWebService.name}}</div>
     <div style="flex: 1;"><button mat-flat-button class="flat-button button-publish" (click)="saveWebService()">Publish</button></div>
 
 </div>
-<div class="msf-menu-body ">
+<div class="msf-menu-body">
     <mat-horizontal-stepper (selectionChange)="getSelectedColumns()">
         <mat-step [stepControl]="dataSourceForm">
             <ng-template matStepLabel>Select Data Source</ng-template>
@@ -17,8 +20,13 @@
                             <mat-icon style="color: white" aria-label="search">search</mat-icon>
                         </mat-form-field>
                         <div style="margin-top: 15px">
-                            <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let table of tables | filter : searchText">
+
+                            <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let table of selectTables.tables | filter : searchText">
                                 <mat-checkbox color="primary" [(ngModel)]="table.selected" (change)=addTable(table)>{{table.name}}
+                                </mat-checkbox>
+                            </div>
+                            <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let table of tables | filter : searchText">
+                                <mat-checkbox *ngIf="!table.selected" color="primary" [(ngModel)]="table.selected" (change)=addTable(table)>{{table.name}}
                                 </mat-checkbox>
                             </div>
                         </div>
@@ -33,6 +41,10 @@
                             <mat-icon style="color: white" aria-label="search">search</mat-icon>
                         </mat-form-field>
                         <div style="margin-top: 15px">
+                            <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let view of selectViews.tables | filter : searchView">
+                                <mat-checkbox color="primary" [(ngModel)]="view.selected" (change)=addView(view)>{{view.name}}
+                                </mat-checkbox>
+                            </div>
                             <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let view of views | filter : searchView">
                                 <mat-checkbox color="primary" [(ngModel)]="view.selected" (change)=addView(view)>{{view.name}}
                                 </mat-checkbox>
@@ -104,7 +116,11 @@
                         </mat-form-field>
                         <div *ngIf="selectconcat.tables.length != 0" style="margin-top: 15px">
                             <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let column of tableSelected.columns | filter: searchColumn">
-                                <mat-checkbox color="primary" [(ngModel)]="column.selected" (change)=addColumn(column)>{{column.name}}
+                                <mat-checkbox *ngIf="column.selected" color="primary" [(ngModel)]="column.selected" (change)=addColumn(column)>{{column.name}}
+                                </mat-checkbox>
+                            </div>
+                            <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let column of tableSelected.columns | filter: searchColumn">
+                                <mat-checkbox *ngIf="!column.selected" color="primary" [(ngModel)]="column.selected" (change)=addColumn(column)>{{column.name}}
                                 </mat-checkbox>
                             </div>
                         </div>
@@ -114,8 +130,8 @@
                 <div style="width: 65%;padding-top: 30px">
                     <div style="margin-bottom: 18px" class="box-titles">Summary</div>
                     <mat-divider></mat-divider>
-                    <div *ngIf="selectconcat.tables.length" style="overflow-y: scroll; max-height: 300px">
-                        <div *ngFor="let item of tableSelected.columns">
+                    <div cdkDropList *ngIf="selectconcat.tables.length" class="draggable-list" style="overflow-y: scroll; max-height: 300px" (cdkDropListDropped)="drop($event)">
+                        <div *ngFor="let item of tableSelected.columns" cdkDrag class="draggable-box">
                             <div *ngIf="item.selected" style="display: flex;margin-top: 5px;margin-bottom: 5px">
                                 <div style="width:20%; color: white; line-height: 30px">{{item.name}}</div>
                                 <mat-select class="select-column" autocomplete="off" (selectionChange)="type(item)" name="tables" [(ngModel)]="item.typePresentation" required>
@@ -297,7 +313,11 @@
                         <div style="margin-top: 15px">
                             <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let table of selectconcat.tables">
                                 <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let column of table.columns | filter: searchGroup">
-                                    <mat-checkbox color="primary" [(ngModel)]="column.groupByBool" (change)=addGroupBy(table,column)>{{table.alias}}<span *ngIf="table.alias">.</span>{{column.name}}
+                                    <mat-checkbox *ngIf="column.groupByBool" color="primary" [(ngModel)]="column.groupByBool" (change)=addGroupBy(table,column)>{{table.alias}}<span *ngIf="table.alias">.</span>{{column.name}}
+                                    </mat-checkbox>
+                                </div>
+                                <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let column of table.columns | filter: searchGroup">
+                                    <mat-checkbox *ngIf="!column.groupByBool" color="primary" [(ngModel)]="column.groupByBool" (change)=addGroupBy(table,column)>{{table.alias}}<span *ngIf="table.alias">.</span>{{column.name}}
                                     </mat-checkbox>
                                 </div>
                             </div>
@@ -343,6 +363,7 @@
                     <mat-select class="server-config" autocomplete="off" name="types" [(ngModel)]="selectconcat.method" [ngModelOptions]="{standalone: true}" name="method" required>
                         <mat-option value="GET">GET</mat-option>
                         <mat-option value="POST">POST</mat-option>
+                        <mat-option value="BOTH">GET/POST</mat-option>
                     </mat-select>
                 </div>
             </form>
@@ -351,10 +372,10 @@
         <mat-step>
             <ng-template matStepLabel>Query Summary</ng-template>
             <div style="margin-left:100px;margin-right:100px;margin-top:20px;font-size: 14px ">
-                <div *ngIf="selectSentence " style="margin-bottom: 5px; "><span style="color:#01abec ">Select </span>{{selectSentence}}</div>
-                <div *ngIf="fromSentence " style="margin-bottom: 5px; "><span style="color:#01abec ">From </span>{{fromSentence}}</div>
-                <div *ngIf="whereSentence  " style="margin-bottom: 5px; "><span style="color:#01abec ">Where </span>{{whereSentence}}</div>
-                <div *ngIf="groupBySentence " style="margin-bottom: 5px; "><span style="color:#01abec ">Group By
+                <div *ngIf="selectSentence" style="margin-bottom: 5px; "><span style="color:#01abec ">Select </span>{{selectSentence}}</div>
+                <div *ngIf="fromSentence" style="margin-bottom: 5px; "><span style="color:#01abec ">From </span>{{fromSentence}}</div>
+                <div *ngIf="whereSentence" style="margin-bottom: 5px; "><span style="color:#01abec ">Where </span>{{whereSentence}}</div>
+                <div *ngIf="groupBySentence" style="margin-bottom: 5px; "><span style="color:#01abec ">Group By
           </span>{{groupBySentence}}</div>
             </div>
         </mat-step>

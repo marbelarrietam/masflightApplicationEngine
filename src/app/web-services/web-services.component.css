@@ -79,14 +79,12 @@ div {
     flex-wrap: wrap;
 }
 
-
 .scroll-type {
     display: block;
     flex-wrap: wrap;
     overflow-y: scroll;
     max-height: 110px;
 }
-
 
 .selected-objects {
     background-color: #333333;
@@ -128,7 +126,7 @@ mat-select {
 }
 
 .search-input .mat-form-field-appearance-legacry .mat-form-field-underline {
-  display: none;
+    display: none;
 }
 
 .mat-form-field {
@@ -206,4 +204,35 @@ textarea.mat-input-element {
 
 .placeholder {
     color: rgba(148, 147, 147, 0.87)
+}
+
+.draggable-list {
+    max-width: 100%;
+    display: block;
+    overflow: hidden;
+    background-color: #232323;
+}
+
+.draggable-box {
+    cursor: move;
+    background-color: #232323;
+}
+
+.cdk-drag-preview {
+    box-sizing: border-box;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.draggable-box:last-child {}
+
+.draggable-list.cdk-drop-list-dragging .draggable-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

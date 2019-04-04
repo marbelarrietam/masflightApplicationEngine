@@ -47,11 +47,12 @@ export class ApplicationComponent implements OnInit {
   ngOnInit() {
     this.validateAdmin();
     this.globals.clearVariables();
-    this.globals.currentApplication = 'create';
+    this.globals.currentApplication = 'list';
 
   }
 
   getOption(option: string){
+    this.globals.currentURL = null;
     this.globals.currentWebService = null;
     this.globals.currentApplication = option;
   }

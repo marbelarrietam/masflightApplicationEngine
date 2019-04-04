@@ -32,6 +32,7 @@ export class Globals {
   moreResultsBtn : boolean = true;
   currentApplication : any;
   currentWebService: QueryWS;
+  currentURL: any;
   minDate:any;
   maxDate:any;
   welcome:any;
@@ -44,8 +45,8 @@ export class Globals {
   currentAirline: any;
   template : boolean = false;
   isFullscreen: boolean = false;
-  //baseUrl = "http://localhost:8882";
-  baseUrl = "";
+  baseUrl = "http://192.168.1.111:8882";
+  //baseUrl = "";
   // baseUrl2 = "http://localhost:8886";
   baseUrl2 = "http://69.64.45.220:8886";
   scheduledata:any;

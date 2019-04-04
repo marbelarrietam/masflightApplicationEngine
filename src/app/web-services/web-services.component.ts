@@ -19,6 +19,7 @@ import "codemirror/mode/sql/sql";
 import { MessageComponent } from "../message/message.component";
 import { QueryArgument } from "../model/QueryArgument";
 import { AggregateFucntions } from "../model/AggregateFunctions";
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: "app-web-services, FilterPipe",
@@ -91,6 +92,9 @@ export class WebServicesComponent implements OnInit {
     );
   }
 
+  backToList(){
+    this.globals.currentApplication = 'list';
+  }
   verifyArguments() {
     let value = 0;
     for (let i = 0; i < this.selectconcat.arguments.length; i++) {
@@ -139,14 +143,6 @@ export class WebServicesComponent implements OnInit {
   }
 
   handlerSuccessWS(_this) {
-    console.log("success");
-    let activity = "created";
-    if (_this.globals.currentWebService) {
-      activity = "edited";
-    }
-    const dialogRef = _this.dialog.open(MessageComponent, {
-      data: { title: "Success", message: "Web service was " + activity }
-    });
     _this.globals.isLoading = false;
     _this.globals.currentApplication = "list";
   }
@@ -227,7 +223,11 @@ export class WebServicesComponent implements OnInit {
           } else {
             columnToAdd.groupBy = "0";
           }
+          if(columnsItem.selectedResult == '1'){
+            columnToAdd.order = j;
+          }
           if (columnsItem.typePresentation == "value") {
+            columnToAdd.alias = columnsItem.alias;
             columnToAdd.typePresentation = columnsItem.typePresentation;
             table.columns.push(columnToAdd);
           } else if (columnsItem.typePresentation == "aggregate") {
@@ -393,6 +393,8 @@ export class WebServicesComponent implements OnInit {
                         columnsToAdd.functions[n].alias;
                     }
                   }
+                }else{
+                  columnsToAdd.alias = columnsOrigin.alias;
                 }
               }
             }
@@ -401,7 +403,7 @@ export class WebServicesComponent implements OnInit {
       }
     }
     this.tableSelected = this.selectconcat.tables[0];
-    console.log("QUEDA ASI: ------");
+    console.log("QUEDA ASI: -------");
     console.log(this.selectconcat);
   }
 
@@ -439,6 +441,10 @@ export class WebServicesComponent implements OnInit {
   }
 
   addFunction(item, ag) {}
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.tableSelected.columns, event.previousIndex, event.currentIndex);
+  }
 
   addColumn(column) {
     if (column.selected) {
@@ -484,8 +490,8 @@ export class WebServicesComponent implements OnInit {
         if (column.selected) {
           let valueAux;
           table.alias
-            ? (valueAux = table.alias + "." + column.name)
-            : (valueAux = column.name);
+            ? (valueAux = table.alias + "." + column.name +  (column.alias ? " " +column.alias : ''))
+            : (valueAux = column.name + (column.alias ? " " +column.alias : ''));
           if (column.typePresentation == "value") {
             let value = valueAux;
             selected.push(value);

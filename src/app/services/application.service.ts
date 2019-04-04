@@ -334,7 +334,19 @@ export class ApplicationService {
 
   testWebService(_this, name, data, handlerSuccess, handlerError){
     let url = this.host + "/engineWebServices/"+name;
+    this.globals.currentURL = url;
     this.http.post(_this,url,data,handlerSuccess,handlerError);
   }
 
+
+  testWebServicesGet(_this, name, data, handlerSuccess, handlerError){
+    let urlString = this.host + "/engineWebServices/"+name+"?";
+    for (let key in data){
+      urlString = urlString + key + "=";
+      urlString = urlString + data[key]+"&";
+    }
+    let url = urlString.substring(0, urlString.length-1);
+    this.globals.currentURL = url;
+    this.http.get(_this,url,handlerSuccess,handlerError, null);
+  }
 }

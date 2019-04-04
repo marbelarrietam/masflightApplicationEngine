@@ -1,6 +1,7 @@
 <div class="general-container">
-    <div class="msf-menu-header" style="height: 30px; display: flex; flex-direction: row; flex-wrap: wrap">
-        <div class="ws-title" style="flex: 1;">Testing {{ws.name}}</div>
+    <div class="msf-menu-header" style="height: 30px; display: flex; flex-direction: column; flex-wrap: wrap">
+        <div class="ws-title" style="flex: 1;padding-top: 5px;padding-bottom: 0px">Testing {{ws.name}}</div>
+        <div class="ws-title" style="flex: 1; font-size: 12px;padding-top: 5px;padding-bottom: 0px">URL: {{globals.currentURL}}</div>
     </div>
     <mat-card class="msf-container-table msf-center-container">
         <div>
@@ -33,7 +34,7 @@
 
             </mat-tab>
             <mat-tab label="Json Response">
-                <div style="background-color: white">
+                <div style="background-color: white; margin-top: 30px">
                     <ngx-json-viewer [json]="data"></ngx-json-viewer>
                 </div>
             </mat-tab>
