@@ -19,6 +19,7 @@ export class TestComponent implements OnInit {
   argumentsJson = {};
   columnsHead: any[] = [];
   columns: any[] = [];
+  errors:any[] = [];
   dataSource;
   data;
   displayedColumns: string[] = [];
@@ -44,7 +45,9 @@ export class TestComponent implements OnInit {
 
   getJsonRequest(){
     for (let i = 0; i < this.arguments.length; i++){
+      this.arguments[i].value = this.arguments[i].value ? this.arguments[i].value : null;
       this.argumentsJson[this.arguments[i].label] = encodeURIComponent(this.arguments[i].value);
+
       if(i==0){
       this.urlArguments+=`${this.arguments[i].label}=${this.arguments[i].value}`;
       }else{
@@ -60,6 +63,7 @@ export class TestComponent implements OnInit {
 
   }
   test(){
+    this.globals.isLoading = true;
     this.getJsonRequest();
     if(this.ws.method=="POST"){
       this.service.testWebService(this,this.ws.name,this.argumentsJson, this.handlerSucces, this.handlerError);
@@ -69,6 +73,9 @@ export class TestComponent implements OnInit {
     }
   }
 
+  backToList() {
+    this.globals.currentApplication = "list";
+  }
   cleanVariables(){
     this.argumentsJson = {};
     this.columnsHead = [];
@@ -79,6 +86,7 @@ export class TestComponent implements OnInit {
   }
 
   handlerSucces(_this, data){
+    if(data.length>0){
     _this.cleanVariables();
     _this.columnsHead = Object.keys(data[0]);
     _this.displayedColumns = _this.columnsHead;
@@ -92,10 +100,18 @@ export class TestComponent implements OnInit {
     }
     _this.data = data;
     _this.dataSource = new MatTableDataSource(data);
+    _this.globals.isLoading = false;
+  }
+ else {
+  _this.globals.isLoading = false;
+  _this.errors.push("No data found");
+}
   }
 
-  handlerError(result){
+  handlerError(_this, result){
     console.log(result);
+    _this.globals.isLoading = false;
+    _this.errors.push(result.message);
   }
 
 }

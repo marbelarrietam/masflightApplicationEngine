@@ -1,8 +1,11 @@
+<div class="msf-menu-header" style="height: 30px; display: flex; flex-direction: column; flex-wrap: wrap">
+    <!-- <button style="padding: 30px" mat-icon-button (click)="backToList()">
+  <mat-icon>arrow_back</mat-icon>
+</button> -->
+    <div class="ws-title" style="flex: 1;padding-top: 5px;padding-bottom: 0px">Testing {{ws.name}}</div>
+    <div class="ws-title" style="flex: 1; font-size: 12px;padding-top: 5px;padding-bottom: 0px">URL: {{globals.currentURL}}</div>
+</div>
 <div class="general-container">
-    <div class="msf-menu-header" style="height: 30px; display: flex; flex-direction: column; flex-wrap: wrap">
-        <div class="ws-title" style="flex: 1;padding-top: 5px;padding-bottom: 0px">Testing {{ws.name}}</div>
-        <div class="ws-title" style="flex: 1; font-size: 12px;padding-top: 5px;padding-bottom: 0px">URL: {{globals.currentURL}}</div>
-    </div>
     <mat-card class="msf-container-table msf-center-container">
         <div>
             <div *ngFor="let item of arguments" style="flex: 1; display: flex; flex-direction: column;">
@@ -17,7 +20,7 @@
 
         <mat-tab-group>
             <mat-tab label="Data">
-                <div *ngIf="columnsHead.length >0">
+                <div class="test-container" *ngIf="columnsHead.length >0">
                     <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 datasource welcome-table" style="margin-top: 30px; font-size: 12px">
 
                         <ng-container [matColumnDef]="column.columnName" *ngFor="let column of columns">
@@ -29,13 +32,19 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
-
                 </div>
 
             </mat-tab>
             <mat-tab label="Json Response">
-                <div style="background-color: white; margin-top: 30px">
+                <div *ngIf="columnsHead.length >0" style="background-color: white; margin-top: 30px">
                     <ngx-json-viewer [json]="data"></ngx-json-viewer>
+                </div>
+            </mat-tab>
+            <mat-tab label="Errors">
+                <div *ngIf="errors.length>0" style="margin-top: 30px">
+                    <div *ngFor="let item of errors">
+                        {{item}}
+                    </div>
                 </div>
             </mat-tab>
         </mat-tab-group>

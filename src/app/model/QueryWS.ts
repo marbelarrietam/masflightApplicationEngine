@@ -8,10 +8,12 @@ export class QueryWS {
   "pageSize": number;
   "query": string;
   "whereclause": string;
+  "havingclause": string;
   "description": string;
   "method": string;
   "arguments": Array<QueryArgument>;
   "url": string;
+  "direction_order":string;
 
   constructor(){
     this.name = '';
@@ -19,10 +21,12 @@ export class QueryWS {
     this.pageSize = 0;
     this.arguments = new Array();
     this.whereclause = '';
+    this.havingclause = '';
     this.query = '';
     this.description = '';
     this.method = 'GET';
     this.url = '';
+    this.direction_order = 'DESC';
 
   }
 

@@ -10,6 +10,8 @@ export class Columns{
   "selected": boolean;
   "groupBy": string;
   "groupByBool": boolean;
+  "orderBy": string;
+  "orderByBool": boolean;
   "aggregationFunction": string;
   "alias": string;
   "selectedResult":string;
@@ -23,6 +25,8 @@ export class Columns{
     this.typePresentation = 'value';
     this.groupBy = '0';
     this.groupByBool = false;
+    this.orderBy = '0';
+    this.orderByBool = false;
     this.functionsAux = new Functions();
     this.functions = new Array();
     this.delete = false;

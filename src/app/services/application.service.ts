@@ -22,6 +22,7 @@ export class ApplicationService {
   //host1 = "http://localhost:8886";
   host1 = "http://69.64.45.220:8886";
 
+  host2 = "http://staging.pulse.aspsols.com";
   constructor(private http: ApiClient, private globals:Globals, private dialog: MatDialog) {
     this.utils = new Utils();
     this.host = this.globals.baseUrl;

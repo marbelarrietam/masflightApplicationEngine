@@ -124,11 +124,11 @@ export class LoginScreenComponent implements OnInit {
   handleLogin(_this,data){
     _this.loggedIn = true;
     _this.router.navigate(["/application"]);
-    this.globals.isLoading = false;
+    _this.globals.isLoading = false;
   }
   errorLogin(_this,result){
     console.log(result);
-    this.globals.isLoading = false;
+    _this.globals.isLoading = false;
   }
 
 
