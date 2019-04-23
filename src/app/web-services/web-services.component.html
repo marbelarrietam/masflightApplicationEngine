@@ -202,43 +202,8 @@
         <mat-step [stepControl]="argForms">
             <ng-template matStepLabel>Service Arguments</ng-template>
             <div style=" overflow: hidden; display: flex; flex-direction: row; flex-flow: row wrap;margin-left:200px;margin-right:200px;margin-top:20px;">
-                <div style="justify-content:flex-end;display: flex; flex-direction: row;">
-                    <div style="line-height: 42px">Add argument</div>
-                    <button mat-icon-button (click)="addNewArgument()">
-          <mat-icon style="color: white" aria-label="add">add_circle</mat-icon>
-        </button>
-                </div>
-                <table *ngIf="selectconcat.arguments.length > 0" class="table-argument" mat-table #table [dataSource]="dataSource" class="mat-elevation-z8 datasource welcome-table">
-                    <ng-container matColumnDef="label" class="example-box">
-                        <th mat-header-cell *matHeaderCellDef>Name</th>
-                        <td mat-cell *matCellDef="let element">
-                            <input matInput placeholder="Label" [value]="element.label" [(ngModel)]="element.label">
-                        </td>
-                    </ng-container>
 
-                    <ng-container matColumnDef="type" class="example-box">
-                        <th mat-header-cell *matHeaderCellDef>Type</th>
-                        <td mat-cell *matCellDef="let element">
-                            <mat-select [(value)]="element.type" placeholder="type" [(ngModel)]="type">
-                                <mat-option value="string">string</mat-option>
-                                <mat-option value="number">number</mat-option>
-                                <mat-option value="date">date</mat-option>
-                            </mat-select>
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="required" class="example-box">
-                        <th mat-header-cell *matHeaderCellDef>Required</th>
-                        <td mat-cell *matCellDef="let element">
-                            <input matInput placeholder="required" [value]="element.required" [(ngModel)]="element.required">
-                        </td>
-                    </ng-container>
-
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectRow(row)" [ngClass]="{ 'selected': row === optionSelected }"></tr>
-                </table>
-                <!--  <div style="width: 40%; margin-right: 20%">
+                <div style="width: 100%">
                     <div style="display: flex; flex-direction: row">
                         <div style="flex: 2; margin-bottom: 5px;" class="box-titles">Arguments Definition</div>
                         <mat-divider></mat-divider>
@@ -248,41 +213,31 @@
                       </button>
                         </div>
                     </div>
+                    <mat-divider></mat-divider>
                     <form [formGroup]="argForms" class="container-arg">
                         <div formArrayName="items" class="argument-container" *ngFor="let arg of selectconcat.arguments; let i = index">
-                            <mat-form-field style="margin-bottom:30px">
-                                <input matInput placeholder="Argument Name" [(ngModel)]="arg.label" [ngModelOptions]="{standalone: true}" name="argumentName">
-                            </mat-form-field>
-                            <mat-select style="margin-bottom:10px" autocomplete="off" name="types" [(ngModel)]="arg.type" [ngModelOptions]="{standalone: true}" name="argumentType" required>
-                                <mat-option value="string">String</mat-option>
-                                <mat-option value="number">Number</mat-option>
-                                <mat-option value="date">Date</mat-option>
-                            </mat-select>
-                            <mat-checkbox [(ngModel)]="arg.required" [ngModelOptions]="{standalone: true}">Required</mat-checkbox>
-                          <mat-radio-group style="margin-bottom:10px" [(ngModel)]="arg.required" name="argumentReq" #radioGroup="matRadioGroup">
-                            <mat-radio-button name="i" style="color: white; margin-right: 5px" [value]="false">Optional</mat-radio-button>
-                            <mat-radio-button name="i" style="color: white" [value]="true">Required</mat-radio-button>
-                        </mat-radio-group>
+                            <div style="display: flex; flex-direction: row">
+                                <mat-form-field>
+                                    <input matInput placeholder="Argument Name" [(ngModel)]="arg.label" [ngModelOptions]="{standalone: true}" name="argumentName">
+                                </mat-form-field>
+                                <mat-select style=" margin-right: 50px; margin-left: 50px; width: 240px" autocomplete="off" name="types" [(ngModel)]="arg.type" [ngModelOptions]="{standalone: true}" name="argumentType" required>
+                                    <mat-option value="string">String</mat-option>
+                                    <mat-option value="number">Number</mat-option>
+                                    <mat-option value="date">Date</mat-option>
+                                </mat-select>
+                                <mat-checkbox [(ngModel)]="arg.requiredBool" (click)="setRequired(arg)" [ngModelOptions]="{standalone: true}">Required</mat-checkbox>
+                                <!--<mat-radio-group style="margin-bottom:10px" [(ngModel)]="arg.required" name="argumentReq" #radioGroup="matRadioGroup">
+                                    <mat-radio-button name="i" style="color: white; margin-right: 5px" [value]="false">Optional</mat-radio-button>
+                                    <mat-radio-button name="i" style="color: white" [value]="true">Required</mat-radio-button>
+                                </mat-radio-group> -->
+                            </div>
+                            <mat-divider style="margin-top: 15px"></mat-divider>
                         </div>
                     </form>
                 </div>
                 <div>
 
                 </div>
-                <div style="width: 30%">
-                    <div class="box-titles" style="margin-bottom: 5px;">Arguments Summary</div>
-                    <mat-divider></mat-divider>
-                    <div class="container-arg">
-                        <div style="margin-top:10px" *ngFor="let arg of selectconcat.arguments">
-                            <div style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 30px; line-height: 30px; color: white; font-size:12px;">
-                                <div style="width:50%">{{arg.label}}</div>
-                                <div style="width:40%">{{arg.type}}</div>
-                                <button style="background-color: transparent; border: none; color:white" (click)="deleteArgument(arg)">x</button>
-                            </div>
-                            <mat-divider></mat-divider>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </mat-step>
 
@@ -369,8 +324,8 @@
             <div style="display: flex; flex-direction: row; flex-wrap: wrap;margin-left:100px;margin-top:20px;">
                 <div style="width: 30%;">
                     <div style="display: flex; flex-direction: row; flex-flow: row wrap; height: 50px">
-                        <div style="color: white; width: 45%; line-height: 65px">Direction</div>
-                        <mat-select class="select-dark" style="width: 48%;" autocomplete="off" name="direction" [(ngModel)]="selectconcat.direction_order" required>
+                        <div style="color: white; width: 45%; line-height: 35px">Direction</div>
+                        <mat-select value="DESC" class="select-dark" style="width: 48%;" autocomplete="off" name="direction" [(ngModel)]="selectconcat.direction_order" required>
                             <mat-option value="DESC">Desc</mat-option>
                             <mat-option value="ASC">Asc</mat-option>
                         </mat-select>
@@ -449,7 +404,7 @@
                     </mat-form-field>
 
                     <mat-form-field class="server-config">
-                        <input class="server-config" value=0 placeholder="Page size" type="number" matInput [(ngModel)]="selectconcat.pageSize" name="pagination">
+                        <input class="server-config" value=0 placeholder="Page size" matInput [(ngModel)]="selectconcat.pageSize" name="pagination">
                     </mat-form-field>
 
                     <mat-form-field class="server-config">

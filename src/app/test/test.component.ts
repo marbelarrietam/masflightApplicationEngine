@@ -86,22 +86,33 @@ export class TestComponent implements OnInit {
   }
 
   handlerSucces(_this, data){
-    if(data.length>0){
+    console.log("data");
+    console.log(data);
+    if(data.Response.records){
+    if(data.Response.records.length>0){
     _this.cleanVariables();
-    _this.columnsHead = Object.keys(data[0]);
+    _this.columnsHead = Object.keys(data.Response.records[0]);
+    console.log(_this.columnsHead);
     _this.displayedColumns = _this.columnsHead;
     for (let i =0; i < _this.columnsHead.length; i++){
       let col = _this.columnsHead[i];
       let aux = { columnName: col, columnLabel: col};
       _this.columns.push(aux);
     }
-    if(_this.ws.method=='GET'){
+
       _this.ws.url=_this.ws.url+_this.urlArguments;
-    }
+
     _this.data = data;
-    _this.dataSource = new MatTableDataSource(data);
+
+    console.log(_this.data)
+    _this.dataSource = new MatTableDataSource(data.Response.records);
     _this.globals.isLoading = false;
   }
+  else {
+    _this.globals.isLoading = false;
+    _this.errors.push("No data found");
+}
+    }
  else {
   _this.globals.isLoading = false;
   _this.errors.push("No data found");

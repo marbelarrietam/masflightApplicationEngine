@@ -363,7 +363,13 @@ export class WebServicesComponent implements OnInit {
   }
   getDataQueryInit() {
     this.selectconcat.arguments = this.selectEdit.arguments;
-    this.dataSource = new MatTableDataSource(this.selectconcat.arguments);
+    for (let i=0;i<this.selectconcat.arguments.length;i++){
+      if(this.selectconcat.arguments[i].required=="true"){
+        this.selectconcat.arguments[i].requiredBool=true;
+      }else{
+        this.selectconcat.arguments[i].requiredBool=false;
+      }
+    }
     this.selectconcat.name = this.selectEdit.name;
     this.selectconcat.id = this.selectEdit.id;
     this.selectconcat.pageSize = this.selectEdit.pageSize;
@@ -775,8 +781,7 @@ export class WebServicesComponent implements OnInit {
     lineNumbers: true,
     lineWrapping: true,
     theme: "material",
-    mode: { name: "text/x-mariadb" },
-    lineSeparator: " "
+    mode: { name: "text/x-mariadb" }
   };
 
   cursorPos: { line: number; ch: number } = { line: 0, ch: 0 };
@@ -794,6 +799,13 @@ export class WebServicesComponent implements OnInit {
     this.selectconcat.arguments.push(argument);
     this.dataSource = new MatTableDataSource(this.selectconcat.arguments);
   }
+
+  setRequired(arg){
+    if(arg.requiredBool == true){
+      arg.required = "true";
+    }else{arg.required = "false"}
+  }
+
 
   checkNameValidator(name) {
     this.service.checkWSName(
