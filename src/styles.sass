@@ -23,6 +23,26 @@
 
 @import "~codemirror/theme/material.css"
 
+// kp20190423
+.application-class
+    background-color: white
+    height: 100%
+
+// kp20190423
+.login-form .mat-checkbox-checked.mat-primary .mat-checkbox-background
+    background-color: $msf-secondary-color-orange
+
+//kp20190423
+.login-form .mat-form-field.mat-focused .mat-form-field-ripple
+    background-color: $msf-secondary-color-orange
+
+//kp20190423
+.msf-header-icons2
+    width: 100px
+    height: 100%
+    vertical-align: middle
+    margin-right: 20px
+
 
 body
     background-image: url("assets/images/fondo.png")
@@ -53,6 +73,7 @@ body
     border-top-right-radius: 40px
     background-color: $msf-primary-light-color
 
+
 .msf-header-image
     width: 30%
     max-width: 250px
@@ -62,10 +83,13 @@ body
     border-bottom-right-radius: 40px
     border-top-right-radius: 40px
     background-color: $msf-primary-light-color
-    background-size: 70%
     background-repeat: no-repeat
-    background-position: 30% 55%
-    background-image: url(assets/images/logo_global_peqe.png)
+    // background-size: 70%  //kp20190423
+    // background-position: 30% 55% //kp20190423
+    // background-image: url(assets/images/logo_global_peqe.png) //kp20190423
+    background-size: 45% //kp20190423
+    background-position: 15% 55% //kp20190423
+    background-image: url(assets/images/pulse_welc.png) //kp20190423
 
 .msf-header-title
     display: inline-block
@@ -359,7 +383,8 @@ p
     -ms-transform: translateY(-1.739125em) scale(.75)
     width: 133.33333%
     margin-left: 7px
-    color: white!important
+    // color: white!important //kp20190423
+    color: $msf-font-color !important
 
 .mat-error
     margin-left: 31px
@@ -382,7 +407,8 @@ p
 
 .notification-warning
     @extend .notification
-    background-color: #b2e1ef
+    // background-color: #b2e1ef //kp20190423
+    background-color: $msf-secondary-color-light
 
 .notification-error
     @extend .notification
@@ -423,6 +449,7 @@ p
 .login-card
     @extend .msf-card
     max-width: 280px
+    background: rgba($msf-primary-white-color,.5) !important //kp20190423
 
 .register-card
     border-radius: 10px!important
@@ -456,7 +483,8 @@ p
 
 .login-header-image
                 width: 80%!important
-                height: 30px
+                // height: 30px
+                height: 50px //descomentar para el nuevo diseño KP20190423
                 margin: 0 auto!important
 .image-avatar
             width: 20px
@@ -480,18 +508,21 @@ p
         color: #343434!important
 
 .login-button
-            background-color: $msf-secondary-color!important
+            // background-color: $msf-secondary-color!important //kp20190423
+            background-color: $msf-secondary-color-orange!important
             line-height: 50px!important
             padding: 0 50px!important
 
 .msf-big-button
     @extend .login-button
+    background-color: $msf-secondary-color!important //kp201904236
     margin-left: 40px!important
     color: white
     margin-top: 10px!important
 
 .login-check
-            color: white
+            // color: white //kp20190423
+            color: $msf-font-color-black !important
             text-align: center
             font-size: $msf-login-font-size
 
@@ -505,12 +536,14 @@ p
     display: block
 
 .login-link-reg
-                color: white
+                // color: white //kp20190423
+                color: $msf-font-color-black
                 margin: 2px
                 font-size: $msf-login-font-size
 
 .login-link-reg2
-                color: $msf-secondary-color
+                // color: $msf-secondary-color //kp20190423
+                color: $msf-secondary-color-orange
 
 
 .login-font-color
@@ -538,9 +571,10 @@ p
 .login-card input[type="text"], .login-card input[type="password"],.login-card  input[type="number"],.login-card input[type="email"]
     padding: 10px
     width: 230px
-    outline: none
+    outline: none    
     border: none
-    color: white
+    // color: white //20190423
+    color: $msf-font-color-black
     padding-left: 31px
     background-size: 0 2px, 100% 1px
     background-position: 50% 100%, 50% 100%
@@ -712,6 +746,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button
 
 .msf-medium-button
     @extend .login-button
+    background-color: $msf-secondary-color!important //kp20190423
     margin-left: 70%!important
     color: white
     margin-top: 10px!important
@@ -825,6 +860,8 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button
 .msf-input-icon-text
     width: calc(100% - 200px) !important
 
+
+
 .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle
     border-color: $msf-secondary-color
 
@@ -909,7 +946,8 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button
     position: relative
 
 .msf-menu-header-image-container
-    width: 265px
+    width: 13% //kp20190423
+    // width: 265px //kp20190423
     height: 100%
     min-height: 60px
     vertical-align: middle
@@ -919,8 +957,10 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button
     background-color: $msf-primary-light-color
 
 .msf-menu-logo
-    width: 170px
-    height: 27px
+    //width: 170px //kp20190423
+    //height: 27px//kp20190423
+    width: 55% //kp20190423
+    height: 20% //kp20190423
     margin-left: 17px
     vertical-align: middle
     display: inline-block
@@ -1035,6 +1075,8 @@ button[aria-expanded="true"]
     position: fixed
     display: flex
     height: 100%
+    background-color: $msf-primary-dark-color //kp20190423
+
 
 .msf-menu-nav
     width: 250px
@@ -2827,8 +2869,21 @@ table.datasource
 
 
 .msf-plan-card-content .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label
-    color: white !important
+    // color: white !important //kp20190423
+    color: $msf-font-color !important
 
+//kp20190423
+.login-form .block-item-input .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix .mat-form-field-label-wrapper .mat-form-field-label
+    color: $msf-secondary-color-orange !important
+
+//kp20190423
+.login-form .mat-checkbox-frame 
+    // border-color: $msf-font-color !important kp20032019
+    border-color: $msf-font-color-black !important
+
+//kp20190423  
+.mat-icon.input_img
+    color: #ED5C27 !important
 
 .msf-plan-card-content .mat-form-field.mat-focused .mat-form-field-ripple
     background-color: white
@@ -3259,8 +3314,12 @@ div
 
 
 .mat-checkbox-label
-    color: white
+    color: $msf-font-color
     font-size: 14px
+
+//kp20190423
+.login-check .mat-checkbox-label 
+    color: $msf-font-color-black !important
 
 
 .ng-star-inserted .mat-step-icon
