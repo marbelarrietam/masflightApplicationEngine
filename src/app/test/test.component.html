@@ -3,7 +3,7 @@
   <mat-icon>arrow_back</mat-icon>
 </button> -->
     <div class="ws-title" style="flex: 1;padding-top: 5px;padding-bottom: 0px">Testing {{ws.name}}</div>
-    <div class="ws-title" style="flex: 1; font-size: 12px;padding-top: 5px;padding-bottom: 0px">URL: {{globals.currentURL}}</div>
+    <div class="ws-title" style="flex: 1; font-size: 12px;padding-top: 5px;padding-bottom: 0px; width: 100%">URL: http://staging.pulse.aspsols.com:8882{{globals.currentURL}}</div>
 </div>
 <div class="general-container">
     <mat-card class="msf-container-table msf-center-container">
@@ -11,7 +11,7 @@
             <div *ngFor="let item of arguments" style="flex: 1; display: flex; flex-direction: column;">
                 <div style="margin-top: 20px; display: flex; flex-direction: row;width:40%;">
                     <p style="width:30%;">{{item.label}} : </p>
-                    <input style="width:60%;height: 30px;background-color: #1e1e1e; margin-left: 5px; border-radius: 2px" matInput [(ngModel)]="item.value">
+                    <input style="width:60%;height: 30px;background-color: #1e1e1e; margin-left: 5px; padding-left:5px; border-radius: 2px" matInput [(ngModel)]="item.value">
                 </div>
             </div>
             <div style="flex: 1;margin-top: 10px"><button mat-flat-button class="flat-button" (click)="test();">Test</button></div>

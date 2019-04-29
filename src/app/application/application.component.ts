@@ -98,7 +98,7 @@ toggle(){
   }
 
   goHome(){
-    this.router.navigate(["/welcome"]);
+    this.globals.currentApplication = 'list';
   }
   logOut(){
     window.localStorage.removeItem("token");

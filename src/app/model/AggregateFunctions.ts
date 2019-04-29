@@ -6,6 +6,7 @@ export class AggregateFucntions{
   "delete":boolean;
   "id": string;
   "orderBy": string;
+  "orderDirection": string;
 
   constructor(){
     this.id = '';
@@ -15,6 +16,7 @@ export class AggregateFucntions{
     this.selected = false;
     this.delete = false;
     this.orderBy = '1';
+    this.orderDirection = '';
   }
 }
 

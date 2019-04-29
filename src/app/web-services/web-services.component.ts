@@ -20,6 +20,7 @@ import { MessageComponent } from "../message/message.component";
 import { QueryArgument } from "../model/QueryArgument";
 import { AggregateFucntions } from "../model/AggregateFunctions";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { CustomFunctions } from '../model/CustomFunctions';
 
 @Component({
   selector: "app-web-services, FilterPipe",
@@ -28,6 +29,7 @@ import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 })
 export class WebServicesComponent implements OnInit {
   @ViewChild("codeEditor") codeEditor: CodemirrorComponent;
+  queryEdit:boolean = false;
   searchText: string;
   searchView: string;
   searchColumn: string;
@@ -37,6 +39,7 @@ export class WebServicesComponent implements OnInit {
   deletedColumns: Array<Columns> = new Array();
   deletedArguments: Array<QueryArgument> = new Array();
   deletedAggregates: Array<AggregateFucntions> = new Array();
+  deletedCustomFunctions: Array<CustomFunctions>  = new Array();
   selectSentence: string;
   selectedColumns: string;
   fromSentence: string;
@@ -44,6 +47,7 @@ export class WebServicesComponent implements OnInit {
   havingSentence: string;
   groupBySentence: string;
   orderBySentence: string;
+  auxCustomFunction: string;
   dataSourceForm = new FormGroup({
     tablesValidator: new FormControl("nameTable", [Validators.required])
   });
@@ -54,6 +58,7 @@ export class WebServicesComponent implements OnInit {
 
   groupBySelected: Array<Columns> = new Array<Columns>();
   orderBySelected: Array<Columns> = new Array<Columns>();
+
   tableSelected: Tables = new Tables();
   selectEdit: QueryWS = new QueryWS();
   selectTables: QueryWS = new QueryWS();
@@ -90,6 +95,39 @@ export class WebServicesComponent implements OnInit {
     this.argForms = this.formBuilder.group({
       items: this.formBuilder.array([])
     });
+  }
+
+  addCustomFunction(){
+    let custom = new CustomFunctions();
+    custom.customText = this.auxCustomFunction;
+    this.selectconcat.customFunctions.push(custom);
+    console.log(this.selectconcat.customFunctions);
+    this.auxCustomFunction = '';
+  }
+
+  getCustomFunctions(){
+    let customArray = new Array<CustomFunctions>();
+    for (let i = 0; i < this.selectconcat.customFunctions.length; i++){
+      let row = this.selectconcat.customFunctions[i];
+      if (row.groupByBool) {
+        row.groupBy = "1";
+      } else {
+        row.groupBy = "0";
+      }
+      if (row.orderByBool) {
+        row.orderBy = "1";
+      } else {
+        row.orderBy = "0";
+      }
+    }
+    customArray = this.selectconcat.customFunctions.concat(this.deletedCustomFunctions);
+    return customArray;
+  }
+
+  deleteCustomFunction(c){
+    let index = this.selectTables.customFunctions.findIndex(d => d === c);
+    this.deletedCustomFunctions.push(this.selectconcat.customFunctions[index]);
+    this.selectconcat.customFunctions.splice(index, 1);
   }
 
   getTables() {
@@ -149,6 +187,14 @@ export class WebServicesComponent implements OnInit {
     }
   }
 
+  DisplayEditQuery(){
+    if(this.queryEdit){
+      this.queryEdit = false;
+    }else{
+      this.queryEdit = true;
+    }
+  }
+
   handlerSuccessWS(_this) {
     _this.globals.isLoading = false;
     _this.globals.currentApplication = "list";
@@ -173,7 +219,7 @@ export class WebServicesComponent implements OnInit {
       queryString += " HAVING " + this.havingSentence;
     }
     if (this.orderBySentence) {
-      queryString += " ORDER BY " + this.orderBySentence + " "+this.selectconcat.direction_order;
+      queryString += " ORDER BY " + this.orderBySentence;
     }
     if (this.selectconcat.pageSize) {
       queryString += " LIMIT " + this.selectconcat.pageSize;
@@ -189,6 +235,7 @@ export class WebServicesComponent implements OnInit {
       queryJson.id = null;
     }
     queryJson.name = this.selectconcat.name;
+    queryJson.customFunctions = this.getCustomFunctions();
     queryJson.tables = this.getTablesColumn();
     queryJson.tables = queryJson.tables.concat(this.deletedTables);
     queryJson.arguments = this.selectconcat.arguments;
@@ -199,7 +246,6 @@ export class WebServicesComponent implements OnInit {
     queryJson.method = this.selectconcat.method;
     queryJson.description = this.selectconcat.description;
     queryJson.pageSize = this.selectconcat.pageSize;
-    queryJson.direction_order = this.selectEdit.direction_order;
     return queryJson;
   }
 
@@ -243,6 +289,7 @@ export class WebServicesComponent implements OnInit {
           }
           if (columnsItem.typePresentation == "value") {
             columnToAdd.alias = columnsItem.alias;
+            columnToAdd.orderDirection = columnsItem.orderDirection;
             columnToAdd.typePresentation = columnsItem.typePresentation;
             table.columns.push(columnToAdd);
           } else if (columnsItem.typePresentation == "aggregate") {
@@ -255,6 +302,7 @@ export class WebServicesComponent implements OnInit {
               agr.selected = true;
               agr.label = "Sum";
               agr.id = columnsItem.functionsAux.idSum;
+              agr.orderDirection = columnsItem.functionsAux.orderDirectionSum;
               if(columnsItem.functionsAux.orderSum){
                 agr.orderBy = "1";
               }else{agr.orderBy = "0";}
@@ -267,6 +315,7 @@ export class WebServicesComponent implements OnInit {
               agr.selected = true;
               agr.label = "Std";
               agr.id = columnsItem.functionsAux.idStd;
+              agr.orderDirection = columnsItem.functionsAux.orderDirectionStd;
               if(columnsItem.functionsAux.orderStd){
                 agr.orderBy = "1";
               }else{agr.orderBy = "0";}
@@ -279,6 +328,7 @@ export class WebServicesComponent implements OnInit {
               agr.selected = true;
               agr.label = "Min";
               agr.id = columnsItem.functionsAux.idMin;
+              agr.orderDirection = columnsItem.functionsAux.orderDirectionMin;
               if(columnsItem.functionsAux.orderMin){
                 agr.orderBy = "1";
               }else{agr.orderBy = "0";}
@@ -291,6 +341,7 @@ export class WebServicesComponent implements OnInit {
               agr.selected = true;
               agr.label = "Max";
               agr.id = columnsItem.functionsAux.idMax;
+              agr.orderDirection = columnsItem.functionsAux.orderDirectionMax;
               if(columnsItem.functionsAux.orderMax){
                 agr.orderBy = "1";
               }else{agr.orderBy = "0";}
@@ -303,6 +354,7 @@ export class WebServicesComponent implements OnInit {
               agr.selected = true;
               agr.label = "Avg";
               agr.id = columnsItem.functionsAux.idAvg;
+              agr.orderDirection = columnsItem.functionsAux.orderDirectionAvg;
               if(columnsItem.functionsAux.orderAvg){
                 agr.orderBy = "1";
               }else{agr.orderBy = "0";}
@@ -315,6 +367,7 @@ export class WebServicesComponent implements OnInit {
               agr.selected = true;
               agr.label = "Count";
               agr.id = columnsItem.functionsAux.idCount;
+              agr.orderDirection = columnsItem.functionsAux.orderDirectionCount;
               if(columnsItem.functionsAux.orderCount){
                 agr.orderBy = "1";
               }else{agr.orderBy = "0";}
@@ -375,9 +428,16 @@ export class WebServicesComponent implements OnInit {
     this.selectconcat.pageSize = this.selectEdit.pageSize;
     this.selectconcat.method = this.selectEdit.method;
     this.selectconcat.description = this.selectEdit.description;
+    this.selectconcat.customFunctions = this.selectEdit.customFunctions;
+    for (let a = 0; a < this.selectconcat.customFunctions.length;a++){
+      if (this.selectconcat.customFunctions[a].orderBy == "1") {
+        this.selectconcat.customFunctions[a].orderByBool = true;
+      } else {
+        this.selectconcat.customFunctions[a].orderByBool = false;
+      }
+    }
     this.whereSentence = this.selectEdit.whereclause;
     this.havingSentence = this.selectEdit.havingclause;
-    this.selectconcat.direction_order = this.selectEdit.direction_order;
     for (let i = 0; i < this.tables.length; i++) {
       for (let j = 0; j < this.selectEdit.tables.length; j++) {
         if (this.tables[i].name == this.selectEdit.tables[j].name) {
@@ -430,6 +490,7 @@ export class WebServicesComponent implements OnInit {
                         columnsToAdd.functionsAux.sum = true;
                         columnsToAdd.functionsAux.aliasSum = columnsToAdd.functions[n].alias;
                         columnsToAdd.functionsAux.idSum = columnsToAdd.functions[n].id;
+                        columnsToAdd.functionsAux.orderDirectionSum = columnsToAdd.functions[n].orderDirection;
                         if(columnsToAdd.functions[n].orderBy=="1"){
                         columnsToAdd.functionsAux.orderSum = true;
                         }else{ columnsToAdd.functionsAux.orderSum = false;}
@@ -439,6 +500,7 @@ export class WebServicesComponent implements OnInit {
                         columnsToAdd.functionsAux.max = true;
                         columnsToAdd.functionsAux.aliasMax = columnsToAdd.functions[n].alias;
                         columnsToAdd.functionsAux.idMax = columnsToAdd.functions[n].id;
+                        columnsToAdd.functionsAux.orderDirectionMax = columnsToAdd.functions[n].orderDirection;
                         if(columnsToAdd.functions[n].orderBy=="1"){
                           columnsToAdd.functionsAux.orderMax = true;
                           }else{ columnsToAdd.functionsAux.orderMax= false;}
@@ -448,6 +510,7 @@ export class WebServicesComponent implements OnInit {
                         columnsToAdd.functionsAux.min = true;
                         columnsToAdd.functionsAux.aliasMin = columnsToAdd.functions[n].alias;
                         columnsToAdd.functionsAux.idMin = columnsToAdd.functions[n].id;
+                        columnsToAdd.functionsAux.orderDirectionMin = columnsToAdd.functions[n].orderDirection;
                         if(columnsToAdd.functions[n].orderBy=="1"){
                           columnsToAdd.functionsAux.orderMin = true;
                           }else{ columnsToAdd.functionsAux.orderMin = false;}
@@ -457,6 +520,7 @@ export class WebServicesComponent implements OnInit {
                         columnsToAdd.functionsAux.avg = true;
                         columnsToAdd.functionsAux.aliasAvg = columnsToAdd.functions[n].alias;
                         columnsToAdd.functionsAux.idAvg = columnsToAdd.functions[n].id;
+                        columnsToAdd.functionsAux.orderDirectionAvg = columnsToAdd.functions[n].orderDirection;
                         if(columnsToAdd.functions[n].orderBy=="1"){
                           columnsToAdd.functionsAux.orderAvg = true;
                           }else{ columnsToAdd.functionsAux.orderAvg = false;}
@@ -466,6 +530,7 @@ export class WebServicesComponent implements OnInit {
                         columnsToAdd.functionsAux.count = true;
                         columnsToAdd.functionsAux.aliasCount = columnsToAdd.functions[n].alias;
                         columnsToAdd.functionsAux.idCount = columnsToAdd.functions[n].id;
+                        columnsToAdd.functionsAux.orderDirectionCount = columnsToAdd.functions[n].orderDirection;
                         if(columnsToAdd.functions[n].orderBy=="1"){
                           columnsToAdd.functionsAux.orderCount = true;
                           }else{ columnsToAdd.functionsAux.orderCount = false;}
@@ -475,6 +540,7 @@ export class WebServicesComponent implements OnInit {
                         columnsToAdd.functionsAux.std = true;
                         columnsToAdd.functionsAux.aliasStd = columnsToAdd.functions[n].alias;
                         columnsToAdd.functionsAux.idStd = columnsToAdd.functions[n].id;
+                        columnsToAdd.functionsAux.orderDirectionStd = columnsToAdd.functions[n].orderDirection;
                         if(columnsToAdd.functions[n].orderBy=="1"){
                           columnsToAdd.functionsAux.orderStd = true;
                           }else{ columnsToAdd.functionsAux.orderStd= false;}
@@ -484,6 +550,7 @@ export class WebServicesComponent implements OnInit {
                     }
                 } else {
                   columnsToAdd.alias = columnsOrigin.alias;
+                  columnsToAdd.orderDirection = columnsOrigin.orderDirection;
                 }
               }
             }
@@ -533,12 +600,13 @@ export class WebServicesComponent implements OnInit {
     }
   }
 
-
+  addFunction(item, ag) {}
 
   addOrderBy(table, column) {
     let columnAdd = column;
     if (column.orderByBool) {
       column.orderBy = "1";
+      column.orderDirection = "DESC"
       this.orderBySelected.push(columnAdd);
     } else {
       let index = this.orderBySelected.findIndex(d => d === columnAdd);
@@ -546,10 +614,20 @@ export class WebServicesComponent implements OnInit {
       this.deletedColumns.push(columnAdd);
       this.orderBySelected.splice(index, 1);
       column.orderBy = "0";
+      column.orderDirection = null;
     }
   }
 
-  addFunction(item, ag) {}
+  addOrderByCF(cf) {
+    if (cf.orderByBool) {
+      cf.orderBy = "1";
+      cf.orderDirection = "DESC"
+    } else {
+      cf.orderBy = "0";
+      cf.orderDirection = null;
+    }
+  }
+
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(
@@ -609,12 +687,19 @@ export class WebServicesComponent implements OnInit {
             : (valueAux = column.name);
 
         }
+        if(column.orderByBool && column.typePresentation=='value'){
+          if(column.alias){
+            orderb.push(column.alias + ' '+column.orderDirection);
+          }else{
+          orderb.push(column.name + ' '+column.orderDirection);
+          }
+        }
         if (column.selected) {
           let valueAux;
-          let col;
-          if(column.name.toLowerCase() == "date"){
+          let col = column.name;
+          /* if(column.name.toLowerCase() == "date"){
             col = "DATE_FORMAT(STR_TO_DATE(" + column.name+", '%m/%d/%y'),'%Y/%m')"
-          }else{col = column.name}
+          }else{col = column.name} */
           table.alias
             ? (valueAux =
                 table.alias +
@@ -628,13 +713,7 @@ export class WebServicesComponent implements OnInit {
             let value = valueAux;
             value = value.toLowerCase();
             selected.push(value);
-            if(column.orderByBool){
-              if(column.alias){
-                orderb.push(column.alias);
-              }else{
-              orderb.push(valueAux);
-              }
-            }
+
           } else {
             if (column.typePresentation == "aggregate") {
               let value;
@@ -648,7 +727,7 @@ export class WebServicesComponent implements OnInit {
                   }else{
                     aggrName = "MAX(" + valueAux + ")";
                   }
-                orderb.push(aggrName);
+                orderb.push(aggrName + ' '+column.functionsAux.orderDirectionMax);
                 }
               }
               if (column.functionsAux.min) {
@@ -661,7 +740,7 @@ export class WebServicesComponent implements OnInit {
                   }else{
                     aggrName = "MIN(" + valueAux + ")";
                   }
-                orderb.push(aggrName);
+                orderb.push(aggrName + ' '+column.functionsAux.orderDirectionMin);
                 }
               }
               if (column.functionsAux.sum) {
@@ -674,7 +753,7 @@ export class WebServicesComponent implements OnInit {
                   }else{
                     aggrName = "SUM(" + valueAux + ")";
                   }
-                orderb.push(aggrName);
+                orderb.push(aggrName + ' '+column.functionsAux.orderDirectionSum);
                 }
               }
               if (column.functionsAux.avg) {
@@ -687,7 +766,7 @@ export class WebServicesComponent implements OnInit {
                   }else{
                     aggrName = "AVG(" + valueAux + ")";
                   }
-                orderb.push(aggrName);
+                orderb.push(aggrName + ' '+column.functionsAux.orderDirectionAvg);
                 }
               }
               if (column.functionsAux.std) {
@@ -701,7 +780,7 @@ export class WebServicesComponent implements OnInit {
                   }else{
                     aggrName = "STDDEV(" + valueAux + ")";
                   }
-                orderb.push(aggrName);
+                orderb.push(aggrName + ' '+column.functionsAux.orderDirectionStd);
                 }
               }
               if (column.functionsAux.count) {
@@ -715,7 +794,7 @@ export class WebServicesComponent implements OnInit {
                   }else{
                     aggrName = "COUNT(" + valueAux + ")";
                   }
-                orderb.push(aggrName);
+                orderb.push(aggrName + ' '+column.functionsAux.orderDirectionCount);
                 }
               }
             }
@@ -723,6 +802,22 @@ export class WebServicesComponent implements OnInit {
         }
       }
     }
+    for (let m= 0; m < this.selectconcat.customFunctions.length; m++){
+      let valueCustom = this.selectconcat.customFunctions[m].alias ? this.selectconcat.customFunctions[m].customText +
+      ' '+this.selectconcat.customFunctions[m].alias :
+      this.selectconcat.customFunctions[m].customText;
+      selected.push(valueCustom);
+      if(this.selectconcat.customFunctions[m].orderByBool){
+        let aggrName;
+        if(this.selectconcat.customFunctions[m].alias){
+          aggrName = this.selectconcat.customFunctions[m].alias;
+        }else{
+          aggrName = this.selectconcat.customFunctions[m].customText;
+        }
+      orderb.push(aggrName + ' '+this.selectconcat.customFunctions[m].orderDirection);
+      }
+    }
+
     let groupJoin = group.join(", ");
     let orderJoin = orderb.join(", ");
     let posTables = selectedTables.join(", ");

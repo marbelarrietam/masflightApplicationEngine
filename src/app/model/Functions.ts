@@ -11,6 +11,12 @@ export class Functions {
   "orderAvg":boolean;
   "orderCount":boolean;
   "orderStd":boolean;
+  "orderDirectionSum":string;
+  "orderDirectionMax":string;
+  "orderDirectionMin":string;
+  "orderDirectionAvg":string;
+  "orderDirectionCount":string;
+  "orderDirectionStd":string;
   "aliasSum":string;
   "aliasMax":string;
   "aliasMin":string;
@@ -38,6 +44,12 @@ export class Functions {
     this.orderMin = false;
     this.orderStd =false;
     this.orderSum = false;
+    this.orderDirectionAvg = '';
+    this.orderDirectionCount ='';
+    this.orderDirectionMax= '';
+    this.orderDirectionMin = '';
+    this.orderDirectionStd ='';
+    this.orderDirectionSum = '';
     this.aliasSum='';
     this.aliasMax = '';
     this.aliasMin = '';
