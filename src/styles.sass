@@ -23,6 +23,15 @@
 
 @import "~codemirror/theme/material.css"
 
+.CodeMirror
+    height: 300px !important
+
+.ocultar
+    display: none  !important
+
+.mostrar
+    display: block
+
 // kp20190423
 .application-class
     background-color: white
@@ -3280,9 +3289,6 @@ img.msf-calendar-image
     color: #333
     display: none
 
-.CodeMirror
-    height: 100px
-
 div
     color: white
     font-size: 14px
@@ -3290,7 +3296,8 @@ div
 
 .mat-horizontal-stepper-header-container
     background-color: #1e1e1e
-    height: 10%
+    //height: 10%
+    height: 50px
 
 
 .mat-stepper-horizontal,
@@ -3338,7 +3345,9 @@ div
 
 
 .mat-step-header
-    height: 100% !important
+    height: 50px !important
+    padding: 0px !important
+    align-items: center !important
 
 
 .ws-title
