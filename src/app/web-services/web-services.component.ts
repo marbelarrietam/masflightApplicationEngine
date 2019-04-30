@@ -29,7 +29,7 @@ import { CustomFunctions } from '../model/CustomFunctions';
 })
 export class WebServicesComponent implements OnInit {
   @ViewChild("codeEditor") codeEditor: CodemirrorComponent;
-  queryEdit:boolean = false;
+  queryEdit:boolean = true;
   searchText: string;
   searchView: string;
   searchColumn: string;
