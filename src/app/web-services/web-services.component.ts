@@ -218,9 +218,18 @@ export class WebServicesComponent implements OnInit {
     }
   }
 
-  handlerSuccessWS(_this) {
+  handlerSuccessWS(_this,data) {
     _this.globals.isLoading = false;
+    if(data.errors==null){
     _this.globals.currentApplication = "list";
+    }else{
+      const dialogRef = _this.dialog.open(MessageComponent, {
+        data: {
+          title: "Error",
+          message: "It was a problem whith your syntax, check and try again"
+        }
+      });
+    }
   }
 
   handlerErrorSave(_this, result) {
