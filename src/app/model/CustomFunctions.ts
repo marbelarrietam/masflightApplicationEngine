@@ -10,6 +10,8 @@ export class CustomFunctions{
   "selectedResult":string;
   "delete":boolean;
   "order": number;
+  "orderOrderBy":number;
+  "orderGroupBy":number;
   "orderDirection":string;
 
 

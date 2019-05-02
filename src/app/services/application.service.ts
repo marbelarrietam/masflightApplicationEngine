@@ -315,6 +315,13 @@ export class ApplicationService {
     this.http.get(_this, url, handlerSucess, handlerError, null);
   }
 
+  getsetSteps(_this,data,handlerSucess,handlerError){
+      _this.globals.isLoading = true;
+      let url = this.host + "/setSteps?query="+data;
+      this.http.get(_this, url, handlerSucess, handlerError, null);
+
+  }
+
   getWebServices(_this, handlerSucess, handlerError){
     _this.globals.isLoading = true;
     let url = this.host + "/getWebServices";

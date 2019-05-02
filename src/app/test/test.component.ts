@@ -6,6 +6,8 @@ import { DataSource } from '@angular/cdk/collections';
 import { QueryArgument } from '../model/QueryArgument';
 import { QueryWS } from '../model/QueryWS';
 import {MatTableDataSource} from '@angular/material';
+import {MatChipInputEvent} from '@angular/material';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-test',
@@ -15,8 +17,10 @@ import {MatTableDataSource} from '@angular/material';
 export class TestComponent implements OnInit {
 
   arguments: Array<QueryArgument> = new Array();
+  resultsOk: boolean = false;
   ws: QueryWS = new QueryWS();
   argumentsJson = {};
+  argumentList: any[] = [];
   columnsHead: any[] = [];
   columns: any[] = [];
   errors:any[] = [];
@@ -24,6 +28,12 @@ export class TestComponent implements OnInit {
   data;
   displayedColumns: string[] = [];
   urlArguments: string = '?';
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  viewParameters = true;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   constructor(public globals: Globals,
     private service: ApplicationService,
@@ -32,6 +42,12 @@ export class TestComponent implements OnInit {
   ngOnInit() {
     this.ws = this.globals.currentWebService;
     this.arguments = this.ws.arguments;
+    for (let i =0; i< this.arguments.length;i++){
+      if(this.arguments[i].type=='list'){
+        this.arguments[i].valueArray = [];
+      }
+    }
+    console.log(this.arguments)
   }
 
    escapeHtml(unsafe) {
@@ -43,8 +59,21 @@ export class TestComponent implements OnInit {
          .replace(/'/g, "&#039;");
  }
 
+ displayParameters(){
+  if(this.viewParameters){
+    this.viewParameters = false;
+  }else{
+    this.viewParameters = true;
+  }
+}
+
   getJsonRequest(){
     for (let i = 0; i < this.arguments.length; i++){
+      if(this.arguments[i].type=='list'){
+        console.log( this.arguments[i].valueArray)
+        this.arguments[i].value = this.arguments[i].valueArray.join(",");
+        console.log( this.arguments[i].value)
+      }
       this.arguments[i].value = this.arguments[i].value ? this.arguments[i].value : null;
       this.argumentsJson[this.arguments[i].label] = encodeURIComponent(this.arguments[i].value);
 
@@ -53,8 +82,6 @@ export class TestComponent implements OnInit {
       }else{
         this.urlArguments+=`&${this.arguments[i].label}=${this.arguments[i].value}`;
       }
-    }
-    for(let key in this.argumentsJson){
     }
   }
 
@@ -123,6 +150,27 @@ export class TestComponent implements OnInit {
     console.log(result);
     _this.globals.isLoading = false;
     _this.errors.push(result.message);
+  }
+
+  add(event: MatChipInputEvent, arrayArg: any[]): void {
+    const input = event.input;
+    const value = event.value;
+
+    if ((value || '').trim()) {
+      arrayArg.push(value.trim());
+    }
+    if (input) {
+      input.value = '';
+    }
+    console.log(arrayArg)
+  }
+
+  remove(arg: any, arrayArg): void {
+    const index = arrayArg.indexOf(arg);
+
+    if (index >= 0) {
+      arrayArg.splice(index, 1);
+    }
   }
 
 }

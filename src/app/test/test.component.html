@@ -1,53 +1,82 @@
-<div class="msf-menu-header" style="height: 30px; display: flex; flex-direction: column; flex-wrap: wrap">
-    <!-- <button style="padding: 30px" mat-icon-button (click)="backToList()">
-  <mat-icon>arrow_back</mat-icon>
-</button> -->
-    <div class="ws-title" style="flex: 1;padding-top: 5px;padding-bottom: 0px">Testing {{ws.name}}</div>
-    <div class="ws-title" style="flex: 1; font-size: 12px;padding-top: 5px;padding-bottom: 0px; width: 100%">URL: http://staging.pulse.aspsols.com:8882{{globals.currentURL}}</div>
-</div>
-<div class="general-container">
-    <mat-card class="msf-container-table msf-center-container">
-        <div>
-            <div *ngFor="let item of arguments" style="flex: 1; display: flex; flex-direction: column;">
-                <div style="margin-top: 20px; display: flex; flex-direction: row;width:40%;">
-                    <p style="width:30%;">{{item.label}} : </p>
-                    <input style="width:60%;height: 30px;background-color: #1e1e1e; margin-left: 5px; padding-left:5px; border-radius: 2px" matInput [(ngModel)]="item.value">
-                </div>
-            </div>
-            <div style="flex: 1;margin-top: 10px"><button mat-flat-button class="flat-button" (click)="test();">Test</button></div>
-
-        </div>
-
-        <mat-tab-group>
-            <mat-tab label="Data">
-                <div class="test-container" *ngIf="columnsHead.length >0">
-                    <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 datasource welcome-table" style="margin-top: 30px; font-size: 12px">
-
-                        <ng-container [matColumnDef]="column.columnName" *ngFor="let column of columns">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{column.columnLabel}}</th>
-                            <td mat-cell *matCellDef="let element">
-                                {{element[column.columnName]}}
-                            </td>
-                        </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    </table>
-                </div>
-
-            </mat-tab>
-            <mat-tab label="Json Response">
-                <div *ngIf="columnsHead.length >0" style="background-color: white; margin-top: 30px">
-                    <ngx-json-viewer [json]="data"></ngx-json-viewer>
-                </div>
-            </mat-tab>
-            <mat-tab label="Errors">
-                <div *ngIf="errors.length>0" style="margin-top: 30px">
-                    <div *ngFor="let item of errors">
-                        {{item}}
+<div class="general-container" style="display: flex; flex-direction: row; height: 84vh;">
+    <div [ngClass]="{'show-parameters': viewParameters, 'hide-parameters':!viewParameters}" style="background-color: #1e1e1e;padding-left: 15px; width: 25%; max-height: 84vh;">
+        <div style="overflow-y: auto;height:75vh">
+            <div *ngFor="let item of arguments" style="display: flex; flex-direction: column;margin-top: 10px;">
+                <div *ngIf="item.type=='string'" style="margin-top: 20px;">
+                    <div style="display: flex; flex-direction: column;">
+                        <label style="width:94%;margin-bottom: 5px">{{item.label}}</label>
+                        <input style="width:94%;height: 30px;background-color: #232323;" matInput [(ngModel)]="item.value">
                     </div>
                 </div>
-            </mat-tab>
-        </mat-tab-group>
 
-    </mat-card>
-</div>
+
+                <div *ngIf="item.type=='list'" style="width: 94%;overflow-x: hidden; margin-top: 5px">
+
+                    <label style="width:94%;margin-bottom: 5px;overflow-x: hidden;">{{item.label}}</label>
+                    <div>
+                        <mat-form-field class="example-chip-list" style="margin-top: 20px;margin-bottom: 20px;height: 42px;overflow-y: auto;overflow-x: hidden;">
+                            <mat-chip-list #chipList style="width:90%;overflow-x: hidden;">
+                                <mat-chip *ngFor="let arg of item.valueArray" [selectable]="selectable" [removable]="removable" (removed)="remove(arg, item.valueArray)">
+                                    {{arg}}
+                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                </mat-chip>
+                                <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event, item.valueArray)">
+                            </mat-chip-list>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 1;margin-top: 10px; width: 94%;border-radius: 0"><button mat-flat-button class="flat-button" (click)="test();">Test</button></div>
+
+    </div>
+    <div style="width: 26px;background-color: #232323; display: flex" (click)="displayParameters()">
+        <mat-icon *ngIf="viewParameters" style="color: white; margin:auto 0;" aria-label="Toogle">keyboard_arrow_left
+        </mat-icon>
+        <mat-icon *ngIf="!viewParameters" style="color: white; margin: auto 0" aria-label="Toogle">keyboard_arrow_right
+        </mat-icon>
+    </div>
+    <div style="width: 100%">
+        <div class="msf-menu-header" style="height: 30px; display: flex; flex-direction: column; flex-wrap: wrap">
+            <div class="ws-title" style="flex: 1;padding-top: 5px;padding-bottom: 0px">Testing {{ws.name}}</div>
+            <div class="ws-title" style="flex: 1; font-size: 12px;padding-top: 5px;padding-bottom: 0px; width: 100%">URL: http://staging.pulse.aspsols.com:8882{{globals.currentURL}}</div>
+        </div>
+        <mat-card class="msf-container-table msf-center-container">
+            <mat-tab-group>
+                <mat-tab label="Data">
+                    <!-- <div *ngIf="!tableOptions.dataSource && !tableOptions.template">
+                        <div class="msf-no-results">
+                            <span *ngIf="!isPanel">Results not available, please fill parameters and make sure they are working</span><span *ngIf="resultsOk">Results not available, </span>
+                        </div>
+                    </div> -->
+
+                    <div class="test-container" *ngIf="columnsHead.length >0">
+                        <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 datasource welcome-table" style="margin-top: 30px; font-size: 12px">
+
+                            <ng-container [matColumnDef]="column.columnName" *ngFor="let column of columns">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color: #1e1e1e; border:none">{{column.columnLabel}}</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element[column.columnName]}}
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns" style="background-color:#232323;color: white;justify-content: center"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                    </div>
+
+                </mat-tab>
+                <mat-tab label="Json Response">
+                    <div *ngIf="columnsHead.length >0" style="background-color: white; margin-top: 30px">
+                        <ngx-json-viewer [json]="data"></ngx-json-viewer>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Errors">
+                    <div *ngIf="errors.length>0" style="margin-top: 30px">
+                        <div *ngFor="let item of errors">
+                            {{item}}
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card>
+    </div>

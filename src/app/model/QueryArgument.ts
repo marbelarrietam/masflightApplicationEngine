@@ -1,5 +1,6 @@
 export class QueryArgument {
   "label":string;
+  "valueArray":any[];
   "type":string;
   "required":string;
   "requiredBool":boolean;
@@ -13,5 +14,6 @@ export class QueryArgument {
     this.requiredBool = true;
     this.delete = false;
     this.value = '';
+    this.valueArray = [];
   }
 }

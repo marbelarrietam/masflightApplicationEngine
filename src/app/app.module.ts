@@ -17,7 +17,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ApplicationComponent } from './application/application.component';
 import {Globals} from './globals/Globals';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import { MatFormFieldModule, MatSelectModule } from '@angular/material';
+import { MatFormFieldModule, MatSelectModule, MatChipsModule } from '@angular/material';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { IntroComponent } from './intro/intro.component';
 import { CurrentQuerySummaryComponent } from './current-query-summary/current-query-summary.component';
@@ -73,6 +73,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
     DragDropModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    MatChipsModule,
     LayoutModule,
     MaterialModule,
     FormsModule,

@@ -30,6 +30,7 @@ import { CustomFunctions } from '../model/CustomFunctions';
 export class WebServicesComponent implements OnInit {
   @ViewChild("codeEditor") codeEditor: CodemirrorComponent;
   queryEdit:boolean = true;
+  queryText:string;
   searchText: string;
   searchView: string;
   searchColumn: string;
@@ -96,6 +97,28 @@ export class WebServicesComponent implements OnInit {
       items: this.formBuilder.array([])
     });
   }
+
+  validate(){
+    this.service.getsetSteps(this,encodeURIComponent(this.queryText),this.handlerSuccessText, this.handlerError)
+  }
+
+  handlerSuccessText(_this,data){
+    if(data.errors==null){
+      _this.selectEdit = data;
+      _this.getDataQueryInit();
+      _this.globals.isLoading = false;
+    }else{
+      _this.globals.isLoading = false;
+      const dialogRef = _this.dialog.open(MessageComponent, {
+        data: {
+          title: "Error",
+          message: "It was a problem whith your syntax, check and try again"
+        }
+      });
+
+    }
+  }
+
 
   addCustomFunction(){
     let custom = new CustomFunctions();
@@ -416,6 +439,7 @@ export class WebServicesComponent implements OnInit {
   }
   getDataQueryInit() {
     this.selectconcat.arguments = this.selectEdit.arguments;
+    if(this.selectconcat.arguments!=null){
     for (let i=0;i<this.selectconcat.arguments.length;i++){
       if(this.selectconcat.arguments[i].required=="true"){
         this.selectconcat.arguments[i].requiredBool=true;
@@ -423,12 +447,14 @@ export class WebServicesComponent implements OnInit {
         this.selectconcat.arguments[i].requiredBool=false;
       }
     }
+  }
     this.selectconcat.name = this.selectEdit.name;
     this.selectconcat.id = this.selectEdit.id;
     this.selectconcat.pageSize = this.selectEdit.pageSize;
     this.selectconcat.method = this.selectEdit.method;
     this.selectconcat.description = this.selectEdit.description;
     this.selectconcat.customFunctions = this.selectEdit.customFunctions;
+    if(this.selectconcat.customFunctions!=null){
     for (let a = 0; a < this.selectconcat.customFunctions.length;a++){
       if (this.selectconcat.customFunctions[a].orderBy == "1") {
         this.selectconcat.customFunctions[a].orderByBool = true;
@@ -436,11 +462,12 @@ export class WebServicesComponent implements OnInit {
         this.selectconcat.customFunctions[a].orderByBool = false;
       }
     }
+  }
     this.whereSentence = this.selectEdit.whereclause;
     this.havingSentence = this.selectEdit.havingclause;
     for (let i = 0; i < this.tables.length; i++) {
       for (let j = 0; j < this.selectEdit.tables.length; j++) {
-        if (this.tables[i].name == this.selectEdit.tables[j].name) {
+        if (this.tables[i].name.toLowerCase() == this.selectEdit.tables[j].name.toLowerCase()) {
           this.tables[i].id = this.selectEdit.tables[j].id;
           this.tables[i].selected = true;
           this.tables[i].alias = this.selectEdit.tables[j].alias;
@@ -454,8 +481,8 @@ export class WebServicesComponent implements OnInit {
                 ? columnsOrigin.order
                 : 0;
               if (
-                this.tables[i].columns[k].name ==
-                this.selectEdit.tables[j].columns[m].name
+                this.tables[i].columns[k].name.toLowerCase() ==
+                this.selectEdit.tables[j].columns[m].name.toLowerCase()
               ) {
                 let columnsToAdd = this.tables[i].columns[k];
 

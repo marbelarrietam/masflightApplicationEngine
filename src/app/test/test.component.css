@@ -2,3 +2,45 @@
     height: 400px;
     overflow: auto;
 }
+
+td.mat-cell,
+td.mat-footer-cell,
+th.mat-header-cell {
+    padding: 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #333;
+}
+
+.mat-row,
+.mat-header-row {
+    background: #232322;
+}
+
+.example-chip-list {
+    width: 100%;
+}
+
+.mat-cell,
+.mat-footer-cell {
+    font-weight: 100;
+    text-align: center;
+    color: #ffffff;
+}
+
+.mat-chip.mat-standard-chip {
+    background-color: #232323;
+    color: rgba(251, 249, 249, 0.87);
+}
+
+.mat-chip.mat-standard-chip .mat-chip-remove {
+    color: #424242;
+}
+
+.show-parameters {
+    display: block;
+}
+
+.hide-parameters {
+    display: none;
+}

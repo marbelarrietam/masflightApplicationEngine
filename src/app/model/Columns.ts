@@ -18,6 +18,10 @@ export class Columns{
   "delete":boolean;
   "order": number;
   "orderDirection":string;
+  "orderOrderBy":number;
+  "orderGroupBY":number;
+  "table":string;
+  "tableAlias":string;
 
   constructor(){
     this.name = '';
@@ -34,5 +38,7 @@ export class Columns{
     this.selectedResult = '0';
     this.order = 0;
     this.orderDirection = '';
+    this.table = '';
+    this.tableAlias ='';
   }
 }
