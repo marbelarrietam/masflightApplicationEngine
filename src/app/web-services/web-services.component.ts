@@ -92,6 +92,12 @@ export class WebServicesComponent implements OnInit {
   dataSource;
 
   ngOnInit() {
+    if(!this.globals.currentWebService){
+      this.queryEdit = true;
+    }else{
+      this.queryEdit = false;
+    }
+
     this.getTables();
     this.argForms = this.formBuilder.group({
       items: this.formBuilder.array([])
@@ -106,6 +112,8 @@ export class WebServicesComponent implements OnInit {
     if(data.errors==null){
       _this.selectEdit = data;
       _this.getDataQueryInit();
+      _this.queryEdit=false;
+      _this.cursorMoved()
       _this.globals.isLoading = false;
     }else{
       _this.globals.isLoading = false;
@@ -912,6 +920,7 @@ export class WebServicesComponent implements OnInit {
     lineNumbers: true,
     lineWrapping: true,
     theme: "material",
+    autofocus: true,
     mode: { name: "text/x-mariadb" }
   };
 
@@ -919,7 +928,6 @@ export class WebServicesComponent implements OnInit {
   cursorMoved() {
     this.cursorPos = (this.codeEditor.codeMirror as any).getCursor();
   }
-
 
   selectRow(row) {
     this.argumentSelected = row;

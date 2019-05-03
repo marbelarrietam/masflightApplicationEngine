@@ -1,5 +1,5 @@
 <div style="height: calc(100% - 84px)">
-    <div class="msf-menu-header" style="display: flex; flex-direction: row; align-items: center; flex-wrap: wrap; height: 70px;">
+    <div class="msf-menu-header headerWS">
         <div style=" display: flex; flex-direction: row; flex-wrap: wrap; width: 85%; height: 100%">
             <button mat-button (click)="backToList()">
                 <mat-icon style="height: 100%;">arrow_back</mat-icon>
@@ -12,18 +12,18 @@
                 <button mat-flat-button class="flat-button button-publish" style="margin: auto 15px; padding: 0px; width: 200px" (click)="saveWebService()">Publish</button>
             </div>
         </div>
-        <div (click)="DisplayEditQuery()" style="display: flex; flex-direction: row; flex-wrap: wrap; width: 15%; background-color: #232323;height: 100%;">
-            <img src="../assets/images/typeQuery.png" Style="height: 25px; margin: auto 0px auto 35px;">
-            <div Style="margin: auto; height: 25px;">Type Query</div>
-            <mat-icon *ngIf="queryEdit" style="color: white; margin: auto 25px; margin-left: 0px; height: 15px;" aria-label="Toogle">keyboard_arrow_down
+        <div (click)="DisplayEditQuery()" class="editQuery">
+            <img src="../assets/images/typeQuery.png">
+            <div>Type Query</div>
+            <mat-icon *ngIf="!queryEdit" class="IconEditQuery" aria-label="Toogle">keyboard_arrow_down
             </mat-icon>
-            <mat-icon *ngIf="!queryEdit" style="color: white; margin: auto 25px; margin-left: 0px; height: 15px;" aria-label="Toogle">keyboard_arrow_up
+            <mat-icon *ngIf="queryEdit" class="IconEditQuery" aria-label="Toogle">keyboard_arrow_up
             </mat-icon>
             <!-- <button (click)="DisplayEditQuery()" mat-flat-button style="background-color: #232323;">Type Query</button> -->
         </div>
     </div>
-    <div class="msf-menu-body;" style="display:flex; flex-direction:column; height: calc(100% - 70px);">
-        <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="display: flex; flex-direction: row; align-items: center; background-color: #232323; height: calc(100% - 50px); padding: 30px 50px 60px 60px;">
+    <div class="msf-menu-body; BodyWS" style="display:flex; flex-direction:column; height: calc(100% - 70px);">
+        <div [ngClass]="queryEdit  ? 'mostrar' : 'ocultar'" style="display: flex; flex-direction: row; align-items: center; background-color: #232323; height: calc(100% - 50px); padding: 30px 50px 60px 60px;">
             <!-- <div [hidden]="!queryEdit" style="height: 300px; background-color:#232323; padding: 30px"> -->
             <div style="width: 70%; display: flex !important; flex-direction: column; margin-right: 30px;">
                 <div Style="font-weight: 500; font-size: 20px; margin: 0px 0px 20px 0px;">Query</div>
@@ -51,7 +51,7 @@
             <mat-step [stepControl]="dataSourceForm">
                 <ng-template matStepLabel>Select Data Source</ng-template>
                 <!-- <div [hidden]="queryEdit"> -->
-                <div [ngClass]="queryEdit  ? 'mostrar' : 'ocultar'" style="height: 100%; background-color:#232323; padding: 20px 30px">
+                <div [ngClass]="queryEdit  ?  'ocultar': 'mostrar'" style="height: 100%; background-color:#232323; padding: 20px 30px">
                     <div style="display: flex !important; flex-direction: row; flex-flow: row wrap;margin-left:100px;margin-top:20px;">
                         <div style="width: 30%;">
                             <div class="box-titles">Table(s)</div>
@@ -134,7 +134,7 @@
             <mat-step [stepControl]="columnsForm">
                 <ng-template matStepLabel>Select Data Column</ng-template>
                 <!-- <div [hidden]="queryEdit"> -->
-                <div [ngClass]="queryEdit  ? 'mostrar' : 'ocultar'" style="height: 300px; background-color:#232323; padding: 30px">
+                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="height: 300px; background-color:#232323; padding: 30px">
                     <div style="display: flex; flex-direction: row; flex-flow: row wrap;margin-left:100px;margin-top:20px;">
                         <div style="width: 30%;">
                             <div style="display: flex; flex-direction: row; flex-flow: row wrap; height: 50px">
@@ -278,7 +278,7 @@
             <mat-step [stepControl]="argForms">
                 <ng-template matStepLabel>Service Arguments</ng-template>
                 <!-- <div [hidden]="queryEdit"> -->
-                <div [ngClass]="queryEdit  ? 'mostrar' : 'ocultar'" style="height: 300px; background-color:#232323; padding: 30px">
+                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="height: 300px; background-color:#232323; padding: 30px">
                     <div style=" overflow: hidden; display: flex; flex-direction: row; flex-flow: row wrap;margin-left:200px;margin-right:200px;margin-top:20px;">
 
                         <div style="width: 100%">
@@ -324,13 +324,13 @@
             <mat-step>
                 <ng-template matStepLabel>Where Condition</ng-template>
                 <!-- <div [hidden]="queryEdit"> -->
-                <div [ngClass]="queryEdit  ? 'mostrar' : 'ocultar'" style="height: 300px; background-color:#232323; padding: 30px">
+                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'"style="height: 300px; background-color:#232323; padding: 30px">
                     <div style="margin-left:100px;margin-right:100px;margin-top:20px;font-size: 14px">
                         <div style="margin-bottom: 5px;"><span style="color:#01abec">Select </span>{{selectSentence}}
                         </div>
                         <div style="margin-bottom: 5px;"><span style="color:#01abec">From </span>{{fromSentence}}</div>
                         <div style="margin-bottom: 5px;"><span style="color:#01abec">Where: </span></div>
-                        <ngx-codemirror #codeEditor [(ngModel)]="whereSentence" [options]="options" (cursorActivity)="cursorMoved()">
+                        <ngx-codemirror #codeEditor [(ngModel)]="whereSentence" [options]="options" >
                         </ngx-codemirror>
                         <div style="margin-top:20px;overflow: hidden; display: flex; flex-direction: row; flex-flow: row wrap">
                             <div style="width:60%; margin-right: 3%">
@@ -366,7 +366,7 @@
             <mat-step>
                 <ng-template matStepLabel>Group by</ng-template>
                 <!-- <div [hidden]="queryEdit"> -->
-                <div [ngClass]="queryEdit  ? 'mostrar' : 'ocultar'" style="height: 300px; background-color:#232323; padding: 30px">
+                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="height: 300px; background-color:#232323; padding: 30px">
                     <div style="display: flex; flex-direction: row; flex-wrap: wrap;margin-left:100px;margin-top:20px;">
                         <div style="width: 30%;padding-top: 30px">
                             <div class="box-container" style="height: 200px">
@@ -409,7 +409,7 @@
             <mat-step>
                 <ng-template matStepLabel>Order by</ng-template>
                 <!-- <div [hidden]="queryEdit"> -->
-                <div [ngClass]="queryEdit  ? 'mostrar' : 'ocultar'" style="height: 300px; background-color:#232323; padding: 30px">
+                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="height: 300px; background-color:#232323; padding: 30px">
                     <div style="display: flex; flex-direction: row; flex-wrap: wrap;margin-left:100px;margin-top:20px;">
                         <div style="width: 30%;">
                             <div class="box-container" style="height: 320px">
@@ -558,7 +558,7 @@
             <mat-step>
                 <ng-template matStepLabel>Service Configuration</ng-template>
                 <!-- <div [hidden]="queryEdit"> -->
-                <div [ngClass]="queryEdit  ? 'mostrar' : 'ocultar'" style="height: 300px; background-color:#232323; padding: 30px">
+                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="height: 300px; background-color:#232323; padding: 30px">
                     <form name="configuration">
                         <div style="margin-left:100px;margin-top:20px;width: 45%">
                             <mat-form-field class="server-config">
@@ -592,7 +592,7 @@
             <mat-step>
                 <ng-template matStepLabel>Query Summary</ng-template>
                 <!-- <div [hidden]="queryEdit"> -->
-                <div [ngClass]="queryEdit  ? 'mostrar' : 'ocultar'" style="height: 300px; background-color:#232323; padding: 30px">
+                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="height: 300px; background-color:#232323; padding: 30px">
                     <div style="margin-left:100px;margin-right:100px;margin-top:20px;font-size: 14px ">
                         <div *ngIf="selectSentence" style="margin-bottom: 5px; "><span style="color:#01abec ">Select
                             </span>{{selectSentence}}</div>
