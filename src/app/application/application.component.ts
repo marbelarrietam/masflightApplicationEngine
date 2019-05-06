@@ -65,7 +65,7 @@ export class ApplicationComponent implements OnInit {
     _this.globals.currentUser = data.name;
     _this.userName = data.name;
     _this.admin = data.admin;
-     _this.globals.isLoading = false;
+    //  _this.globals.isLoading = false; kp20190506
 
     // if (_this.dashboardPlan)
     //  _this.goToDashboard ();

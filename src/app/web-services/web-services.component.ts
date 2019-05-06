@@ -750,11 +750,15 @@ export class WebServicesComponent implements OnInit {
     );
   }
 
-  addColumn(column) {
+  addColumn(column) {    
     if (column.selected) {
       column.selectedResult = "1";
     } else {
       column.selectedResult = "0";
+      if (!column.orderBool && !column.groupByBool){
+        column.delete = true;
+      }
+
     }
   }
 

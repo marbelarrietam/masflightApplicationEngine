@@ -41,4 +41,6 @@ export class Columns{
     this.table = null;
     this.tableAlias = null;
   }
+
+  
 }
