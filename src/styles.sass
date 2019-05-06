@@ -23,11 +23,30 @@
 
 @import "~codemirror/theme/material.css"
 
-.editQuery
-    cursor: pointer
+.BodyQueryEdit
+    display: flex
+    flex-direction: row
+    align-items: center
+    background-color: #232323 
+    height: calc(100% - 50px)
+    padding: 30px 50px 60px 60px
+
+
+.headerWS
     display: flex
     flex-direction: row
     flex-wrap: wrap
+
+.headerWS_Div
+    align-items: center
+    height: 70px
+
+.headerWsTitle
+    padding: 0px
+    margin: auto 0px
+
+.editQuery
+    cursor: pointer
     width: 15%
     background-color: #232323
     height: 100%
@@ -44,20 +63,34 @@
     margin-left: 0px
     height: 15px
 
-.headerWS
-    display: flex
-    flex-direction: row
-    align-items: center
-    flex-wrap: wrap
-    height: 70px
-
 .BodyWS
     display: flex
-    flex-direction:column
+    flex-direction: column
     height: calc(100% - 70px)
 
 .CodeMirror
     height: 300px !important
+
+.InfoQuery
+    padding-bottom: 15px
+    height: 245px
+    font-weight: lighter
+    font-size: 12px
+    text-align: justify
+
+.ocultar2
+    // display: none  !important
+    height:  0px !important
+    transition: 0.5s
+    padding: 0px !important
+    #codeEditor
+        display: none  !important
+
+
+.mostrar2
+    // display: block
+    height: auto !important
+    transition: 0.5s
 
 .ocultar
     display: none  !important

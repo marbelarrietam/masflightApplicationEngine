@@ -38,7 +38,7 @@ export class Columns{
     this.selectedResult = '0';
     this.order = 0;
     this.orderDirection = '';
-    this.table = '';
-    this.tableAlias ='';
+    this.table = null;
+    this.tableAlias = null;
   }
 }

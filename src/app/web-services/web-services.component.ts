@@ -66,7 +66,9 @@ export class WebServicesComponent implements OnInit {
   selectViews: QueryWS = new QueryWS();
   selectconcat: QueryWS = new QueryWS();
   tables: any[] = [];
+  tablesInicial: any[] = [];
   views: any[] = [];
+  viewsInicial: any[] = [];
   argumentSelected: any;
   argForms: FormGroup;
   items: FormArray;
@@ -104,7 +106,27 @@ export class WebServicesComponent implements OnInit {
     });
   }
 
+  
+  clear(){
+    // var aux = this.tablesInicial.slice(0);
+    // this.tables = [];
+    // this.tables = aux;
+    this.tableSelected =  new Tables();
+    this.selectEdit = new QueryWS();
+    this.selectTables = new QueryWS();
+    this.selectViews = new QueryWS();
+    this.selectconcat = new QueryWS();
+
+    
+    // for (let i = 0; i < this.tables.length; i++) {
+    //   if(this.tables[i].se){
+
+    //   }
+    // }
+  }
+
   validate(){
+    this.clear()
     this.service.getsetSteps(this,encodeURIComponent(this.queryText),this.handlerSuccessText, this.handlerError)
   }
 
@@ -432,13 +454,22 @@ export class WebServicesComponent implements OnInit {
   }
 
   handlerSuccessTables(_this, data) {
+    var x = data.slice();
     for (let i = 0; i < data.length; i++) {
       if (data[i].type == "table") {
         _this.tables.push(data[i]);
+        // _this.tablesInicial.push(data[i]);
       } else if (data[i].type == "view") {
         _this.views.push(data[i]);
+       _this.viewsInicial.push(data[i]);
       }
     }
+    for (let i = 0; i < x.length; i++) {
+      if (data[i].type == "table") {
+        _this.tablesInicial.push(x[i]);
+      } 
+    }
+    // _this.tablesInicial = _this.tables.slice();
     if (_this.globals.currentWebService) {
       _this.loadWebService();
     }
@@ -449,6 +480,7 @@ export class WebServicesComponent implements OnInit {
     console.log(result);
     _this.globals.isLoading = false;
   }
+
 
   loadWebService() {
     this.selectEdit = this.globals.currentWebService;
@@ -607,7 +639,12 @@ export class WebServicesComponent implements OnInit {
             }
             return 0;
           });
-        }
+        }else{
+          //kp 06/05/2019
+          this.tables[i].id = null;
+          this.tables[i].selected = false;
+          this.tables[i].alias = null;
+          }
       }
     }
     this.tableSelected = this.selectconcat.tables[0];
