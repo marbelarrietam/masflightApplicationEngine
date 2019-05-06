@@ -75,11 +75,12 @@ export class WebServicesComponent implements OnInit {
   configurationForm = new FormGroup({
     nameValidator: new FormControl("name", [Validators.required])
   });
+  
 
   argumentsForm = new FormGroup({
     argumentRequired: new FormControl(),
     argumentName: new FormControl("argumentName", [Validators.required]),
-    argumentType: new FormControl()
+    argumentType: new FormControl("argumentType", [Validators.required])
   });
 
   constructor(
@@ -135,7 +136,8 @@ export class WebServicesComponent implements OnInit {
       _this.selectEdit = data;
       _this.getDataQueryInit();
       _this.queryEdit=false;
-      _this.cursorMoved()
+      // _this.cursorMoved()
+      _this.getSelectedColumns();
       _this.globals.isLoading = false;
     }else{
       _this.globals.isLoading = false;
@@ -194,28 +196,53 @@ export class WebServicesComponent implements OnInit {
   backToList() {
     this.globals.currentApplication = "list";
   }
+
   verifyArguments() {
-    let value = 0;
+    let value = "";
     for (let i = 0; i < this.selectconcat.arguments.length; i++) {
       if (
         this.selectconcat.arguments[i]["label"] == null ||
         this.selectconcat.arguments[i]["label"] == ""
       ) {
-        value = 1;
+        value = "label";
+      }
+      if (
+        this.selectconcat.arguments[i]["type"] == null ||
+        this.selectconcat.arguments[i]["type"] == ""
+      ) {
+        value = "type";
       }
     }
-    if (value > 0) {
-      return false;
+    if (value==="") {
+      return "ok";
     } else {
-      return true;
+      return value;
     }
   }
 
+  // verifyArguments() {
+  //   let value = 0;
+  //   for (let i = 0; i < this.selectconcat.arguments.length; i++) {
+  //     if (
+  //       this.selectconcat.arguments[i]["label"] == null ||
+  //       this.selectconcat.arguments[i]["label"] == ""
+  //     ) {
+  //       value = 1;
+  //     }
+  //   }
+  //   if (value > 0) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // }
+
   saveWebService() {
+    var merr="";
     this.getSelectedColumns();
     let argumentsVerification = this.verifyArguments();
     if (this.configurationForm.valid) {
-      if (argumentsVerification) {
+      if (argumentsVerification==="ok") {
         this.service.saveWebServices(
           this,
           this.createQueryJson(),
@@ -223,10 +250,15 @@ export class WebServicesComponent implements OnInit {
           this.handlerErrorSave
         );
       } else {
+        if (argumentsVerification==="label"){
+          merr = "You have missing some arguments names, please check"
+        }else if (argumentsVerification==="type"){
+          merr = "You have missing some arguments types, please check"
+        }
         const dialogRef = this.dialog.open(MessageComponent, {
           data: {
             title: "Error",
-            message: "You have missing some arguments names, please check"
+            message: merr
           }
         });
       }
@@ -1017,4 +1049,11 @@ export class WebServicesComponent implements OnInit {
       ? "Name already exists"
       : "";
   }
+
+  getErrorTypeArguments() {
+    return this.argumentsForm.get("argumentType").hasError("required")
+      ? "You must enter a type argument"
+      : "";
+  }
+
 }
