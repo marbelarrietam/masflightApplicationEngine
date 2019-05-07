@@ -30,23 +30,29 @@
                     <ngx-codemirror #codeEditor [(ngModel)]="queryText" [options]="options" (cursorActivity)="cursorMoved()">
                     </ngx-codemirror>
                 </div>
-                <div *ngIf="queryEdit" Style="width: 30%;">
-                    <div Style=" font-weight: 500; font-size: 15px; margin: 0px 0px 20px 0px; text-align: right;">Information
+                <div *ngIf="queryEdit" Style="width: 30%; text-align: center;">
+                    <div Style=" font-weight: 500; font-size: 15px; margin: 0px 0px 20px 0px; text-align: right;">
+                        Information
                         <!-- <mat-icon *ngIf="queryEdit" style="color: white; margin: auto;" aria-label="Toogle">
                             keyboard_arrow_down
                         </mat-icon> -->
-                        <mat-icon style="color: white; margin: auto;" aria-label="Toogle">
+                        <!-- <mat-icon style="color: white; margin: auto;" aria-label="Toogle">
                             keyboard_arrow_up
-                        </mat-icon>
+                        </mat-icon> -->
                     </div>
                     <div class="InfoQuery">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
                         in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        <!-- <mat-form-field >
+                            <textarea matInput >
+                            </textarea>
+                          </mat-form-field>  -->
                     </div>
                     <button mat-flat-button class="flat-button button-publish" (click)="validate()" style=" margin: auto; padding: 0px; width: 200px;">Validate</button>
                 </div>
             </div>
-            <mat-horizontal-stepper style="height: 100%;" (selectionChange)="getSelectedColumns()">
+            <!-- <mat-horizontal-stepper style="height: 100%;" (selectionChange)="getSelectedColumns()"> -->
+            <mat-horizontal-stepper style="height: 100%;">
     
                 <mat-step [stepControl]="dataSourceForm">
                     <ng-template matStepLabel>Select Data Source</ng-template>
@@ -607,7 +613,7 @@
                 </mat-step>
     
                 <mat-step>
-                    <ng-template matStepLabel>Query Summary</ng-template>
+                    <ng-template matStepLabel ><p (click)="getSelectedColumns()">Query Summary</p></ng-template>
                     <!-- <div [hidden]="queryEdit"> -->
                     <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="height: 300px; background-color:#232323; padding: 30px">
                         <div style="margin-left:100px;margin-right:100px;margin-top:20px;font-size: 14px ">

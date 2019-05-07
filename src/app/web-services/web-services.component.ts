@@ -136,7 +136,6 @@ export class WebServicesComponent implements OnInit {
       _this.selectEdit = data;
       _this.getDataQueryInit();
       _this.queryEdit=false;
-      // _this.cursorMoved()
       _this.getSelectedColumns();
       _this.globals.isLoading = false;
     }else{
