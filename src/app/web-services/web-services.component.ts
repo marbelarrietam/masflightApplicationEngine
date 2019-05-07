@@ -958,6 +958,9 @@ export class WebServicesComponent implements OnInit {
   deleteArgument(arg) {
     let index = this.selectconcat.arguments.findIndex(d => d === arg);
     arg.delete = true;
+    if (arg.type===null || arg.type===""){
+      arg.type="string";
+    }
     this.deletedArguments.push(arg);
     this.selectconcat.arguments.splice(index, 1);
   }
@@ -1013,11 +1016,12 @@ export class WebServicesComponent implements OnInit {
   }
 
   setRequired(arg){
-    if(arg.requiredBool == true){
+    if(arg.requiredBool){
       arg.required = "true";
-    }else{arg.required = "false"}
+    }else{
+      arg.required = "false";
+    }
   }
-
 
   checkNameValidator(name) {
     this.service.checkWSName(
