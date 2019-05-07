@@ -340,6 +340,7 @@ export class WebServicesComponent implements OnInit {
     queryJson.method = this.selectconcat.method;
     queryJson.description = this.selectconcat.description;
     queryJson.pageSize = this.selectconcat.pageSize;
+    queryJson.wrapped = this.selectconcat.wrapped; //kp20190507
     return queryJson;
   }
 

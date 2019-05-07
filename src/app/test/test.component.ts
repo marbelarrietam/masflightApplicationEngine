@@ -89,6 +89,7 @@ export class TestComponent implements OnInit {
   setDisplayedColumns(_this){
 
   }
+  /* //kp20190507 coemtado
   test(){
     this.globals.isLoading = true;
     this.getJsonRequest();
@@ -98,7 +99,14 @@ export class TestComponent implements OnInit {
     if(this.ws.method=="GET"){
       this.service.testWebServicesGet(this,this.ws.name,this.argumentsJson, this.handlerSucces, this.handlerError);
     }
-  }
+  }*/
+
+  //kp20190507 modificado
+  test(){
+    this.globals.isLoading = true;
+    this.getJsonRequest();
+    this.service.testWebServicesGet(this,this.ws.name,this.argumentsJson, this.handlerSucces, this.handlerError);
+    }
 
   backToList() {
     this.globals.currentApplication = "list";
