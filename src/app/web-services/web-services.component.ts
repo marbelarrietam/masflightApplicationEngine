@@ -751,11 +751,13 @@ export class WebServicesComponent implements OnInit {
     );
   }
 
+
   addColumn(column) {    
     if (column.selected) {
       column.selectedResult = "1";
     } else {
       column.selectedResult = "0";
+        //kp20190506 add
       if (!column.orderBool && !column.groupByBool){
         column.delete = true;
       }
@@ -1016,6 +1018,7 @@ export class WebServicesComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.selectconcat.arguments);
   }
 
+  //kp20190507 modificado
   setRequired(arg){
     if(arg.requiredBool){
       arg.required = "true";
