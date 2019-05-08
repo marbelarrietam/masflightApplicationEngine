@@ -15,7 +15,9 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
   styleUrls: ['./test.component.css']
 })
 export class TestComponent implements OnInit {
-
+  tab:number = 1;
+  showUrl:boolean = false;
+  showTable:boolean = false;
   arguments: Array<QueryArgument> = new Array();
   resultsOk: boolean = false;
   ws: QueryWS = new QueryWS();
@@ -33,6 +35,7 @@ export class TestComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   viewParameters = true;
+  wrapped:string = "0";
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   constructor(public globals: Globals,
@@ -41,6 +44,7 @@ export class TestComponent implements OnInit {
 
   ngOnInit() {
     this.ws = this.globals.currentWebService;
+    this.wrapped = this.ws.wrapped;
     this.arguments = this.ws.arguments;
     for (let i =0; i< this.arguments.length;i++){
       if(this.arguments[i].type=='list'){
@@ -92,13 +96,8 @@ export class TestComponent implements OnInit {
   test(){
     this.globals.isLoading = true;
     this.getJsonRequest();
-    if(this.ws.method=="POST"){
-      this.service.testWebService(this,this.ws.name,this.argumentsJson, this.handlerSucces, this.handlerError);
+    this.service.testWebServicesGet(this,this.ws.name,this.argumentsJson, this.handlerSucces, this.handlerError);
     }
-    if(this.ws.method=="GET"){
-      this.service.testWebServicesGet(this,this.ws.name,this.argumentsJson, this.handlerSucces, this.handlerError);
-    }
-  }
 
   backToList() {
     this.globals.currentApplication = "list";
@@ -110,14 +109,17 @@ export class TestComponent implements OnInit {
     this.dataSource = [];
     this.data = [];
     this.displayedColumns = [];
+    this.showTable = false;
+    this.showUrl = false;
   }
 
   handlerSucces(_this, data){
-    console.log("data");
-    console.log(data);
+    if(_this.wrapped=="1"){
     if(data.Response.records){
     if(data.Response.records.length>0){
     _this.cleanVariables();
+    _this.data = data;
+    _this.showUrl = true;
     _this.columnsHead = Object.keys(data.Response.records[0]);
     console.log(_this.columnsHead);
     _this.displayedColumns = _this.columnsHead;
@@ -128,22 +130,75 @@ export class TestComponent implements OnInit {
     }
 
       _this.ws.url=_this.ws.url+_this.urlArguments;
+    console.log(_this.data)
+    _this.dataSource = new MatTableDataSource(data.Response.records);
+    _this.showTable = true;
+    _this.tab=1;
+  }
+  else {
+    if(_this.data.Response.errors){
+      _this.cleanVariables();
+      _this.data = data;
+      _this.showUrl = true;
+    for (let i=0;i<_this.data.Response.errors.length;i++){
+    _this.errors.push(_this.data.Response.errors[i].error);
+    _this.tab=2;
+    }
+  }
+}
+    }
 
+ else {
+  if(_this.data.Response.errors){
+    _this.cleanVariables();
+    _this.data = data;
+    _this.showUrl = true;
+for (let i=0;i<_this.data.Response.errors.length;i++){
+    _this.errors.push(_this.data.Response.errors[i].error);
+    _this.tab=2;
+    }
+  }
+}
+    }
+
+else{
+  if(data){
+    if(data.length>0){
+      _this.cleanVariables();
+      _this.data = data;
+      _this.showUrl = true;
+    _this.displayedColumns = _this.columnsHead;
+    if(_this.columnsHead[0] == 'error'){
+      for(let i=0;i<data.length;i++){
+      _this.errors.push(data[i].error);
+      }
+      _this.tab=2;
+
+    }
+    else{
+      _this.cleanVariables();
+      _this.data = data;
+      _this.showUrl = true;
+      _this.columnsHead = Object.keys(data[0]);
+      _this.displayedColumns = _this.columnsHead;
+    for (let i =0; i < _this.columnsHead.length; i++){
+      let col = _this.columnsHead[i];
+      let aux = { columnName: col, columnLabel: col};
+      _this.columns.push(aux);
+    }
+      _this.ws.url=_this.ws.url+_this.urlArguments;
     _this.data = data;
 
     console.log(_this.data)
-    _this.dataSource = new MatTableDataSource(data.Response.records);
-    _this.globals.isLoading = false;
-  }
-  else {
-    _this.globals.isLoading = false;
-    _this.errors.push("No data found");
-}
+    _this.dataSource = new MatTableDataSource(data);
+    _this.showTable = true;
+    _this.tab=1;
     }
- else {
-  _this.globals.isLoading = false;
-  _this.errors.push("No data found");
+  }
+  }
 }
+_this.globals.isLoading = false;
+
   }
 
   handlerError(_this, result){
