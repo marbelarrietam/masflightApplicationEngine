@@ -487,22 +487,13 @@ export class WebServicesComponent implements OnInit {
   }
 
   handlerSuccessTables(_this, data) {
-    var x = data.slice();
     for (let i = 0; i < data.length; i++) {
       if (data[i].type == "table") {
         _this.tables.push(data[i]);
-        // _this.tablesInicial.push(data[i]);
       } else if (data[i].type == "view") {
         _this.views.push(data[i]);
-       _this.viewsInicial.push(data[i]);
       }
     }
-    for (let i = 0; i < x.length; i++) {
-      if (data[i].type == "table") {
-        _this.tablesInicial.push(x[i]);
-      } 
-    }
-    // _this.tablesInicial = _this.tables.slice();
     if (_this.globals.currentWebService) {
       _this.loadWebService();
     }
@@ -536,6 +527,7 @@ export class WebServicesComponent implements OnInit {
     this.selectconcat.method = this.selectEdit.method;
     this.selectconcat.description = this.selectEdit.description;
     this.selectconcat.customFunctions = this.selectEdit.customFunctions;
+    this.selectconcat.wrapped = this.selectEdit.wrapped; //kp20190508
     if(this.selectconcat.customFunctions!=null){
     for (let a = 0; a < this.selectconcat.customFunctions.length;a++){
       if (this.selectconcat.customFunctions[a].orderBy == "1") {
@@ -547,6 +539,7 @@ export class WebServicesComponent implements OnInit {
   }
     this.whereSentence = this.selectEdit.whereclause;
     this.havingSentence = this.selectEdit.havingclause;
+    //kp20190508 change order of for to decrease time of search
     for (let j = 0; j < this.selectEdit.tables.length; j++) {
       for (let i = 0; i < this.tables.length; i++) {
         if (this.tables[i].name.toLowerCase() == this.selectEdit.tables[j].name.toLowerCase()) {
