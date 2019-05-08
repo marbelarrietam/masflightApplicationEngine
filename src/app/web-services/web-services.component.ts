@@ -116,14 +116,14 @@ export class WebServicesComponent implements OnInit {
     this.selectEdit = new QueryWS();
     this.selectTables = new QueryWS();
     this.selectViews = new QueryWS();
-    this.selectconcat = new QueryWS();
-
-    
-    // for (let i = 0; i < this.tables.length; i++) {
-    //   if(this.tables[i].se){
-
-    //   }
-    // }
+    this.selectconcat = new QueryWS();    
+    for (let i = 0; i < this.tables.length; i++) {
+      if(this.tables[i].selected===true){
+        this.tables[i].id = null;
+        this.tables[i].selected = false;
+        this.tables[i].alias = null;
+      }
+    }
   }
 
   validate(){
@@ -146,7 +146,7 @@ export class WebServicesComponent implements OnInit {
           message: "It was a problem whith your syntax, check and try again"
         }
       });
-
+      console.log(data.errors);
     }
   }
 
@@ -290,6 +290,7 @@ export class WebServicesComponent implements OnInit {
           message: "It was a problem whith your syntax, check and try again"
         }
       });
+      console.log(data.errors);
     }
   }
 
@@ -546,8 +547,8 @@ export class WebServicesComponent implements OnInit {
   }
     this.whereSentence = this.selectEdit.whereclause;
     this.havingSentence = this.selectEdit.havingclause;
-    for (let i = 0; i < this.tables.length; i++) {
-      for (let j = 0; j < this.selectEdit.tables.length; j++) {
+    for (let j = 0; j < this.selectEdit.tables.length; j++) {
+      for (let i = 0; i < this.tables.length; i++) {
         if (this.tables[i].name.toLowerCase() == this.selectEdit.tables[j].name.toLowerCase()) {
           this.tables[i].id = this.selectEdit.tables[j].id;
           this.tables[i].selected = true;
@@ -671,12 +672,7 @@ export class WebServicesComponent implements OnInit {
             }
             return 0;
           });
-        }else{
-          //kp 06/05/2019
-          this.tables[i].id = null;
-          this.tables[i].selected = false;
-          this.tables[i].alias = null;
-          }
+        }
       }
     }
     this.tableSelected = this.selectconcat.tables[0];
@@ -699,6 +695,7 @@ export class WebServicesComponent implements OnInit {
     }
     this.tableSelected = this.selectconcat.tables[0];
   }
+
   addGroupBy(table, column) {
     let columnAdd = column;
     if (column.groupByBool) {
