@@ -163,7 +163,7 @@
                                 </div>
                             </div>
     
-                            <div style="width: 65%;">
+                            <div style="width: 70%;">
                                 <div style="display: flex; flex-direction: row">
                                     <div style="margin-bottom: 18px" class="box-titles">Summary</div>
                                     <input clas="placeholder-color" style="width:85%;height: 30px;background-color: #1e1e1e; margin-left: 40px; padding-left:5px; border-radius: 2px" placeholder="Add a custom function" matInput [(ngModel)]="auxCustomFunction">
@@ -302,7 +302,7 @@
                                             </mat-form-field>
                                             <!-- <mat-select [formControl]="argumentsForm.get('argumentType')" style=" margin-right: 50px; margin-left: 50px; width: 240px" autocomplete="off" name="types" [(ngModel)]="arg.type" [ngModelOptions]="{standalone: true}" name="argumentType" required> -->
                                             <mat-select style=" margin-right: 50px; margin-left: 50px; width: 240px" autocomplete="off" name="types" [(ngModel)]="arg.type" [ngModelOptions]="{standalone: true}" name="argumentType" required>
-                                                 <mat-option value="string">String</mat-option>
+                                                <mat-option value="string">String</mat-option>
                                                 <mat-option value="number">Number</mat-option>
                                                 <mat-option value="date">Date</mat-option>
                                                 <mat-option value="list">List</mat-option>
@@ -310,7 +310,13 @@
                                                         {{getErrorTypeArguments()}}
                                                     </mat-error> -->
                                             </mat-select>
-                                            <mat-checkbox [(ngModel)]="arg.requiredBool" (click)="setRequired(arg)" [ngModelOptions]="{standalone: true}">Required</mat-checkbox>
+                                            <mat-checkbox [(ngModel)]="arg.requiredBool" (change)="setRequired(arg)" [ngModelOptions]="{standalone: true}">Required</mat-checkbox>                                          
+                                            <div>
+                                                <button mat-icon-button (click)="deleteArgument(arg)">
+                                                    <mat-icon style="color: white" aria-label="delete">delete</mat-icon>
+                                                </button>
+                                            </div>
+                                    
                                             <!--<mat-radio-group style="margin-bottom:10px" [(ngModel)]="arg.required" name="argumentReq" #radioGroup="matRadioGroup">
                                         <mat-radio-button name="i" style="color: white; margin-right: 5px" [value]="false">Optional</mat-radio-button>
                                         <mat-radio-button name="i" style="color: white" [value]="true">Required</mat-radio-button>
@@ -587,10 +593,13 @@
                                     <input class="server-config" placeholder="Description" matInput [(ngModel)]="selectconcat.description" name="description">
                                 </mat-form-field>
     
-                                <mat-select class="server-config" autocomplete="off" name="types" [(ngModel)]="selectconcat.method" [ngModelOptions]="{standalone: true}" name="method" required>
+                                <!--comentado kp20190507 <mat-select class="server-config" autocomplete="off" name="types" [(ngModel)]="selectconcat.method" [ngModelOptions]="{standalone: true}" name="method" required>
                                     <mat-option value="GET">GET</mat-option>
                                     <mat-option value="POST">POST</mat-option>
-                                    <!-- <mat-option value="BOTH">GET/POST</mat-option> -->
+                                </mat-select> -->
+                                <mat-select class="server-config" autocomplete="off" [(ngModel)]="selectconcat.wrapped" [ngModelOptions]="{standalone: true}" name="wrapped" required>
+                                    <mat-option value="1">Wrapped</mat-option>
+                                    <mat-option value="0">Not Wrapped</mat-option>
                                 </mat-select>
                             </div>
                         </form>

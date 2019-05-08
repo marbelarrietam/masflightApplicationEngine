@@ -340,6 +340,7 @@ export class WebServicesComponent implements OnInit {
     queryJson.method = this.selectconcat.method;
     queryJson.description = this.selectconcat.description;
     queryJson.pageSize = this.selectconcat.pageSize;
+    queryJson.wrapped = this.selectconcat.wrapped; //kp20190507
     return queryJson;
   }
 
@@ -750,11 +751,17 @@ export class WebServicesComponent implements OnInit {
     );
   }
 
-  addColumn(column) {
+
+  addColumn(column) {    
     if (column.selected) {
       column.selectedResult = "1";
     } else {
       column.selectedResult = "0";
+        //kp20190506 add
+      if (!column.orderBool && !column.groupByBool){
+        column.delete = true;
+      }
+
     }
   }
 
@@ -954,6 +961,9 @@ export class WebServicesComponent implements OnInit {
   deleteArgument(arg) {
     let index = this.selectconcat.arguments.findIndex(d => d === arg);
     arg.delete = true;
+    if (arg.type===null || arg.type===""){
+      arg.type="string";
+    }
     this.deletedArguments.push(arg);
     this.selectconcat.arguments.splice(index, 1);
   }
@@ -1008,12 +1018,14 @@ export class WebServicesComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.selectconcat.arguments);
   }
 
+  //kp20190507 modificado
   setRequired(arg){
-    if(arg.requiredBool == true){
+    if(arg.requiredBool){
       arg.required = "true";
-    }else{arg.required = "false"}
+    }else{
+      arg.required = "false";
+    }
   }
-
 
   checkNameValidator(name) {
     this.service.checkWSName(
