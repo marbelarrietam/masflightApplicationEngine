@@ -15,7 +15,7 @@ export class QueryWS {
   "arguments": Array<QueryArgument>;
   "customFunctions": Array<CustomFunctions>;
   "url": string;
-  "wrapped": string; //kp20190507
+  "wrapped": string;
 
   constructor(){
     this.name = '';
@@ -29,7 +29,8 @@ export class QueryWS {
     this.description = '';
     this.method = 'GET';
     this.url = '';
-    this.wrapped = '1'; //kp20190507
+    this.wrapped = '1';
+
   }
 
 }

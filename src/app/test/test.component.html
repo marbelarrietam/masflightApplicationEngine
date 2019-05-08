@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <div style="flex: 1;margin-top: 10px; width: 94%;border-radius: 0"><button mat-flat-button class="flat-button" (click)="test();">Test</button></div>
+        <div style="flex: 1;margin-top: 10px; width: 94%;border-radius: 0"><button mat-flat-button style="width:100%" class="flat-button" (click)="test();">Test</button></div>
 
     </div>
     <div style="width: 26px;background-color: #232323; display: flex" (click)="displayParameters()">
@@ -37,20 +37,20 @@
         </mat-icon>
     </div>
     <div style="width: 100%">
-        <div class="msf-menu-header" style="height: 30px; display: flex; flex-direction: column; flex-wrap: wrap">
+        <div class="msf-menu-header" style="height: 110px; display: flex; flex-direction: column; flex-wrap: wrap">
             <div class="ws-title" style="flex: 1;padding-top: 5px;padding-bottom: 0px">Testing {{ws.name}}</div>
-            <div class="ws-title" style="flex: 1; font-size: 12px;padding-top: 5px;padding-bottom: 0px; width: 100%">URL: http://staging.pulse.aspsols.com:8882{{globals.currentURL}}</div>
+            <div *ngIf="showUrl" class="ws-title" style="flex: 1; font-size: 12px;padding-top: 5px;padding-bottom: 0px; width: 100%">URL: http://staging.pulse.aspsols.com:8882{{globals.currentURL}}</div>
         </div>
         <mat-card class="msf-container-table msf-center-container">
-            <mat-tab-group>
-                <mat-tab label="Data">
+            <mat-tab-group style="height: 385px">
+                <mat-tab *ngIf="tab==1" label="Data">
                     <!-- <div *ngIf="!tableOptions.dataSource && !tableOptions.template">
                         <div class="msf-no-results">
                             <span *ngIf="!isPanel">Results not available, please fill parameters and make sure they are working</span><span *ngIf="resultsOk">Results not available, </span>
                         </div>
                     </div> -->
 
-                    <div class="test-container" *ngIf="columnsHead.length >0">
+                    <div class="test-container" *ngIf="showTable">
                         <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 datasource welcome-table" style="margin-top: 30px; font-size: 12px">
 
                             <ng-container [matColumnDef]="column.columnName" *ngFor="let column of columns">
@@ -65,12 +65,12 @@
                     </div>
 
                 </mat-tab>
-                <mat-tab label="Json Response">
+                <mat-tab *ngIf="tab==1" label="Json Response">
                     <div *ngIf="columnsHead.length >0" style="background-color: white; margin-top: 30px">
                         <ngx-json-viewer [json]="data"></ngx-json-viewer>
                     </div>
                 </mat-tab>
-                <mat-tab label="Errors">
+                <mat-tab *ngIf="tab==2" label="Errors">
                     <div *ngIf="errors.length>0" style="margin-top: 30px">
                         <div *ngFor="let item of errors">
                             {{item}}
