@@ -29,6 +29,7 @@ import { CustomFunctions } from '../model/CustomFunctions';
 })
 export class WebServicesComponent implements OnInit {
   @ViewChild("codeEditor") codeEditor: CodemirrorComponent;
+  dataError; any;
   queryEdit:boolean = true;
   queryText:string;
   searchText: string;
@@ -100,7 +101,7 @@ export class WebServicesComponent implements OnInit {
     }else{
       this.queryEdit = false;
     }
-
+    this.dataError = {errors:[]};
     this.getTables();
     this.argForms = this.formBuilder.group({
       items: this.formBuilder.array([])
@@ -112,6 +113,7 @@ export class WebServicesComponent implements OnInit {
     // var aux = this.tablesInicial.slice(0);
     // this.tables = [];
     // this.tables = aux;
+    this.dataError = {errors:[]};
     this.tableSelected =  new Tables();
     this.selectEdit = new QueryWS();
     this.selectTables = new QueryWS();
@@ -140,6 +142,7 @@ export class WebServicesComponent implements OnInit {
       _this.globals.isLoading = false;
     }else{
       _this.globals.isLoading = false;
+      _this.dataError=data;
       const dialogRef = _this.dialog.open(MessageComponent, {
         data: {
           title: "Error",
@@ -178,10 +181,15 @@ export class WebServicesComponent implements OnInit {
     return customArray;
   }
 
+  //modificado kp20190508
   deleteCustomFunction(c){
-    let index = this.selectTables.customFunctions.findIndex(d => d === c);
-    this.deletedCustomFunctions.push(this.selectconcat.customFunctions[index]);
+    let index = this.selectconcat.customFunctions.findIndex(d => d === c);
+    if (index!=-1){
+    if(c.id!=null){
+      this.deletedCustomFunctions.push(this.selectconcat.customFunctions[index]);
+    }
     this.selectconcat.customFunctions.splice(index, 1);
+  }
   }
 
   getTables() {
@@ -947,14 +955,20 @@ export class WebServicesComponent implements OnInit {
     view.selected = false;
   }
 
+  //modificado kp20190508
   deleteArgument(arg) {
     let index = this.selectconcat.arguments.findIndex(d => d === arg);
-    arg.delete = true;
-    if (arg.type===null || arg.type===""){
-      arg.type="string";
+    if (index!=1){
+    if (arg.id != null){
+      arg.delete = true;
+      if (arg.type===null || arg.type===""){
+        arg.type="string";
+      }
+      this.deletedArguments.push(arg);
+
     }
-    this.deletedArguments.push(arg);
     this.selectconcat.arguments.splice(index, 1);
+  }
   }
 
   addView(view) {

@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="msf-menu-body" style="display:flex; flex-direction:column; height: calc(100% - 70px);">
-            <div [ngClass]="queryEdit  ? 'mostrar2' : 'ocultar2'" style="display: flex; flex-direction: row; align-items: center; background-color: #232323; height: calc(100% - 50px); padding: 30px 50px 60px 60px;">
+            <div [ngClass]="queryEdit  ? 'mostrar2' : 'ocultar2'" style="display: flex; flex-direction: row; align-items: center; background-color: #232323; height: calc(100% - 50px); padding: 30px 30px 60px 30px;">
                 <!-- <div [hidden]="!queryEdit" style="height: 300px; background-color:#232323; padding: 30px"> -->
                 <div  *ngIf="queryEdit" style="width: 70%; margin-right: 30px;">
                     <div Style="font-weight: 500; font-size: 20px; margin: 0px 0px 20px 0px;">Query</div>
@@ -41,12 +41,9 @@
                         </mat-icon> -->
                     </div>
                     <div class="InfoQuery">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                        <!-- <mat-form-field >
-                            <textarea matInput >
-                            </textarea>
-                          </mat-form-field>  -->
+                        <div *ngFor="let error of dataError.errors" style="font-size: 12px; display: flex; flex-direction: row;">
+                            <p style="color: #ED5C27;">{{error.code}}</p> - - - {{error.message}}
+                        </div>
                     </div>
                     <button mat-flat-button class="flat-button button-publish" (click)="validate()" style=" margin: auto; padding: 0px; width: 200px;">Validate</button>
                 </div>
@@ -269,7 +266,7 @@
                                                 <input matInput [(ngModel)]="item.alias">
                                                 <mat-placeholder class="placeholder">write an alias</mat-placeholder>
                                             </mat-form-field>
-                                            <button style="margin-top: 4%" mat-icon-button (click)="deleteCustomFunction()">
+                                            <button style="margin-top: 4%" mat-icon-button (click)="deleteCustomFunction(item)">
                                                 <mat-icon style="color: white" aria-label="close">close</mat-icon>
                                             </button>
     

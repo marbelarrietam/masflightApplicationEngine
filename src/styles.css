@@ -69,11 +69,13 @@
 }
 
 .InfoQuery {
-  padding-bottom: 15px;
-  height: 245px;
+  margin-bottom: 15px;
+  height: 241px;
   font-weight: lighter;
-  font-size: 12px;
   text-align: justify;
+  background-color: #1e1e1e;
+  padding: 4px 10px;
+  overflow-y: auto;
 }
 
 .ocultar2 {
