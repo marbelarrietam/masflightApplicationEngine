@@ -337,7 +337,7 @@
                 </mat-step>
     
                 <mat-step>
-                    <ng-template matStepLabel>Where Condition</ng-template>
+                    <ng-template matStepLabel><p (click)="getSelectedColumns()">Where Condition</p></ng-template>
                     <!-- <div [hidden]="queryEdit"> -->
                     <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'"style="height: 300px; background-color:#232323; padding: 30px">
                         <div style="margin-left:100px;margin-right:100px;margin-top:20px;font-size: 14px">
