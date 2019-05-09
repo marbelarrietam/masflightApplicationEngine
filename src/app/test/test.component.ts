@@ -145,7 +145,7 @@ export class TestComponent implements OnInit {
     _this.tab=1;
   }
   else {
-    if(_this.data.Response.errors){
+    if(data.Response.errors){
       _this.cleanVariables();
       _this.data = data;
       _this.showUrl = true;
@@ -158,7 +158,7 @@ export class TestComponent implements OnInit {
     }
 
  else {
-  if(_this.data.Response.errors){
+  if(data.Response.errors){
     _this.cleanVariables();
     _this.data = data;
     _this.showUrl = true;
