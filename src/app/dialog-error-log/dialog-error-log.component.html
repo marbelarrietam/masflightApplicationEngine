@@ -1,0 +1,12 @@
+<div style="cursor: all-scroll;" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+  <div style="flex: 1; color: white">Information</div>
+  <div style="flex: 1">
+      <!-- <div *ngFor="let error of globals.dataErrorStep.errors" style="font-size: 12px; display: flex; flex-direction: row;"> -->
+          <div *ngFor="let error of dataError.errors" style="font-size: 12px; display: flex; flex-direction: row;">
+      <p style="color: #ED5C27;">{{error.code}}</p> - - - {{error.message}}
+    </div>
+  </div>
+  <mat-dialog-actions style="float: right">
+        <button mat-flat-button class="flat-button" (click)="onNoClick()">Hide</button>
+    </mat-dialog-actions>
+</div>

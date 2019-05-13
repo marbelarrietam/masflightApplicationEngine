@@ -21,6 +21,7 @@ import { QueryArgument } from "../model/QueryArgument";
 import { AggregateFucntions } from "../model/AggregateFunctions";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { CustomFunctions } from '../model/CustomFunctions';
+import { DialogErrorLogComponent } from '../dialog-error-log/dialog-error-log.component';
 
 @Component({
   selector: "app-web-services, FilterPipe",
@@ -29,7 +30,8 @@ import { CustomFunctions } from '../model/CustomFunctions';
 })
 export class WebServicesComponent implements OnInit {
   @ViewChild("codeEditor") codeEditor: CodemirrorComponent;
-  dataError; any;
+  dataError: any;
+  dataErrorStep: any
   queryEdit:boolean = true;
   queryText:string;
   searchText: string;
@@ -84,6 +86,9 @@ export class WebServicesComponent implements OnInit {
     argumentType: new FormControl("argumentType", [Validators.required])
   });
 
+  showError: boolean;
+  dialogRef : any;
+
   constructor(
     private router: Router,
     public globals: Globals,
@@ -96,12 +101,15 @@ export class WebServicesComponent implements OnInit {
   dataSource;
 
   ngOnInit() {
+    this.showError=false;
     if(!this.globals.currentWebService){
       this.queryEdit = true;
     }else{
       this.queryEdit = false;
     }
     this.dataError = {errors:[]};
+    this.dataErrorStep = {errors:[]};
+    this.globals.DialogClose = true;
     this.getTables();
     this.argForms = this.formBuilder.group({
       items: this.formBuilder.array([])
@@ -113,7 +121,9 @@ export class WebServicesComponent implements OnInit {
     // var aux = this.tablesInicial.slice(0);
     // this.tables = [];
     // this.tables = aux;
+    this.showError=false;
     this.dataError = {errors:[]};
+    this.dataErrorStep = {errors:[]};
     this.tableSelected =  new Tables();
     this.selectEdit = new QueryWS();
     this.selectTables = new QueryWS();
@@ -287,27 +297,55 @@ export class WebServicesComponent implements OnInit {
     }
   }
 
+    //kp20190510 actualizado
+  // handlerSuccessWS(_this,data) {
+  //   _this.showError=false;
+  //   _this.globals.isLoading = false;
+  //   if(data.errors==null){
+  //   _this.globals.currentApplication = "list";
+  //   }else{
+  //     const dialogRef = _this.dialog.open(MessageComponent, {
+  //       data: {
+  //         title: "Error",
+  //         message: "It was a problem whith your syntax, check and try again"
+  //       }
+  //     });
+  //     console.log(data.errors);
+  //   }
+  // }
+
   handlerSuccessWS(_this,data) {
-    _this.globals.isLoading = false;
+    
+    if (!_this.globals.DialogClose){
+      _this.dialogRef.close();
+      _this.globals.DialogClose = true;
+    }
+    _this.showError=false;
+    _this.globals.isLoading = false;   
+    _this.dataErrorStep=data;
     if(data.errors==null){
     _this.globals.currentApplication = "list";
     }else{
-      const dialogRef = _this.dialog.open(MessageComponent, {
-        data: {
-          title: "Error",
-          message: "It was a problem whith your syntax, check and try again"
-        }
-      });
-      console.log(data.errors);
+      _this.showError=true;
+      _this.openDialog(_this.dataErrorStep);
     }
   }
 
+  //kp20190510 actualizado
+  // handlerErrorSave(_this, result) {
+  //   const dialogRef = _this.dialog.open(MessageComponent, {
+  //     data: { title: "Error", message: "It was a problem, try again" }
+  //   });
+  //   _this.globals.isLoading = false;
+  // }
+
   handlerErrorSave(_this, result) {
-    const dialogRef = _this.dialog.open(MessageComponent, {
-      data: { title: "Error", message: "It was a problem, try again" }
-    });
+    _this.showError=true;
+    //hacer For ?
+    const dialogRef = _this.dialog.open(DialogErrorLogComponent, result);
     _this.globals.isLoading = false;
   }
+
   getQueryString() {
     let queryString =
       "SELECT " + this.selectSentence + " FROM " + this.fromSentence;
@@ -958,7 +996,7 @@ export class WebServicesComponent implements OnInit {
   //modificado kp20190508
   deleteArgument(arg) {
     let index = this.selectconcat.arguments.findIndex(d => d === arg);
-    if (index!=1){
+    if (index!=-1){
     if (arg.id != null){
       arg.delete = true;
       if (arg.type===null || arg.type===""){
@@ -1069,6 +1107,26 @@ export class WebServicesComponent implements OnInit {
     return this.argumentsForm.get("argumentType").hasError("required")
       ? "You must enter a type argument"
       : "";
+  }
+
+  //kp20190510
+  openDialog(data): void {  
+    // openDialog(): void {  
+    if (this.globals.DialogClose){
+    this.globals.DialogClose=false;
+    this.dialogRef = this.dialog.open(DialogErrorLogComponent, {
+      disableClose: false,
+      hasBackdrop: false
+      ,data: data
+    });
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+  else{
+    this.dialogRef.close();
+  }
   }
 
 }

@@ -45,6 +45,7 @@ import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { AllWebServicesComponent } from './all-web-services/all-web-services.component';
 import { TestComponent } from './test/test.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { DialogErrorLogComponent } from './dialog-error-log/dialog-error-log.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
     ResetPasswordComponent,
     MsfLoadingComponent,
     AllWebServicesComponent,
-    TestComponent
+    TestComponent,
+    DialogErrorLogComponent
   ],
   imports: [
     BrowserModule,
@@ -113,7 +115,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    MessageComponent
-  ]
+    MessageComponent,
+    DialogErrorLogComponent]
 })
 export class AppModule { }
