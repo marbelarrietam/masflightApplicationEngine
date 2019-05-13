@@ -216,6 +216,7 @@ export class WebServicesComponent implements OnInit {
 
   verifyArguments() {
     let value = "";
+    if (this.selectconcat.arguments.length!=0){
     for (let i = 0; i < this.selectconcat.arguments.length; i++) {
       if (
         this.selectconcat.arguments[i]["label"] == null ||
@@ -230,6 +231,7 @@ export class WebServicesComponent implements OnInit {
         value = "type";
       }
     }
+  }
     if (value==="") {
       return "ok";
     } else {
@@ -1053,9 +1055,15 @@ export class WebServicesComponent implements OnInit {
     this.argumentSelected = row;
 }
 
+//modificado kp20190513
   addNewArgument() {
     let argument = new QueryArgument();
-    this.selectconcat.arguments.push(argument);
+    if(this.selectconcat.arguments!=null){
+      this.selectconcat.arguments.push(argument);
+    }else{
+      this.selectconcat.arguments = [];
+      this.selectconcat.arguments.push(argument);
+    }
     this.dataSource = new MatTableDataSource(this.selectconcat.arguments);
   }
 
