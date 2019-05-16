@@ -118,7 +118,7 @@
                                         <div style="margin-top:3px; width: 100%;"
                                             *ngFor="let table of selectTables.tables">
                                             <div
-                                                style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 30px; line-height: 30px; color: white; font-size:12px;">
+                                                style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 30px; line-height: 30px; color: white;">
                                                 <div style="width:50%;; margin-right: 10px;">{{table.name}}</div>
                                                 <mat-form-field [floatLabel]="'never'" style="width:40%">
                                                     <input matInput [(ngModel)]="table.alias">
@@ -139,7 +139,7 @@
                                 <div class="selected-containers">
                                     <div style="margin-top:10px; width: 100%;" *ngFor="let view of selectViews.tables">
                                         <div
-                                            style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 30px; line-height: 30px; color: white; font-size:12px;">
+                                            style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 30px; line-height: 30px; color: white;">
                                             <div style="width:50%;; margin-right: 10px;">{{view.name}}</div>
                                             <mat-form-field [floatLabel]="'never'" style="width:40%">
                                                 <input matInput [(ngModel)]="view.alias">
