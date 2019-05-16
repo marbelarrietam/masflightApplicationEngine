@@ -6,6 +6,10 @@ export class QueryArgument {
   "requiredBool":boolean;
   "delete":boolean;
   "value":string;
+  "grouping":string;
+  "groupingBool":boolean;
+  "sorting":string;
+  "sortingBool":boolean;
 
   constructor(){
     this.label = '';
@@ -15,5 +19,9 @@ export class QueryArgument {
     this.delete = false;
     this.value = '';
     this.valueArray = [];
+    this.grouping = '0';
+    this.groupingBool = false;
+    this.sorting = '0';
+    this.sortingBool = false;
   }
 }

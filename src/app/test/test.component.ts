@@ -15,6 +15,8 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
   styleUrls: ['./test.component.css']
 })
 export class TestComponent implements OnInit {
+  pageNumber=0;
+  pageSize=100;
   tab:number = 1;
   showUrl:boolean = false;
   showTable:boolean = false;
@@ -36,6 +38,7 @@ export class TestComponent implements OnInit {
   addOnBlur = true;
   viewParameters = true;
   wrapped:string = "0";
+  notFound:string="0";
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   constructor(public globals: Globals,
@@ -102,11 +105,22 @@ export class TestComponent implements OnInit {
   }*/
 
   //kp20190507 modificado
-  test(){
+  test(n:number){
+    if(n==1){
+      this.pageNumber=0;
+    }
     this.globals.isLoading = true;
     this.getJsonRequest();
-    this.service.testWebServicesGet(this,this.ws.name,this.argumentsJson, this.handlerSucces, this.handlerError);
+    this.showUrl = true;
+    this.service.testWebServicesGet(this,this.ws.name,this.argumentsJson, this.pageNumber,this.pageSize, this.handlerSucces, this.handlerError);
     }
+
+
+    testMore(){
+      this.pageNumber++;
+      this.test(2);
+    }
+
 
   backToList() {
     this.globals.currentApplication = "list";
@@ -120,12 +134,18 @@ export class TestComponent implements OnInit {
     this.displayedColumns = [];
     this.showTable = false;
     this.showUrl = false;
+    this.notFound = '0';
   }
 
   handlerSucces(_this, data){
+    _this.showUrl = true;
+    _this.globals.isLoading = false;
     if(_this.wrapped=="1"){
+      if(data.Response.total==0){
+       _this.notFound="1";
+      }
     if(data.Response.records){
-    if(data.Response.records.length>0){
+    if(data.Response.records.length>0 && data.Response.total!=0){
     _this.cleanVariables();
     _this.data = data;
     _this.showUrl = true;
@@ -206,7 +226,7 @@ else{
   }
   }
 }
-_this.globals.isLoading = false;
+
 
   }
 

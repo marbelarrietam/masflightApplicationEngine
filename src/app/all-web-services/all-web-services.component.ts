@@ -22,8 +22,7 @@ export class AllWebServicesComponent implements OnInit {
   constructor(
     private router: Router,
     public globals: Globals,
-    private service: ApplicationService,
-    public dialog: MatDialog) { }
+    private service: ApplicationService) { }
 
   displayedColumns = ['columnName', 'columnDescription', 'columnQuery', 'columnTables', 'columnEdit'];
 
@@ -33,7 +32,6 @@ export class AllWebServicesComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.getWebServices();
   }
 

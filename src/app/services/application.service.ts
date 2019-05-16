@@ -328,6 +328,12 @@ export class ApplicationService {
     this.http.get(_this, url, handlerSucess, handlerError, null);
   }
 
+  getConnections(_this, handlerSucess, handlerError){
+    _this.globals.isLoading = true;
+    let url = this.host + "/getConnections";
+    this.http.get(_this, url, handlerSucess, handlerError, null);
+  }
+
   saveWebServices(_this, data, handlerSuccess, handlerError){
     _this.globals.isLoading = true;
     let url = this.host + "/saveWebServices";
@@ -347,14 +353,15 @@ export class ApplicationService {
   }
 
 
-  testWebServicesGet(_this, name, data, handlerSuccess, handlerError){
+  testWebServicesGet(_this, name, data, pageNumber, pageSize, handlerSuccess, handlerError){
     let urlString = this.host + "/engineWebServices/"+name+"?";
     for (let key in data){
       urlString = urlString + key + "=";
       urlString = urlString + data[key]+"&";
     }
-    let url = urlString.substring(0, urlString.length-1);
+    let url = urlString+"page_number="+pageNumber+"&pageSize="+pageSize;
     this.globals.currentURL = url;
+    let url2 = url + "&testEngine=yes"
     this.http.get(_this,url,handlerSuccess,handlerError, null);
   }
 }

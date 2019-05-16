@@ -4091,4 +4091,15 @@ textarea.mat-input-element {
   color: rgba(148, 147, 147, 0.87);
 }
 
+.darktable {
+  background-color: #1e1e1e;
+  border: none;
+}
+
+.darktable-row {
+  background-color: #232323;
+  color: white;
+  justify-content: center;
+}
+
 /*# sourceMappingURL=styles.css.map */

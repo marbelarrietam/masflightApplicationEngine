@@ -5,7 +5,7 @@
                 <div *ngIf="item.type=='string'" style="margin-top: 20px;">
                     <div style="display: flex; flex-direction: column;">
                         <label style="width:94%;margin-bottom: 5px">{{item.label}}</label>
-                        <input style="width:94%;height: 30px;background-color: #232323;" matInput [(ngModel)]="item.value">
+                        <input style="width:94%;height: 30px;background-color: #232323; padding-left: 5px" matInput [(ngModel)]="item.value">
                     </div>
                 </div>
 
@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <div style="flex: 1;margin-top: 10px; width: 94%;border-radius: 0"><button mat-flat-button style="width:100%" class="flat-button" (click)="test();">Test</button></div>
+        <div style="flex: 1;margin-top: 10px; width: 94%;border-radius: 0"><button mat-flat-button style="width:100%" class="flat-button" (click)="test(1);">Test</button></div>
 
     </div>
     <div style="width: 26px;background-color: #232323; display: flex" (click)="displayParameters()">
@@ -39,44 +39,55 @@
     <div style="width: 100%">
         <div class="msf-menu-header" style="height: 110px; display: flex; flex-direction: column; flex-wrap: wrap">
             <div class="ws-title" style="flex: 1;padding-top: 5px;padding-bottom: 0px">Testing {{ws.name}}</div>
-            <div *ngIf="showUrl" class="ws-title" style="flex: 1; font-size: 12px;padding-top: 5px;padding-bottom: 0px; width: 100%">URL: http://staging.pulse.aspsols.com:8882{{globals.currentURL}}</div>
+            <div *ngIf="showUrl" class="ws-title" style="flex: 1; font-size: 12px;padding-top: 5px;padding-bottom: 0px; width: 100%">http://staging.pulse.aspsols.com:8882{{globals.currentURL}}</div>
         </div>
-        <mat-card class="msf-container-table msf-center-container">
-            <mat-tab-group style="height: 385px">
-                <mat-tab *ngIf="tab==1" label="Data">
-                    <!-- <div *ngIf="!tableOptions.dataSource && !tableOptions.template">
+        <mat-card class="msf-container-table msf-center-container" style="width: 95%">
+            <div *ngIf="notFound=='0'">
+                <mat-tab-group style="height: 400px">
+                    <mat-tab *ngIf="tab==1" label="Data">
+                        <!-- <div *ngIf="!tableOptions.dataSource && !tableOptions.template">
                         <div class="msf-no-results">
                             <span *ngIf="!isPanel">Results not available, please fill parameters and make sure they are working</span><span *ngIf="resultsOk">Results not available, </span>
                         </div>
                     </div> -->
 
-                    <div class="test-container" *ngIf="showTable">
-                        <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 datasource welcome-table" style="margin-top: 30px; font-size: 12px">
+                        <div class="test-container" *ngIf="showTable">
+                            <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 datasource welcome-table" style="font-size: 12px">
 
-                            <ng-container [matColumnDef]="column.columnName" *ngFor="let column of columns">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color: #1e1e1e; border:none">{{column.columnLabel}}</th>
-                                <td mat-cell *matCellDef="let element">
-                                    {{element[column.columnName]}}
-                                </td>
-                            </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns" style="background-color:#232323;color: white;justify-content: center"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                        </table>
-                    </div>
-
-                </mat-tab>
-                <mat-tab *ngIf="tab==1" label="Json Response">
-                    <div *ngIf="columnsHead.length >0" style="background-color: white; margin-top: 30px">
-                        <ngx-json-viewer [json]="data"></ngx-json-viewer>
-                    </div>
-                </mat-tab>
-                <mat-tab *ngIf="tab==2" label="Errors">
-                    <div *ngIf="errors.length>0" style="margin-top: 30px">
-                        <div *ngFor="let item of errors">
-                            {{item}}
+                                <ng-container [matColumnDef]="column.columnName" *ngFor="let column of columns">
+                                    <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header>{{column.columnLabel}}</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element[column.columnName]}}
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns" style="background-color:#232323;color: white;justify-content: center"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                            <div [ngClass]="globals.moreResultsBtn && !globals.isLoading? 'msf-menu-more-button' : 'msf-menu-more-button disabled-more-button'" (click)="testMore()" style="height:85px">
+                                <img style="width: 16px;height: 16px;" src="../../assets/images/more.png" class="msf-menu-image msf-vertical-middle msf-line">
+                                <div class="msf-vertical-middle msf-line" style="font-size: 13px">More Result</div>
+                            </div>
                         </div>
-                    </div>
-                </mat-tab>
-            </mat-tab-group>
+
+                    </mat-tab>
+                    <mat-tab *ngIf="tab==1" label="Json Response">
+                        <div *ngIf="columnsHead.length >0" style="background-color: white; overflow-y: auto; max-height: 400px">
+                            <ngx-json-viewer [json]="data"></ngx-json-viewer>
+                        </div>
+                    </mat-tab>
+                    <mat-tab *ngIf="tab==2" label="Errors" style="overflow-y: auto">
+                        <div *ngIf="errors.length>0" style="margin-top: 30px">
+                            <div *ngFor="let item of errors">
+                                {{item}}
+                            </div>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+            <div *ngIf="notFound=='1'">
+                <div class="msf-no-results">
+                    <span>Results not available, please select your Filters and click on Test button</span>
+                </div>
+            </div>
         </mat-card>
     </div>

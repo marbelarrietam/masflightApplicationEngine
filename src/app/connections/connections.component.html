@@ -1,0 +1,45 @@
+<div class="general-container">
+    <div class="msf-menu-header" style="height: 30px; display: flex; flex-direction: row; flex-wrap: wrap">
+        <div class="ws-title" style="flex: 1;">Web Services Summary</div>
+    </div>
+    <mat-card class="msf-container-table msf-center-container" style="height: 71vh">
+        <div style="display: flex; flex-direction:row">
+            <div style="display: flex; flex-direction: column; width:60%">
+                <div style="display: flex; flex-direction: row; height: 10vh;">
+                    <mat-form-field style="width:50%; float: right; margin-top: 20px">
+                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" />
+                    </mat-form-field>
+                </div>
+                <div class="container-conn" style="width: 95%">
+                    <table mat-table matSort [dataSource]="dataSource" class="datasource welcome-table" style="width:100%;font-size: 12px">
+                        <ng-container matColumnDef="columnHost">
+                            <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header> Host </th>
+                            <td mat-cell class="darktable-row" *matCellDef="let element"> {{ element.host }} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="columnUsername">
+                            <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header> Username </th>
+                            <td mat-cell class="darktable-row" *matCellDef="let element">
+                                {{ element.username }} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="columnSchema">
+                            <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header> Schema </th>
+                            <td mat-cell class="darktable-row" *matCellDef="let element"> {{ element.nameSchema }} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; width:40%; padding-top:10vh">
+                <div class="container-conn" style="width:95%">
+                    <div class="darktable" style="height: 10%"> </div>
+                </div>
+            </div>
+
+        </div>
+    </mat-card>
+</div>

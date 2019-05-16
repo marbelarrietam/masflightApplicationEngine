@@ -16,6 +16,8 @@ export class QueryWS {
   "customFunctions": Array<CustomFunctions>;
   "url": string;
   "wrapped": string;
+  "groupingList":string;
+  "sortingList":string;
 
   constructor(){
     this.name = '';
@@ -30,6 +32,8 @@ export class QueryWS {
     this.method = 'GET';
     this.url = '';
     this.wrapped = '1';
+    this.groupingList = '0';
+    this.sortingList = '0';
 
   }
 
