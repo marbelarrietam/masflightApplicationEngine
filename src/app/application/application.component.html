@@ -6,10 +6,16 @@
     </div>
     <div class="msf-header-icons">
         <img src="../../assets/images/logo_global_peqe.png" class="msf-header-icons2">
-        <div *ngIf="globals.currentUser" style="margin-right:5px;" class="msf-inline msf-vertical-middle">
-            <button mat-icon-button style="margin-right: 70px" [matMenuTriggerFor]="userMenu">
+        <div *ngIf="globals.currentUser" style="padding: 0px; margin: 0px;
+        border: 0px; margin-left: 5px;
+        /*width: calc(70% - 35px);*/
+        display: flex;
+        justify-content: center;">
+            <button mat-button style="height: 60px;     padding: 0px;
+            margin: 0px;
+            border: 0px; font-size: 12px;" [matMenuTriggerFor]="userMenu">
                 {{globals.currentUser}}
-                <mat-icon>person</mat-icon>
+                <mat-icon style="font-size: 20px; width: 20px;height: 20px;">person</mat-icon>
             </button>
         </div>
         <mat-menu #userMenu="matMenu">
@@ -19,7 +25,9 @@
                 </button>
         </mat-menu>
 
-        <button mat-icon-button [matMenuTriggerFor]="adminMenu">
+        <button mat-icon-button [matMenuTriggerFor]="adminMenu" style="padding: 0px;
+        margin: 0px;
+        border: 0px;">
           <mat-icon>more_vert</mat-icon>
       </button>
         <mat-menu #adminMenu="matMenu">
