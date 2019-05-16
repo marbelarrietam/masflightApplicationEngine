@@ -52,10 +52,6 @@ export class WebServicesComponent implements OnInit {
   groupBySentence: string;
   orderBySentence: string;
   auxCustomFunction: string;
-  groupinglist: string = '0';
-  argumentGrouping: string;
-  argumentSorting: string;
-  sortingList: string= '0';
   dataSourceForm = new FormGroup({
     tablesValidator: new FormControl("nameTable", [Validators.required])
   });
@@ -82,7 +78,7 @@ export class WebServicesComponent implements OnInit {
   configurationForm = new FormGroup({
     nameValidator: new FormControl("name", [Validators.required])
   });
-
+  
 
   argumentsForm = new FormGroup({
     argumentRequired: new FormControl(),
@@ -120,7 +116,7 @@ export class WebServicesComponent implements OnInit {
     });
   }
 
-
+  
   clear(){
     // var aux = this.tablesInicial.slice(0);
     // this.tables = [];
@@ -132,7 +128,7 @@ export class WebServicesComponent implements OnInit {
     this.selectEdit = new QueryWS();
     this.selectTables = new QueryWS();
     this.selectViews = new QueryWS();
-    this.selectconcat = new QueryWS();
+    this.selectconcat = new QueryWS();    
     for (let i = 0; i < this.tables.length; i++) {
       if(this.tables[i].selected===true){
         this.tables[i].id = null;
@@ -321,13 +317,13 @@ export class WebServicesComponent implements OnInit {
   // }
 
   handlerSuccessWS(_this,data) {
-
+    
     if (!_this.globals.DialogClose){
       _this.dialogRef.close();
       _this.globals.DialogClose = true;
     }
     _this.showError=false;
-    _this.globals.isLoading = false;
+    _this.globals.isLoading = false;   
     _this.dataErrorStep=data;
     if(data.errors==null){
     _this.globals.currentApplication = "list";
@@ -358,14 +354,17 @@ export class WebServicesComponent implements OnInit {
     if (this.whereSentence) {
       queryString += " WHERE " + this.whereSentence;
     }
-    if (this.groupBySentence && this.selectconcat.groupingList=='0') {
+    if (this.groupBySentence) {
       queryString += " GROUP BY " + this.groupBySentence;
     }
-    if (this.havingSentence  && this.selectconcat.groupingList=='0') {
+    if (this.havingSentence) {
       queryString += " HAVING " + this.havingSentence;
     }
-    if (this.orderBySentence && this.selectconcat.sortingList=='0') {
+    if (this.orderBySentence) {
       queryString += " ORDER BY " + this.orderBySentence;
+    }
+    if (this.selectconcat.pageSize) {
+      queryString += " LIMIT " + this.selectconcat.pageSize;
     }
     return queryString;
   }
@@ -390,8 +389,6 @@ export class WebServicesComponent implements OnInit {
     queryJson.description = this.selectconcat.description;
     queryJson.pageSize = this.selectconcat.pageSize;
     queryJson.wrapped = this.selectconcat.wrapped; //kp20190507
-    queryJson.groupingList = this.selectconcat.groupingList;
-    queryJson.sortingList = this.selectconcat.sortingList;
     return queryJson;
   }
 
@@ -567,27 +564,12 @@ export class WebServicesComponent implements OnInit {
     for (let i=0;i<this.selectconcat.arguments.length;i++){
       if(this.selectconcat.arguments[i].required=="true"){
         this.selectconcat.arguments[i].requiredBool=true;
-
       }else{
         this.selectconcat.arguments[i].requiredBool=false;
-      }
-      if(this.selectconcat.arguments[i].grouping=="1"){
-        this.selectconcat.arguments[i].groupingBool = true;
-        this.argumentGrouping = this.selectconcat.arguments[i].label;
-      }else{
-        this.selectconcat.arguments[i].groupingBool=false;
-      }
-      if(this.selectconcat.arguments[i].sorting=="1"){
-        this.selectconcat.arguments[i].sortingBool = true;
-        this.argumentSorting = this.selectconcat.arguments[i].label;
-      }else{
-        this.selectconcat.arguments[i].sortingBool=false;
       }
     }
   }
     this.selectconcat.name = this.selectEdit.name;
-    this.selectconcat.groupingList = this.selectEdit.groupingList;
-    this.selectconcat.sortingList = this.selectEdit.sortingList;
     this.selectconcat.id = this.selectEdit.id;
     this.selectconcat.pageSize = this.selectEdit.pageSize;
     this.selectconcat.method = this.selectEdit.method;
@@ -633,7 +615,7 @@ export class WebServicesComponent implements OnInit {
                 columnsToAdd.functions = columnsOrigin.functions;
                 columnsToAdd.groupBy = columnsOrigin.groupBy;
                 columnsToAdd.orderBy = columnsOrigin.orderBy;
-                if (columnsToAdd.groupBy == "1" && this.groupinglist=='0') {
+                if (columnsToAdd.groupBy == "1") {
                   columnsToAdd.groupByBool = true;
                   this.groupBySelected.push(columnsToAdd);
                 } else {
@@ -755,30 +737,6 @@ export class WebServicesComponent implements OnInit {
     this.tableSelected = this.selectconcat.tables[0];
   }
 
-  setGroupingState(i){
-    for(let arg of this.selectconcat.arguments){
-      arg.groupingBool = false;
-      arg.grouping = '0';
-    }
-    this.selectconcat.arguments[i].groupingBool = true;
-    this.selectconcat.arguments[i].grouping = '1';
-    this.argumentGrouping = this.selectconcat.arguments[i].label;
-
-  }
-
-  setSortingState(i){
-    for(let arg of this.selectconcat.arguments){
-      arg.sortingBool = false;
-      arg.sorting = '0';
-    }
-    this.selectconcat.arguments[i].sortingBool = true;
-    this.selectconcat.arguments[i].sorting = '1';
-    this.argumentSorting = this.selectconcat.arguments[i].label;
-
-  }
-
-
-
   addGroupBy(table, column) {
     let columnAdd = column;
     if (column.groupByBool) {
@@ -831,7 +789,7 @@ export class WebServicesComponent implements OnInit {
   }
 
 
-  addColumn(column) {
+  addColumn(column) {    
     if (column.selected) {
       column.selectedResult = "1";
     } else {
@@ -1017,21 +975,12 @@ export class WebServicesComponent implements OnInit {
       }
     }
 
-    let groupJoin, sortJoin;
-    if(this.selectconcat.groupingList=='1'){
-      groupJoin = ':'+this.argumentGrouping;
-    }else{
-      groupJoin = group.join(", ");
-    }
-    if(this.selectconcat.sortingList=='1'){
-      sortJoin = ':'+this.argumentSorting;
-    }else{
-      sortJoin = orderb.join(", ");
-    }
+    let groupJoin = group.join(", ");
+    let orderJoin = orderb.join(", ");
     let posTables = selectedTables.join(", ");
     let pos = selected.join(", ");
     this.groupBySentence = groupJoin;
-    this.orderBySentence = sortJoin;
+    this.orderBySentence = orderJoin;
     this.fromSentence = posTables;
     this.selectSentence = pos;
   }
@@ -1169,8 +1118,8 @@ export class WebServicesComponent implements OnInit {
   }
 
   //kp20190510
-  openDialog(data): void {
-    // openDialog(): void {
+  openDialog(data): void {  
+    // openDialog(): void {  
     if (this.globals.DialogClose){
     this.globals.DialogClose=false;
     this.dialogRef = this.dialog.open(DialogErrorLogComponent, {

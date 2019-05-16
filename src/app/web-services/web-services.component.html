@@ -4,13 +4,17 @@
             <button mat-button (click)="backToList()">
                 <mat-icon style="height: 100%;">arrow_back</mat-icon>
             </button>
-            <div style="padding: 0px;margin: auto 0; width: calc(100% - 334px) !important" *ngIf="!globals.currentWebService" class="ws-title">Create a new Web Service
+            <div style="padding: 0px;margin: auto 0; width: calc(100% - 334px) !important"
+                *ngIf="!globals.currentWebService" class="ws-title">Create a new Web Service
             </div>
-            <div *ngIf="globals.currentWebService" class="ws-title" style="padding: 0px;margin: auto 0; width: calc(100% - 334px) !important">Edit {{globals.currentWebService.name}}
+            <div *ngIf="globals.currentWebService" class="ws-title"
+                style="padding: 0px;margin: auto 0; width: calc(100% - 334px) !important">Edit
+                {{globals.currentWebService.name}}
             </div>
             <div style="display: flex; align-items: center;">
-                <button mat-flat-button class="flat-button button-publish" style="margin: auto 15px; padding: 0px; width: 200px" (click)="saveWebService()">Publish</button>
-                <button *ngIf="showError" mat-icon-button>
+                <button mat-flat-button class="flat-button button-publish"
+                    style="margin: auto 15px; padding: 0px; width: 200px" (click)="saveWebService()">Publish</button>
+                <button *ngIf="showError" mat-icon-button >                    
                     <!-- <mat-icon class ="IconEditQuery'" (click)="openDialog(dataErrorStep)">info</mat-icon> -->
                     <mat-icon [ngClass]="globals.DialogClose? 'IconAct' : 'IconEditQuery'" (click)="openDialog()">info</mat-icon>
                 </button>
@@ -27,11 +31,13 @@
         </div>
     </div>
     <div class="msf-menu-body" style="display:flex; flex-direction:column; height: calc(100% - 70px);">
-        <div [ngClass]="queryEdit  ? 'mostrar2' : 'ocultar2'" style="display: flex; flex-direction: row; align-items: center; background-color: #232323; height: calc(100% - 50px); padding: 30px 30px 60px 30px;">
+        <div [ngClass]="queryEdit  ? 'mostrar2' : 'ocultar2'"
+            style="display: flex; flex-direction: row; align-items: center; background-color: #232323; height: calc(100% - 50px); padding: 30px 30px 60px 30px;">
             <!-- <div [hidden]="!queryEdit" style="height: 300px; background-color:#232323; padding: 30px"> -->
             <div *ngIf="queryEdit" style="width: 70%; margin-right: 30px;">
                 <div Style="font-weight: 500; font-size: 20px; margin: 0px 0px 20px 0px;">Query</div>
-                <ngx-codemirror #codeEditor [(ngModel)]="queryText" [options]="options" (cursorActivity)="cursorMoved()">
+                <ngx-codemirror #codeEditor [(ngModel)]="queryText" [options]="options"
+                    (cursorActivity)="cursorMoved()">
                 </ngx-codemirror>
             </div>
             <div *ngIf="queryEdit" Style="width: 30%; text-align: center;">
@@ -45,11 +51,13 @@
                         </mat-icon> -->
                 </div>
                 <div class="InfoQuery">
-                    <div *ngFor="let error of dataError.errors" style="font-size: 12px; display: flex; flex-direction: row;">
+                    <div *ngFor="let error of dataError.errors"
+                        style="font-size: 12px; display: flex; flex-direction: row;">
                         <p style="color: #ED5C27;">{{error.code}}</p> - - - {{error.message}}
                     </div>
                 </div>
-                <button mat-flat-button class="flat-button button-publish" (click)="validate()" style=" margin: auto; padding: 0px; width: 200px;">Validate</button>
+                <button mat-flat-button class="flat-button button-publish" (click)="validate()"
+                    style=" margin: auto; padding: 0px; width: 200px;">Validate</button>
             </div>
         </div>
         <!-- <mat-horizontal-stepper style="height: 100%;" (selectionChange)="getSelectedColumns()"> -->
@@ -58,8 +66,10 @@
             <mat-step [stepControl]="dataSourceForm">
                 <ng-template matStepLabel>Select Data Source</ng-template>
                 <!-- <div [hidden]="queryEdit"> -->
-                <div [ngClass]="queryEdit  ?  'ocultar': 'mostrar'" style="height: 100%; background-color:#232323; padding: 20px 30px">
-                    <div style="display: flex !important; flex-direction: row; flex-flow: row wrap;margin-left:100px;margin-top:20px;">
+                <div [ngClass]="queryEdit  ?  'ocultar': 'mostrar'"
+                    style="height: 100%; background-color:#232323; padding: 20px 30px">
+                    <div
+                        style="display: flex !important; flex-direction: row; flex-flow: row wrap;margin-left:100px;margin-top:20px;">
                         <div style="width: 30%;">
                             <div class="box-titles">Table(s)</div>
                             <div class="box-container">
@@ -69,8 +79,10 @@
                                 </mat-form-field>
                                 <div style="margin-top: 15px; max-height: 295px; overflow: auto">
 
-                                    <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let table of tables | filter : searchText">
-                                        <mat-checkbox color="primary" [(ngModel)]="table.selected" (change)=addTable(table)>
+                                    <div style="margin-bottom: 10px; margin-left:4px;"
+                                        *ngFor="let table of tables | filter : searchText">
+                                        <mat-checkbox color="primary" [(ngModel)]="table.selected"
+                                            (change)=addTable(table)>
                                             {{table.name}}
                                         </mat-checkbox>
                                     </div>
@@ -86,8 +98,10 @@
                                     <mat-icon style="color: white" aria-label="search">search</mat-icon>
                                 </mat-form-field>
                                 <div style="margin-top: 15px;  max-height: 295px; overflow: auto">
-                                    <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let view of selectViews.tables | filter : searchView">
-                                        <mat-checkbox color="primary" [(ngModel)]="view.selected" (change)=addView(view)>
+                                    <div style="margin-bottom: 10px; margin-left:4px;"
+                                        *ngFor="let view of selectViews.tables | filter : searchView">
+                                        <mat-checkbox color="primary" [(ngModel)]="view.selected"
+                                            (change)=addView(view)>
                                             {{view.name}}
                                         </mat-checkbox>
                                     </div>
@@ -101,15 +115,18 @@
                                 <div style="margin-top: 10px;">
                                     <span style="color:#01abec;">Select Table(s)</span>
                                     <div class="selected-containers">
-                                        <div style="margin-top:3px; width: 100%;" *ngFor="let table of selectTables.tables">
-                                            <div style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 30px; line-height: 30px; color: white; font-size:12px;">
+                                        <div style="margin-top:3px; width: 100%;"
+                                            *ngFor="let table of selectTables.tables">
+                                            <div
+                                                style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 30px; line-height: 30px; color: white; font-size:12px;">
                                                 <div style="width:50%;; margin-right: 10px;">{{table.name}}</div>
                                                 <mat-form-field [floatLabel]="'never'" style="width:40%">
                                                     <input matInput [(ngModel)]="table.alias">
                                                     <mat-placeholder class="placeholder">write an alias
                                                     </mat-placeholder>
                                                 </mat-form-field>
-                                                <button style="background-color: transparent; border: none; color:white" (click)="deleteFromSelectTable(table)">x</button>
+                                                <button style="background-color: transparent; border: none; color:white"
+                                                    (click)="deleteFromSelectTable(table)">x</button>
                                             </div>
 
                                         </div>
@@ -121,13 +138,15 @@
                                 <span style="color:#01abec;">Select View(s)</span>
                                 <div class="selected-containers">
                                     <div style="margin-top:10px; width: 100%;" *ngFor="let view of selectViews.tables">
-                                        <div style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 30px; line-height: 30px; color: white; font-size:12px;">
+                                        <div
+                                            style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 30px; line-height: 30px; color: white; font-size:12px;">
                                             <div style="width:50%;; margin-right: 10px;">{{view.name}}</div>
                                             <mat-form-field [floatLabel]="'never'" style="width:40%">
                                                 <input matInput [(ngModel)]="view.alias">
                                                 <mat-placeholder class="placeholder">write an alias</mat-placeholder>
                                             </mat-form-field>
-                                            <button style="background-color: transparent; border: none; color:white" (click)="deleteFromSelectView(view)">x</button>
+                                            <button style="background-color: transparent; border: none; color:white"
+                                                (click)="deleteFromSelectView(view)">x</button>
                                         </div>
 
                                     </div>
@@ -143,12 +162,15 @@
                 <!-- <div [hidden]="queryEdit"> -->
                 <!-- <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="height: 300px; background-color:#232323; padding: 30px"> mod kp06/05/2019-->
                 <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="background-color:#232323; padding: 30px">
-                    <div style="display: flex; flex-direction: row; flex-flow: row wrap;margin-left:100px;margin-top:20px;">
+                    <div
+                        style="display: flex; flex-direction: row; flex-flow: row wrap;margin-left:100px;margin-top:20px;">
                         <div style="width: 30%;">
                             <div style="display: flex; flex-direction: row; flex-flow: row wrap; height: 50px">
                                 <div style="color: white; width: 45%; line-height: 37px">Available Columns for</div>
                                 <!-- <mat-form-field class="select-dark" style="width: 45%;" class="msf-item"> -->
-                                <mat-select class="select-dark" style="width: 48%;" autocomplete="off" (selectionChange)="concatChangeEvent($event)" name="tables" required [(value)]=tableSelected>
+                                <mat-select class="select-dark" style="width: 48%;" autocomplete="off"
+                                    (selectionChange)="concatChangeEvent($event)" name="tables" required
+                                    [(value)]=tableSelected>
                                     <mat-option>--</mat-option>
                                     <mat-option *ngFor="let con of selectconcat.tables" [value]="con">
                                         {{ con.name }}
@@ -161,9 +183,12 @@
                                     <input class="search-input" style="width:85%" matInput [(ngModel)]="searchColumn">
                                     <mat-icon style="color: white" aria-label="search">search</mat-icon>
                                 </mat-form-field>
-                                <div *ngIf="selectconcat.tables.length != 0" style="margin-top: 15px; max-height: 260px; overflow: auto">
-                                    <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let column of tableSelected.columns | filter: searchColumn">
-                                        <mat-checkbox color="primary" [(ngModel)]="column.selected" (change)=addColumn(column)>{{column.name}}
+                                <div *ngIf="selectconcat.tables.length != 0"
+                                    style="margin-top: 15px; max-height: 260px; overflow: auto">
+                                    <div style="margin-bottom: 10px; margin-left:4px;"
+                                        *ngFor="let column of tableSelected.columns | filter: searchColumn">
+                                        <mat-checkbox color="primary" [(ngModel)]="column.selected"
+                                            (change)=addColumn(column)>{{column.name}}
                                         </mat-checkbox>
                                     </div>
                                 </div>
@@ -173,7 +198,9 @@
                         <div style="width: 70%;">
                             <div style="display: flex; flex-direction: row">
                                 <div style="margin-bottom: 18px" class="box-titles">Summary</div>
-                                <input clas="placeholder-color" style="width:85%;height: 30px;background-color: #1e1e1e; margin-left: 40px; padding-left:5px; border-radius: 2px" placeholder="Add a custom function" matInput [(ngModel)]="auxCustomFunction">
+                                <input clas="placeholder-color"
+                                    style="width:85%;height: 30px;background-color: #1e1e1e; margin-left: 40px; padding-left:5px; border-radius: 2px"
+                                    placeholder="Add a custom function" matInput [(ngModel)]="auxCustomFunction">
                                 <div style="display: flex; flex-direction: row;">
                                     <button mat-icon-button (click)="addCustomFunction()">
                                         <mat-icon style="color: white" aria-label="add">add_circle</mat-icon>
@@ -181,74 +208,104 @@
                                 </div>
                             </div>
                             <mat-divider></mat-divider>
-                            <div cdkDropList *ngIf="selectconcat.tables.length" class="draggable-list" style="overflow-y: scroll; max-height: 330px" (cdkDropListDropped)="drop($event)">
+                            <div cdkDropList *ngIf="selectconcat.tables.length" class="draggable-list"
+                                style="overflow-y: scroll; max-height: 330px" (cdkDropListDropped)="drop($event)">
                                 <div *ngFor="let tab of selectconcat.tables">
                                     <div *ngFor="let item of tab.columns" cdkDrag class="draggable-box">
-                                        <div *ngIf="item.selected" style="display: flex;margin-top: 5px;margin-bottom: 5px">
+                                        <div *ngIf="item.selected"
+                                            style="display: flex;margin-top: 5px;margin-bottom: 5px">
                                             <div style="width:20%; color: white; line-height: 30px">{{item.name}}</div>
-                                            <mat-select class="select-column" autocomplete="off" (selectionChange)="type(item)" name="tables" [(ngModel)]="item.typePresentation" required>
+                                            <mat-select class="select-column" autocomplete="off"
+                                                (selectionChange)="type(item)" name="tables"
+                                                [(ngModel)]="item.typePresentation" required>
                                                 <mat-option value="value">Value</mat-option>
                                                 <mat-option value="aggregate">Aggregate</mat-option>
                                             </mat-select>
-                                            <mat-form-field *ngIf="item.typePresentation=='value'" [floatLabel]="'never'" style="width:20%; margin-right: 20px">
+                                            <mat-form-field *ngIf="item.typePresentation=='value'"
+                                                [floatLabel]="'never'" style="width:20%; margin-right: 20px">
                                                 <input matInput [(ngModel)]="item.alias">
                                                 <mat-placeholder class="placeholder">write an alias</mat-placeholder>
                                             </mat-form-field>
-                                            <div *ngIf="item.typePresentation=='aggregate'" style="display: flex;flex-direction: column;">
+                                            <div *ngIf="item.typePresentation=='aggregate'"
+                                                style="display: flex;flex-direction: column;">
                                                 <div style="display: flex;flex-direction: column;">
 
                                                     <div style="display: flex;flex-direction: row; margin: 5px;">
-                                                        <mat-checkbox style="width:40%;" class="agr-functions" [(ngModel)]="item.functionsAux.sum" (change)=addFunction(item)>
+                                                        <mat-checkbox style="width:40%;" class="agr-functions"
+                                                            [(ngModel)]="item.functionsAux.sum"
+                                                            (change)=addFunction(item)>
                                                             Sum
                                                         </mat-checkbox>
-                                                        <mat-form-field [floatLabel]="'never'" style="width:40%; margin-right: 20px">
-                                                            <input matInput [disabled]="!item.functionsAux.sum" [(ngModel)]="item.functionsAux.aliasSum">
+                                                        <mat-form-field [floatLabel]="'never'"
+                                                            style="width:40%; margin-right: 20px">
+                                                            <input matInput [disabled]="!item.functionsAux.sum"
+                                                                [(ngModel)]="item.functionsAux.aliasSum">
                                                             <mat-placeholder class="placeholder">alias</mat-placeholder>
                                                         </mat-form-field>
                                                     </div>
                                                     <mat-divider></mat-divider>
 
                                                     <div style="display: flex;flex-direction: row; margin: 5px;">
-                                                        <mat-checkbox class="agr-functions" [(ngModel)]="item.functionsAux.max" (change)=addFunction($event)>Max
+                                                        <mat-checkbox class="agr-functions"
+                                                            [(ngModel)]="item.functionsAux.max"
+                                                            (change)=addFunction($event)>Max
                                                         </mat-checkbox>
-                                                        <mat-form-field [floatLabel]="'never'" style="width:40%; margin-right: 20px">
-                                                            <input matInput [disabled]="!item.functionsAux.max" [(ngModel)]="item.functionsAux.aliasMax">
+                                                        <mat-form-field [floatLabel]="'never'"
+                                                            style="width:40%; margin-right: 20px">
+                                                            <input matInput [disabled]="!item.functionsAux.max"
+                                                                [(ngModel)]="item.functionsAux.aliasMax">
                                                             <mat-placeholder class="placeholder">alias</mat-placeholder>
                                                         </mat-form-field>
                                                     </div>
                                                     <mat-divider></mat-divider>
                                                     <div style="display: flex;flex-direction: row; margin: 5px;">
-                                                        <mat-checkbox class="agr-functions" [(ngModel)]="item.functionsAux.min" (change)=addFunction($event)>Min
+                                                        <mat-checkbox class="agr-functions"
+                                                            [(ngModel)]="item.functionsAux.min"
+                                                            (change)=addFunction($event)>Min
                                                         </mat-checkbox>
-                                                        <mat-form-field [floatLabel]="'never'" style="width:40%; margin-right: 20px">
-                                                            <input matInput [disabled]="!item.functionsAux.min" [(ngModel)]="item.functionsAux.aliasMin">
+                                                        <mat-form-field [floatLabel]="'never'"
+                                                            style="width:40%; margin-right: 20px">
+                                                            <input matInput [disabled]="!item.functionsAux.min"
+                                                                [(ngModel)]="item.functionsAux.aliasMin">
                                                             <mat-placeholder class="placeholder">alias</mat-placeholder>
                                                         </mat-form-field>
                                                     </div>
                                                     <mat-divider></mat-divider>
                                                     <div style="display: flex;flex-direction: row; margin: 5px;">
-                                                        <mat-checkbox class="agr-functions" [(ngModel)]="item.functionsAux.avg" (change)=addFunction($event)>Avg
+                                                        <mat-checkbox class="agr-functions"
+                                                            [(ngModel)]="item.functionsAux.avg"
+                                                            (change)=addFunction($event)>Avg
                                                         </mat-checkbox>
-                                                        <mat-form-field [floatLabel]="'never'" style="width:40%; margin-right: 20px">
-                                                            <input matInput [disabled]="!item.functionsAux.avg" [(ngModel)]="item.functionsAux.aliasAvg">
+                                                        <mat-form-field [floatLabel]="'never'"
+                                                            style="width:40%; margin-right: 20px">
+                                                            <input matInput [disabled]="!item.functionsAux.avg"
+                                                                [(ngModel)]="item.functionsAux.aliasAvg">
                                                             <mat-placeholder class="placeholder">alias</mat-placeholder>
                                                         </mat-form-field>
                                                     </div>
                                                     <mat-divider></mat-divider>
                                                     <div style="display: flex;flex-direction: row; margin: 5px;">
-                                                        <mat-checkbox class="agr-functions" [(ngModel)]="item.functionsAux.count" (change)=addFunction($event)>
+                                                        <mat-checkbox class="agr-functions"
+                                                            [(ngModel)]="item.functionsAux.count"
+                                                            (change)=addFunction($event)>
                                                             Count</mat-checkbox>
-                                                        <mat-form-field [floatLabel]="'never'" style="width:40%; margin-right: 20px">
-                                                            <input matInput [disabled]="!item.functionsAux.count" [(ngModel)]="item.functionsAux.aliasCount">
+                                                        <mat-form-field [floatLabel]="'never'"
+                                                            style="width:40%; margin-right: 20px">
+                                                            <input matInput [disabled]="!item.functionsAux.count"
+                                                                [(ngModel)]="item.functionsAux.aliasCount">
                                                             <mat-placeholder class="placeholder">alias</mat-placeholder>
                                                         </mat-form-field>
                                                     </div>
                                                     <mat-divider></mat-divider>
                                                     <div style="display: flex;flex-direction: row; margin: 5px;">
-                                                        <mat-checkbox class="agr-functions" [(ngModel)]="item.functionsAux.std" (change)=addFunction($event)>Std Deviation
+                                                        <mat-checkbox class="agr-functions"
+                                                            [(ngModel)]="item.functionsAux.std"
+                                                            (change)=addFunction($event)>Std Deviation
                                                         </mat-checkbox>
-                                                        <mat-form-field [floatLabel]="'never'" style="width:40%; margin-right: 20px">
-                                                            <input matInput [disabled]="!item.functionsAux.std" [(ngModel)]="item.functionsAux.aliasStd">
+                                                        <mat-form-field [floatLabel]="'never'"
+                                                            style="width:40%; margin-right: 20px">
+                                                            <input matInput [disabled]="!item.functionsAux.std"
+                                                                [(ngModel)]="item.functionsAux.aliasStd">
                                                             <mat-placeholder class="placeholder">alias</mat-placeholder>
                                                         </mat-form-field>
                                                     </div>
@@ -264,13 +321,16 @@
                                 <div *ngFor="let item of selectconcat.customFunctions">
                                     <div style="display: flex; flex-direction: row; flex-flow: row wrap; height: 60px">
                                         <mat-form-field style="width:70%;margin-right: 20px" [floatLabel]="'never'">
-                                            <textarea matInput style="height: 45px;" [(ngModel)]="item.customText"></textarea>
+                                            <textarea matInput style="height: 45px;"
+                                                [(ngModel)]="item.customText"></textarea>
                                         </mat-form-field>
-                                        <mat-form-field [floatLabel]="'never'" style="width:20%; margin-right: 20px; margin-top: 4%">
+                                        <mat-form-field [floatLabel]="'never'"
+                                            style="width:20%; margin-right: 20px; margin-top: 4%">
                                             <input matInput [(ngModel)]="item.alias">
                                             <mat-placeholder class="placeholder">write an alias</mat-placeholder>
                                         </mat-form-field>
-                                        <button style="margin-top: 4%" mat-icon-button (click)="deleteCustomFunction(item)">
+                                        <button style="margin-top: 4%" mat-icon-button
+                                            (click)="deleteCustomFunction(item)">
                                             <mat-icon style="color: white" aria-label="close">close</mat-icon>
                                         </button>
 
@@ -288,7 +348,8 @@
                 <!-- <div [hidden]="queryEdit"> -->
                 <!-- <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="height: 300px; background-color:#232323; padding: 30px"> -->
                 <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="background-color:#232323; padding: 30px">
-                    <div style=" overflow: hidden; display: flex; flex-direction: row; flex-flow: row wrap;margin-left:200px;margin-right:200px;margin-top:20px;">
+                    <div
+                        style=" overflow: hidden; display: flex; flex-direction: row; flex-flow: row wrap;margin-left:200px;margin-right:200px;margin-top:20px;">
 
                         <div style="width: 100%">
                             <div style="display: flex; flex-direction: row">
@@ -302,13 +363,17 @@
                             </div>
                             <mat-divider></mat-divider>
                             <form [formGroup]="argForms" class="container-arg">
-                                <div formArrayName="items" class="argument-container" *ngFor="let arg of selectconcat.arguments; let i = index">
+                                <div formArrayName="items" class="argument-container"
+                                    *ngFor="let arg of selectconcat.arguments; let i = index">
                                     <div style="display: flex; flex-direction: row;margin-top: 15px">
                                         <mat-form-field>
-                                            <input matInput placeholder="Argument Name" [(ngModel)]="arg.label" [ngModelOptions]="{standalone: true}" name="argumentName">
+                                            <input matInput placeholder="Argument Name" [(ngModel)]="arg.label"
+                                                [ngModelOptions]="{standalone: true}" name="argumentName">
                                         </mat-form-field>
                                         <!-- <mat-select [formControl]="argumentsForm.get('argumentType')" style=" margin-right: 50px; margin-left: 50px; width: 240px" autocomplete="off" name="types" [(ngModel)]="arg.type" [ngModelOptions]="{standalone: true}" name="argumentType" required> -->
-                                        <mat-select style=" margin-right: 50px; margin-left: 50px; width: 240px" autocomplete="off" name="types" [(ngModel)]="arg.type" [ngModelOptions]="{standalone: true}" name="argumentType" required>
+                                        <mat-select style=" margin-right: 50px; margin-left: 50px; width: 240px"
+                                            autocomplete="off" name="types" [(ngModel)]="arg.type"
+                                            [ngModelOptions]="{standalone: true}" name="argumentType" required>
                                             <mat-option value="string">String</mat-option>
                                             <mat-option value="number">Number</mat-option>
                                             <mat-option value="date">Date</mat-option>
@@ -317,7 +382,8 @@
                                                         {{getErrorTypeArguments()}}
                                                     </mat-error> -->
                                         </mat-select>
-                                        <mat-checkbox [(ngModel)]="arg.requiredBool" (change)="setRequired(arg)" [ngModelOptions]="{standalone: true}">Required</mat-checkbox>
+                                        <mat-checkbox [(ngModel)]="arg.requiredBool" (change)="setRequired(arg)"
+                                            [ngModelOptions]="{standalone: true}">Required</mat-checkbox>
                                         <div>
                                             <button mat-icon-button (click)="deleteArgument(arg)">
                                                 <mat-icon style="color: white" aria-label="delete">delete</mat-icon>
@@ -345,7 +411,8 @@
                     <p (click)="getSelectedColumns()">Where Condition</p>
                 </ng-template>
                 <!-- <div [hidden]="queryEdit"> -->
-                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="height: 300px; background-color:#232323; padding: 30px">
+                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'"
+                    style="height: 300px; background-color:#232323; padding: 30px">
                     <div style="margin-left:100px;margin-right:100px;margin-top:20px;font-size: 14px">
                         <div style="margin-bottom: 5px;"><span style="color:#01abec">Select </span>{{selectSentence}}
                         </div>
@@ -353,13 +420,15 @@
                         <div style="margin-bottom: 5px;"><span style="color:#01abec">Where: </span></div>
                         <ngx-codemirror #codeEditor [(ngModel)]="whereSentence" [options]="options">
                         </ngx-codemirror>
-                        <div style="margin-top:20px;overflow: hidden; display: flex; flex-direction: row; flex-flow: row wrap">
+                        <div
+                            style="margin-top:20px;overflow: hidden; display: flex; flex-direction: row; flex-flow: row wrap">
                             <div style="width:60%; margin-right: 3%">
                                 <div class="titles-large">Table(s)</div>
                                 <div class="scroll-type" style="margin-top: 10px">
                                     <div *ngFor="let item of selectconcat.tables" style="margin-bottom: 5px;">
                                         <div style="font-size: 18px">{{item.name}}</div>
-                                        <div style="overflow: hidden; display: flex; flex-direction: row; flex-flow: row wrap">
+                                        <div
+                                            style="overflow: hidden; display: flex; flex-direction: row; flex-flow: row wrap">
                                             <div *ngFor="let cl of item.columns" style="margin-right: 4px">
                                                 <div style="font-size: 12px">{{cl.name}}, </div>
                                             </div>
@@ -371,7 +440,8 @@
                                 <div class="titles-large">Arguments</div>
                                 <div style="margin-top:10px" class="scroll-type">
                                     <div *ngFor="let arg of selectconcat.arguments">
-                                        <div *ngIf="arg.label" style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 20px; line-height: 20px; color: white; font-size:12px;">
+                                        <div *ngIf="arg.label"
+                                            style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 20px; line-height: 20px; color: white; font-size:12px;">
                                             <div style="width:60%">{{arg.label}}</div>
                                             <div style="width:40%">{{arg.type}}</div>
                                         </div>
@@ -387,33 +457,23 @@
             <mat-step>
                 <ng-template matStepLabel>Group by</ng-template>
                 <!-- <div [hidden]="queryEdit"> -->
-                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="height: 395px; background-color:#232323;">
+                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'"
+                    style="height: 300px; background-color:#232323; padding: 30px">
                     <div style="display: flex; flex-direction: row; flex-wrap: wrap;margin-left:100px;margin-top:20px;">
                         <div style="width: 30%;padding-top: 30px">
-                            <div style="display: flex; flex-direction: row; flex-flow: row wrap; height: 50px">
-                                <mat-select class="select-dark" style="width: 93%;" autocomplete="off" name="tables" required [(value)]=selectconcat.groupingList>
-                                    <mat-option>--</mat-option>
-                                    <mat-option value="0">Static Group By</mat-option>
-                                    <mat-option value="1">Dynamic Group By</mat-option>
-                                </mat-select>
-                            </div>
                             <div class="box-container" style="height: 200px">
                                 <mat-form-field style="background-color: #1e1e1e; margin-bottom: 15px">
                                     <input class="search-input" style="width:85%" matInput [(ngModel)]="searchGroup">
                                     <mat-icon style="color: white" aria-label="search">search</mat-icon>
                                 </mat-form-field>
                                 <div style="margin-top: 15px;  max-height: 135px; overflow: auto">
-                                    <div *ngIf="this.selectconcat.groupingList=='0'">
-                                        <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let table of selectconcat.tables">
-                                            <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let column of table.columns | filter: searchGroup">
-                                                <mat-checkbox color="primary" [(ngModel)]="column.groupByBool" (change)=addGroupBy(table,column)>{{table.alias}}<span *ngIf="table.alias">.</span>{{column.name}}
-                                                </mat-checkbox>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div *ngIf="this.selectconcat.groupingList=='1'" style="margin-bottom: 10px; margin-left:4px;">
-                                        <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let arg of selectconcat.arguments | filter: searchGroup; let i = index">
-                                            <mat-checkbox color="primary" [(ngModel)]="arg.groupingBool" (change)="setGroupingState(i)">{{arg.label}}
+                                    <div style="margin-bottom: 10px; margin-left:4px;"
+                                        *ngFor="let table of selectconcat.tables">
+                                        <div style="margin-bottom: 10px; margin-left:4px;"
+                                            *ngFor="let column of table.columns | filter: searchGroup">
+                                            <mat-checkbox color="primary" [(ngModel)]="column.groupByBool"
+                                                (change)=addGroupBy(table,column)>{{table.alias}}<span
+                                                    *ngIf="table.alias">.</span>{{column.name}}
                                             </mat-checkbox>
                                         </div>
                                     </div>
@@ -424,28 +484,20 @@
                         <div style="width: 65%;padding-top: 30px; height: 200px;">
                             <div style="margin-bottom: 18px" class="box-titles">Summary</div>
                             <mat-divider></mat-divider>
-                            <div *ngIf="selectconcat.groupingList=='0'" style="margin: 9px 0px"><span style="color:#01abec;">Select Column(s)</span></div>
-                            <div *ngIf="selectconcat.groupingList=='1'" style="margin: 9px 0px"><span style="color:#01abec;">Select Argument for dynamic Grouping</span></div>
+                            <div style="margin: 9px 0px"><span style="color:#01abec;">Select Column(s)</span></div>
                             <mat-divider></mat-divider>
                             <div style="max-height: 135px; overflow: auto">
-                                <div *ngIf="selectconcat.groupingList=='0'">
-                                    <div *ngFor="let item of groupBySelected">
-                                        <div style="width:20%; color: white; line-height: 30px">{{item.name}}</div>
-                                        <mat-divider></mat-divider>
-                                    </div>
-                                </div>
-                                <div *ngIf="selectconcat.groupingList=='1'">
-                                    <div>
-                                        <div style="width:20%; color: white; line-height: 30px">{{argumentGrouping}}</div>
-                                        <mat-divider></mat-divider>
-                                    </div>
+                                <div *ngFor="let item of groupBySelected">
+                                    <div style="width:20%; color: white; line-height: 30px">{{item.name}}</div>
+                                    <mat-divider></mat-divider>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div style="margin-left:100px; margin-right:100px">
                         <div style="margin-bottom: 5px;"><span style="color:#01abec">Having: </span></div>
-                        <ngx-codemirror #codeEditor [(ngModel)]="havingSentence" [options]="options" (cursorActivity)="cursorMoved()">
+                        <ngx-codemirror #codeEditor [(ngModel)]="havingSentence" [options]="options"
+                            (cursorActivity)="cursorMoved()">
                         </ngx-codemirror>
                     </div>
                 </div>
@@ -458,160 +510,197 @@
                 <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="background-color:#232323; padding: 30px">
                     <div style="display: flex; flex-direction: row; flex-wrap: wrap;margin-left:100px;margin-top:20px;">
                         <div style="width: 30%;">
-                            <mat-select class="select-dark" style="width: 93%;" autocomplete="off" name="tables" required [(value)]=selectconcat.sortingList>
-                                <mat-option>--</mat-option>
-                                <mat-option value="0">Static Sorting</mat-option>
-                                <mat-option value="1">Dynamic Sorting</mat-option>
-                            </mat-select>
                             <div class="box-container" style="height: 320px">
                                 <mat-form-field style="background-color: #1e1e1e; margin-bottom: 15px">
                                     <input class="search-input" style="width:85%" matInput [(ngModel)]="searchOrder">
                                     <mat-icon style="color: white" aria-label="search">search</mat-icon>
                                 </mat-form-field>
                                 <div style="margin-top: 15px;  max-height: 260px; overflow: auto">
-                                    <div *ngIf="this.selectconcat.sortingList=='0'">
-                                        <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let table of selectconcat.tables">
-                                            <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let column of table.columns | filter: searchOrder">
-                                                <mat-checkbox [disabled]="selectconcat.sortingList=='1'" *ngIf="column.typePresentation=='value'" color="primary" [(ngModel)]="column.orderByBool" (change)=addOrderBy(table,column)>
-                                                    {{table.alias}}<span *ngIf="table.alias">.</span>{{column.name}} {{column.alias}}
+                                    <div style="margin-bottom: 10px; margin-left:4px;"
+                                        *ngFor="let table of selectconcat.tables">
+                                        <div style="margin-bottom: 10px; margin-left:4px;"
+                                            *ngFor="let column of table.columns | filter: searchOrder">
+                                            <mat-checkbox *ngIf="column.typePresentation=='value'" color="primary"
+                                                [(ngModel)]="column.orderByBool" (change)=addOrderBy(table,column)>
+                                                {{table.alias}}<span *ngIf="table.alias">.</span>{{column.name}}
+                                                {{column.alias}}
+                                            </mat-checkbox>
+
+                                            <div *ngIf="column.typePresentation=='aggregate'"
+                                                style="display: flex; flex-direction: column">
+                                                <mat-checkbox *ngIf="column.selected && column.functionsAux.sum"
+                                                    style="width:40%;" class="agr-functions"
+                                                    [(ngModel)]="column.functionsAux.orderSum">SUM({{column.name}})
+                                                    {{column.alias}}
                                                 </mat-checkbox>
 
-                                                <div *ngIf="column.typePresentation=='aggregate'" style="display: flex; flex-direction: column">
-                                                    <mat-checkbox *ngIf="column.selected && column.functionsAux.sum" style="width:40%;" class="agr-functions" [(ngModel)]="column.functionsAux.orderSum">SUM({{column.name}}) {{column.alias}}
-                                                    </mat-checkbox>
-
-                                                    <mat-checkbox *ngIf="column.selected && column.functionsAux.max" style="width:40%;" class="agr-functions" [(ngModel)]="column.functionsAux.orderMax">MAX({{column.name}}) {{column.alias}}
-                                                    </mat-checkbox>
-                                                    <mat-checkbox *ngIf="column.selected && column.functionsAux.min" style="width:40%;" class="agr-functions" [(ngModel)]="column.functionsAux.orderMin">MIN({{column.name}}) {{column.alias}}
-                                                    </mat-checkbox>
-                                                    <mat-checkbox *ngIf="column.selected && column.functionsAux.avg" style="width:40%;" class="agr-functions" [(ngModel)]="column.functionsAux.orderAvg">AVG({{column.name}}) {{column.alias}}
-                                                    </mat-checkbox>
-                                                    <mat-checkbox *ngIf="column.selected && column.functionsAux.count" style="width:40%;" class="agr-functions" [(ngModel)]="column.functionsAux.orderCount">COUNT({{column.name}}) {{column.alias}}
-                                                    </mat-checkbox>
-                                                    <mat-checkbox *ngIf="column.selected && column.functionsAux.std" style="width:40%;" class="agr-functions" [(ngModel)]="column.functionsAux.orderStd">STD({{column.name}}) {{column.alias}}
-                                                    </mat-checkbox>
-                                                </div>
+                                                <mat-checkbox *ngIf="column.selected && column.functionsAux.max"
+                                                    style="width:40%;" class="agr-functions"
+                                                    [(ngModel)]="column.functionsAux.orderMax">MAX({{column.name}})
+                                                    {{column.alias}}
+                                                </mat-checkbox>
+                                                <mat-checkbox *ngIf="column.selected && column.functionsAux.min"
+                                                    style="width:40%;" class="agr-functions"
+                                                    [(ngModel)]="column.functionsAux.orderMin">MIN({{column.name}})
+                                                    {{column.alias}}
+                                                </mat-checkbox>
+                                                <mat-checkbox *ngIf="column.selected && column.functionsAux.avg"
+                                                    style="width:40%;" class="agr-functions"
+                                                    [(ngModel)]="column.functionsAux.orderAvg">AVG({{column.name}})
+                                                    {{column.alias}}
+                                                </mat-checkbox>
+                                                <mat-checkbox *ngIf="column.selected && column.functionsAux.count"
+                                                    style="width:40%;" class="agr-functions"
+                                                    [(ngModel)]="column.functionsAux.orderCount">COUNT({{column.name}})
+                                                    {{column.alias}}
+                                                </mat-checkbox>
+                                                <mat-checkbox *ngIf="column.selected && column.functionsAux.std"
+                                                    style="width:40%;" class="agr-functions"
+                                                    [(ngModel)]="column.functionsAux.orderStd">STD({{column.name}})
+                                                    {{column.alias}}
+                                                </mat-checkbox>
                                             </div>
                                         </div>
-
-                                        <div *ngFor="let item of selectconcat.customFunctions" style="margin-left:4px;">
-                                            <mat-checkbox color="primary" [(ngModel)]="item.orderByBool" (change)=addOrderByCF(item)>{{item.alias}}({{item.customText}})
-                                            </mat-checkbox>
-                                        </div>
                                     </div>
-                                    <div *ngIf="this.selectconcat.sortingList=='1'">
-                                        <div>
-                                            <div style="width:20%; color: white; line-height: 30px">{{argumentSorting}}</div>
-                                            <mat-divider></mat-divider>
-                                        </div>
 
+                                    <div *ngFor="let item of selectconcat.customFunctions" style="margin-left:4px;">
+                                        <mat-checkbox color="primary" [(ngModel)]="item.orderByBool"
+                                            (change)=addOrderByCF(item)>{{item.alias}}({{item.customText}})
+                                        </mat-checkbox>
                                     </div>
+
                                 </div>
-
-
                             </div>
-                            <div style="width: 65%;padding-top: 30px">
-                                <div style="margin-bottom: 18px" class="box-titles">Summary</div>
-                                <mat-divider></mat-divider>
-                                <div style="margin: 9px 0px"><span style="color:#01abec;">Select Column(s)</span></div>
-                                <mat-divider></mat-divider>
-                                <div style="max-height: 215px; overflow-y:auto">
-                                    <div *ngFor="let tab of selectconcat.tables">
-                                        <div *ngFor="let item of tab.columns" style="display: flex; flex-direction: column;">
-                                            <div *ngIf="item.typePresentation == 'value' && item.orderByBool" style="display: flex; flex-direction: row; margin-top: 5px; margin-bottom:5px">
-                                                <div style="width:40%; color: white; line-height: 30px">{{item.name}}</div>
-                                                <mat-select value="DESC" class="select-column" style="width: 48%;" autocomplete="off" name="direction" [(ngModel)]="item.orderDirection" required>
-                                                    <mat-option value="DESC">Desc</mat-option>
-                                                    <mat-option value="ASC">Asc</mat-option>
-                                                </mat-select>
-                                            </div>
-                                            <mat-divider *ngIf="item.typePresentation == 'value' && item.orderByBool">
-                                            </mat-divider>
-                                            <div *ngIf="item.typePresentation=='aggregate'" style="display: flex;flex-direction:column;">
-                                                <div *ngIf="item.selected && item.functionsAux.orderSum" style="display: flex; flex-direction: row; margin-top: 5px; margin-bottom: 5px">
-                                                    <div style="width:40%; color: white; line-height: 30px">
-                                                        SUM({{item.name}})
-                                                    </div>
-                                                    <mat-select value="DESC" class="select-column" style="width: 48%;" autocomplete="off" name="direction" [(ngModel)]="item.functionsAux.orderDirectionSum" required>
-                                                        <mat-option value="DESC">Desc</mat-option>
-                                                        <mat-option value="ASC">Asc</mat-option>
-                                                    </mat-select>
-                                                </div>
-                                                <mat-divider *ngIf="item.selected && item.functionsAux.orderSum">
-                                                </mat-divider>
-                                                <div *ngIf="item.selected && item.functionsAux.orderMax" style="display: flex; flex-direction: row; margin-top: 5px; margin-bottom: 5px">
-                                                    <div style="width:40%; color: white; line-height: 30px">
-                                                        MAX({{item.name}})
-                                                    </div>
-                                                    <mat-select value="DESC" class="select-column" style="width: 48%;" autocomplete="off" name="direction" [(ngModel)]="item.functionsAux.orderDirectionMax" required>
-                                                        <mat-option value="DESC">Desc</mat-option>
-                                                        <mat-option value="ASC">Asc</mat-option>
-                                                    </mat-select>
-                                                </div>
-                                                <mat-divider *ngIf="item.selected && item.functionsAux.orderMax">
-                                                </mat-divider>
-                                                <div *ngIf="item.selected && item.functionsAux.orderMin" style="display: flex; flex-direction: row;margin-top: 5px; margin-bottom: 5px">
-                                                    <div style="width:40%; color: white; line-height: 30px">
-                                                        MIN({{item.name}})
-                                                    </div>
-                                                    <mat-select value="DESC" class="select-column" style="width: 48%;" autocomplete="off" name="direction" [(ngModel)]="item.functionsAux.orderDirectionMin" required>
-                                                        <mat-option value="DESC">Desc</mat-option>
-                                                        <mat-option value="ASC">Asc</mat-option>
-                                                    </mat-select>
-                                                </div>
-                                                <mat-divider *ngIf="item.selected && item.functionsAux.orderMin">
-                                                </mat-divider>
-                                                <div *ngIf="item.selected && item.functionsAux.orderAvg" style="display: flex; flex-direction: row;margin-top: 5px; margin-bottom: 5px">
-                                                    <div style="width:40%; color: white; line-height: 30px">
-                                                        AVG({{item.name}})
-                                                    </div>
-                                                    <mat-select value="DESC" class="select-column" style="width: 48%;" autocomplete="off" name="direction" [(ngModel)]="item.functionsAux.orderDirectionAvg" required>
-                                                        <mat-option value="DESC">Desc</mat-option>
-                                                        <mat-option value="ASC">Asc</mat-option>
-                                                    </mat-select>
-                                                </div>
-                                                <mat-divider *ngIf="item.selected && item.functionsAux.orderAvg">
-                                                </mat-divider>
-                                                <div *ngIf="item.selected && item.functionsAux.orderCount" style="display: flex; flex-direction: row;margin-top: 5px; margin-bottom: 5px">
-                                                    <div style="width:40%; color: white; line-height: 30px">
-                                                        COUNT({{item.name}})
-                                                    </div>
-                                                    <mat-select value="DESC" class="select-column" style="width: 48%;" autocomplete="off" name="direction" [(ngModel)]="item.functionsAux.orderDirectionCount" required>
-                                                        <mat-option value="DESC">Desc</mat-option>
-                                                        <mat-option value="ASC">Asc</mat-option>
-                                                    </mat-select>
-                                                </div>
-                                                <mat-divider *ngIf="item.selected && item.functionsAux.orderCount">
-                                                </mat-divider>
-                                                <div *ngIf="item.selected && item.functionsAux.orderStd" style="display: flex; flex-direction: row;margin-top: 5px; margin-bottom: 5px">
-                                                    <div style="width:40%; color: white; line-height: 30px">
-                                                        STD({{item.name}})
-                                                    </div>
-                                                    <mat-select value="DESC" class="select-column" style="width: 48%;" autocomplete="off" name="direction" [(ngModel)]="item.functionsAux.orderDirectionStd" required>
-                                                        <mat-option value="DESC">Desc</mat-option>
-                                                        <mat-option value="ASC">Asc</mat-option>
-                                                    </mat-select>
-                                                </div>
-                                                <mat-divider *ngIf="item.selected && item.functionsAux.orderStd">
-                                                </mat-divider>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div *ngFor="let item of selectconcat.customFunctions">
-                                        <div *ngIf="item.orderByBool" style="display: flex; flex-direction: row; margin-top: 5px; margin-bottom:5px">
-                                            <div style="width:40%; color: white; line-height: 30px">{{item.customText}}
-                                            </div>
-                                            <mat-select value="DESC" class="select-column" style="width: 48%;" autocomplete="off" name="direction" [(ngModel)]="item.orderDirection" required>
+
+
+                        </div>
+                        <div style="width: 65%;padding-top: 30px">
+                            <div style="margin-bottom: 18px" class="box-titles">Summary</div>
+                            <mat-divider></mat-divider>
+                            <div style="margin: 9px 0px"><span style="color:#01abec;">Select Column(s)</span></div>
+                            <mat-divider></mat-divider>
+                            <div style="max-height: 215px; overflow-y:auto">
+                                <div *ngFor="let tab of selectconcat.tables">
+                                    <div *ngFor="let item of tab.columns"
+                                        style="display: flex; flex-direction: column;">
+                                        <div *ngIf="item.typePresentation == 'value' && item.orderByBool"
+                                            style="display: flex; flex-direction: row; margin-top: 5px; margin-bottom:5px">
+                                            <div style="width:40%; color: white; line-height: 30px">{{item.name}}</div>
+                                            <mat-select value="DESC" class="select-column" style="width: 48%;"
+                                                autocomplete="off" name="direction" [(ngModel)]="item.orderDirection"
+                                                required>
                                                 <mat-option value="DESC">Desc</mat-option>
                                                 <mat-option value="ASC">Asc</mat-option>
                                             </mat-select>
                                         </div>
+                                        <mat-divider *ngIf="item.typePresentation == 'value' && item.orderByBool">
+                                        </mat-divider>
+                                        <div *ngIf="item.typePresentation=='aggregate'"
+                                            style="display: flex;flex-direction:column;">
+                                            <div *ngIf="item.selected && item.functionsAux.orderSum"
+                                                style="display: flex; flex-direction: row; margin-top: 5px; margin-bottom: 5px">
+                                                <div style="width:40%; color: white; line-height: 30px">
+                                                    SUM({{item.name}})
+                                                </div>
+                                                <mat-select value="DESC" class="select-column" style="width: 48%;"
+                                                    autocomplete="off" name="direction"
+                                                    [(ngModel)]="item.functionsAux.orderDirectionSum" required>
+                                                    <mat-option value="DESC">Desc</mat-option>
+                                                    <mat-option value="ASC">Asc</mat-option>
+                                                </mat-select>
+                                            </div>
+                                            <mat-divider *ngIf="item.selected && item.functionsAux.orderSum">
+                                            </mat-divider>
+                                            <div *ngIf="item.selected && item.functionsAux.orderMax"
+                                                style="display: flex; flex-direction: row; margin-top: 5px; margin-bottom: 5px">
+                                                <div style="width:40%; color: white; line-height: 30px">
+                                                    MAX({{item.name}})
+                                                </div>
+                                                <mat-select value="DESC" class="select-column" style="width: 48%;"
+                                                    autocomplete="off" name="direction"
+                                                    [(ngModel)]="item.functionsAux.orderDirectionMax" required>
+                                                    <mat-option value="DESC">Desc</mat-option>
+                                                    <mat-option value="ASC">Asc</mat-option>
+                                                </mat-select>
+                                            </div>
+                                            <mat-divider *ngIf="item.selected && item.functionsAux.orderMax">
+                                            </mat-divider>
+                                            <div *ngIf="item.selected && item.functionsAux.orderMin"
+                                                style="display: flex; flex-direction: row;margin-top: 5px; margin-bottom: 5px">
+                                                <div style="width:40%; color: white; line-height: 30px">
+                                                    MIN({{item.name}})
+                                                </div>
+                                                <mat-select value="DESC" class="select-column" style="width: 48%;"
+                                                    autocomplete="off" name="direction"
+                                                    [(ngModel)]="item.functionsAux.orderDirectionMin" required>
+                                                    <mat-option value="DESC">Desc</mat-option>
+                                                    <mat-option value="ASC">Asc</mat-option>
+                                                </mat-select>
+                                            </div>
+                                            <mat-divider *ngIf="item.selected && item.functionsAux.orderMin">
+                                            </mat-divider>
+                                            <div *ngIf="item.selected && item.functionsAux.orderAvg"
+                                                style="display: flex; flex-direction: row;margin-top: 5px; margin-bottom: 5px">
+                                                <div style="width:40%; color: white; line-height: 30px">
+                                                    AVG({{item.name}})
+                                                </div>
+                                                <mat-select value="DESC" class="select-column" style="width: 48%;"
+                                                    autocomplete="off" name="direction"
+                                                    [(ngModel)]="item.functionsAux.orderDirectionAvg" required>
+                                                    <mat-option value="DESC">Desc</mat-option>
+                                                    <mat-option value="ASC">Asc</mat-option>
+                                                </mat-select>
+                                            </div>
+                                            <mat-divider *ngIf="item.selected && item.functionsAux.orderAvg">
+                                            </mat-divider>
+                                            <div *ngIf="item.selected && item.functionsAux.orderCount"
+                                                style="display: flex; flex-direction: row;margin-top: 5px; margin-bottom: 5px">
+                                                <div style="width:40%; color: white; line-height: 30px">
+                                                    COUNT({{item.name}})
+                                                </div>
+                                                <mat-select value="DESC" class="select-column" style="width: 48%;"
+                                                    autocomplete="off" name="direction"
+                                                    [(ngModel)]="item.functionsAux.orderDirectionCount" required>
+                                                    <mat-option value="DESC">Desc</mat-option>
+                                                    <mat-option value="ASC">Asc</mat-option>
+                                                </mat-select>
+                                            </div>
+                                            <mat-divider *ngIf="item.selected && item.functionsAux.orderCount">
+                                            </mat-divider>
+                                            <div *ngIf="item.selected && item.functionsAux.orderStd"
+                                                style="display: flex; flex-direction: row;margin-top: 5px; margin-bottom: 5px">
+                                                <div style="width:40%; color: white; line-height: 30px">
+                                                    STD({{item.name}})
+                                                </div>
+                                                <mat-select value="DESC" class="select-column" style="width: 48%;"
+                                                    autocomplete="off" name="direction"
+                                                    [(ngModel)]="item.functionsAux.orderDirectionStd" required>
+                                                    <mat-option value="DESC">Desc</mat-option>
+                                                    <mat-option value="ASC">Asc</mat-option>
+                                                </mat-select>
+                                            </div>
+                                            <mat-divider *ngIf="item.selected && item.functionsAux.orderStd">
+                                            </mat-divider>
+                                        </div>
                                     </div>
-                                    
+                                </div>
+                                <div *ngFor="let item of selectconcat.customFunctions">
+                                    <div *ngIf="item.orderByBool"
+                                        style="display: flex; flex-direction: row; margin-top: 5px; margin-bottom:5px">
+                                        <div style="width:40%; color: white; line-height: 30px">{{item.customText}}
+                                        </div>
+                                        <mat-select value="DESC" class="select-column" style="width: 48%;"
+                                            autocomplete="off" name="direction" [(ngModel)]="item.orderDirection"
+                                            required>
+                                            <mat-option value="DESC">Desc</mat-option>
+                                            <mat-option value="ASC">Asc</mat-option>
+                                        </mat-select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
             </mat-step>
 
             <mat-step>
@@ -622,7 +711,10 @@
                     <form name="configuration">
                         <div style="margin-left:100px;margin-top:20px;width: 45%">
                             <mat-form-field class="server-config">
-                                <input (change)="checkNameValidator($event.target.value)" class="server-config" placeholder="Web Service Name" matInput [formControl]="configurationForm.get('nameValidator')" [(ngModel)]="selectconcat.name" name="name">
+                                <input (change)="checkNameValidator($event.target.value)" class="server-config"
+                                    placeholder="Web Service Name" matInput
+                                    [formControl]="configurationForm.get('nameValidator')"
+                                    [(ngModel)]="selectconcat.name" name="name">
                                 <mat-error *ngIf="configurationForm.get('nameValidator')?.hasError('exists')">
                                     {{getErrorNameExistMessage()}}
                                 </mat-error>
@@ -632,18 +724,21 @@
                             </mat-form-field>
 
                             <mat-form-field class="server-config">
-                                <input class="server-config" value=0 placeholder="Limit" matInput [(ngModel)]="selectconcat.pageSize" name="pagination">
+                                <input class="server-config" value=0 placeholder="Limit" matInput
+                                    [(ngModel)]="selectconcat.pageSize" name="pagination">
                             </mat-form-field>
 
                             <mat-form-field class="server-config">
-                                <input class="server-config" placeholder="Description" matInput [(ngModel)]="selectconcat.description" name="description">
+                                <input class="server-config" placeholder="Description" matInput
+                                    [(ngModel)]="selectconcat.description" name="description">
                             </mat-form-field>
 
                             <!--comentado kp20190507 <mat-select class="server-config" autocomplete="off" name="types" [(ngModel)]="selectconcat.method" [ngModelOptions]="{standalone: true}" name="method" required>
                                     <mat-option value="GET">GET</mat-option>
                                     <mat-option value="POST">POST</mat-option>
                                 </mat-select> -->
-                            <mat-select class="server-config" autocomplete="off" [(ngModel)]="selectconcat.wrapped" [ngModelOptions]="{standalone: true}" name="wrapped" required>
+                            <mat-select class="server-config" autocomplete="off" [(ngModel)]="selectconcat.wrapped"
+                                [ngModelOptions]="{standalone: true}" name="wrapped" required>
                                 <mat-option value="1">Wrapped</mat-option>
                                 <mat-option value="0">Not Wrapped</mat-option>
                             </mat-select>
@@ -657,7 +752,8 @@
                     <p (click)="getSelectedColumns()">Query Summary</p>
                 </ng-template>
                 <!-- <div [hidden]="queryEdit"> -->
-                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="height: 300px; background-color:#232323; padding: 30px">
+                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'"
+                    style="height: 300px; background-color:#232323; padding: 30px">
                     <div style="margin-left:100px;margin-right:100px;margin-top:20px;font-size: 14px ">
                         <div *ngIf="selectSentence" style="margin-bottom: 5px; "><span style="color:#01abec ">Select
                             </span>{{selectSentence}}</div>
@@ -671,11 +767,12 @@
                             </span>{{havingSentence}}</div>
                         <div *ngIf="orderBySentence" style="margin-bottom: 5px; "><span style="color:#01abec ">Order By
                             </span>{{orderBySentence}}</div>
-                        <div *ngIf="selectconcat.pageSize" style="margin-bottom: 5px; "><span style="color:#01abec ">Limit
+                        <div *ngIf="selectconcat.pageSize" style="margin-bottom: 5px; "><span
+                                style="color:#01abec ">Limit
                             </span>{{selectconcat.pageSize}}</div>
                     </div>
                 </div>
             </mat-step>
         </mat-horizontal-stepper>
-        </div>
     </div>
+</div>
