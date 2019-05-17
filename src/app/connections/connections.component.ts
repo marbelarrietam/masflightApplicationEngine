@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ConnectionQuery } from '../model/connection'
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { Globals } from '../globals/Globals';
 import { ApplicationService } from '../services/application.service';
 import { MatTableDataSource } from '@angular/material';
+import { FormControl, Validators,ValidatorFn, ValidationErrors, AbstractControl, FormGroup } from '@angular/forms';      
 
 @Component({
   selector: 'app-connections',
@@ -12,7 +14,16 @@ import { MatTableDataSource } from '@angular/material';
 export class ConnectionsComponent implements OnInit {
   dataSource;
   connections;
-
+  optionSelected = new ConnectionQuery();
+  optionOver;
+  innerHeight: number;
+connectionForm = new FormGroup({
+  hostValidator:new FormControl('host', [Validators.required]),
+  usernameValidator:new FormControl('username', [Validators.required]),
+  passwordValidator:new FormControl('password', [Validators.required]),
+  schemaValidator:new FormControl('schema', [Validators.required]),
+  portValidator:new FormControl('port', [Validators.required]),
+});
   constructor(
     private router: Router,
     public globals: Globals,
@@ -22,8 +33,10 @@ export class ConnectionsComponent implements OnInit {
   displayedColumns = ['columnHost', 'columnUsername', 'columnSchema'];
 
   ngOnInit() {
+    this.innerHeight = window.innerHeight;
     this.getConnections();
   }
+
 
   handlerSuccessGet(_this, data){
      _this.connections = data;
@@ -43,4 +56,29 @@ export class ConnectionsComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  save(){
+    
+  }
+  cancelAndClean(){
+    this.optionSelected =  new ConnectionQuery();
+  }
+
+  selectRow(row){
+    this.optionSelected = row;
+  }
+
+  overRow(row){
+    this.optionOver = row;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  checkScreen(event): void
+  {
+    this.innerHeight = event.target.innerHeight;
+  }
+
+  getInnerHeight(): number
+  {
+    return this.innerHeight;
+  }
 }

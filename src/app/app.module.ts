@@ -40,17 +40,22 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { WebServicesComponent } from './web-services/web-services.component';
+import { WebServicesCopyComponent } from './web-services-copy/web-services-copy.component';
 import { FilterPipe } from './web-services/pipe-filter';
+import { FilterPipeCopy } from './web-services-copy/pipe-filter-copy';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { AllWebServicesComponent } from './all-web-services/all-web-services.component';
 import { TestComponent } from './test/test.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { DialogErrorLogComponent } from './dialog-error-log/dialog-error-log.component';
+import { ConnectionsComponent } from './connections/connections.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginScreenComponent,
+    WebServicesCopyComponent,
+    FilterPipeCopy,
     WebServicesComponent,
     FilterPipe,
     MessageComponent,
@@ -68,7 +73,8 @@ import { DialogErrorLogComponent } from './dialog-error-log/dialog-error-log.com
     MsfLoadingComponent,
     AllWebServicesComponent,
     TestComponent,
-    DialogErrorLogComponent
+    DialogErrorLogComponent,
+    ConnectionsComponent
   ],
   imports: [
     BrowserModule,

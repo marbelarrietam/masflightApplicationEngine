@@ -1,45 +1,95 @@
-<div class="general-container">
+<div class="general-container" [style.height.px]="getInnerHeight()">
     <div class="msf-menu-header" style="height: 30px; display: flex; flex-direction: row; flex-wrap: wrap">
         <div class="ws-title" style="flex: 1;">Web Services Summary</div>
     </div>
-    <mat-card class="msf-container-table msf-center-container" style="height: 71vh">
+    <mat-card class="msf-container-table msf-center-container" style="height: 100%">
         <div style="display: flex; flex-direction:row">
             <div style="display: flex; flex-direction: column; width:60%">
                 <div style="display: flex; flex-direction: row; height: 10vh;">
-                    <mat-form-field style="width:50%; float: right; margin-top: 20px">
+                    <mat-form-field style="width:95%; float: right; margin-top: 20px">
                         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" />
                     </mat-form-field>
                 </div>
-                <div class="container-conn" style="width: 95%">
+                <div class="container-conn" style="width: 95%; height:calc(100% - 10%)">
                     <table mat-table matSort [dataSource]="dataSource" class="datasource welcome-table" style="width:100%;font-size: 12px">
                         <ng-container matColumnDef="columnHost">
                             <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header> Host </th>
-                            <td mat-cell class="darktable-row" *matCellDef="let element"> {{ element.host }} </td>
+                            <td mat-cell style="color:white" *matCellDef="let element"> {{ element.host }} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="columnUsername">
                             <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header> Username </th>
-                            <td mat-cell class="darktable-row" *matCellDef="let element">
+                            <td mat-cell style="color:white" *matCellDef="let element">
                                 {{ element.username }} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="columnSchema">
                             <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header> Schema </th>
-                            <td mat-cell class="darktable-row" *matCellDef="let element"> {{ element.nameSchema }} </td>
+                            <td mat-cell style="color:white" *matCellDef="let element"> {{ element.nameSchema }} </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns" (mouseover)="overRow(row)" (mouseleave)="optionOver=null" (click)="selectRow(row)" [ngClass]="{ 'selected': row === optionSelected, 'over-option': row===optionOver, 'darktable-row': row != optionSelected  }"></tr>
                     </table>
                 </div>
             </div>
 
             <div style="display: flex; flex-direction: column; width:40%; padding-top:10vh">
-                <div class="container-conn" style="width:95%">
-                    <div class="darktable" style="height: 10%"> </div>
+                <div class="container-conn" style="width:100%">
+                    <form name="connection" style="height:100%">
+                        <div class="darktable" style="height: 15%">
+                            <div>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                        <div style="padding:15px; padding-top:5vh; text-align: center">
+
+                            <div style="display:flex; flex-direction:row">
+
+                                <div style="width:50%">
+                                    <mat-form-field [formGroup]="connectionForm" class="short-input">
+                                        <input matInput placeholder="Host" formControlName="hostValidator" name="host" [(value)]="optionSelected.host" />
+                                    </mat-form-field>
+                                </div>
+
+                                <div style="width:50%">
+                                    <mat-form-field [formGroup]="connectionForm" class="short-input">
+                                        <input matInput placeholder="Port" formControlName="portValidator" name="port" [(value)]="optionSelected.port" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div style="display:flex; flex-direction:row">
+                                <div style="width:50%">
+                                    <mat-form-field [formGroup]="connectionForm" class="short-input">
+                                        <input matInput placeholder="Username" formControlName="usernameValidator" name="username" [(value)]="optionSelected.username" />
+                                    </mat-form-field>
+                                </div>
+                                <div style="width:50%">
+                                    <mat-form-field [formGroup]="connectionForm" class="short-input">
+                                        <input matInput placeholder="Password" formControlName="passwordValidator" name="password" [(value)]="optionSelected.password" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div>
+                                <mat-form-field [formGroup]="connectionForm" class="large-input">
+                                    <input matInput placeholder="Schema" formControlName="schemaValidator" name="schema" [(value)]="optionSelected.nameSchema" />
+                                </mat-form-field>
+                            </div>
+
+                            <div style="margin-top: 10%; display:flex; flex-direction:row">
+                                <div class="button-form">
+                                    <button mat-flat-button class="flat-button button-publish" style="width:80%" (click)="save()">Save</button>
+                                </div>
+                                <div class="button-form">
+                                    <button mat-flat-button class="flat-button button-publish" style="width:80%" (click)="cancelAndClean()">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-
         </div>
     </mat-card>
 </div>

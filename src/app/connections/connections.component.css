@@ -2,3 +2,27 @@
     background-color: #232323;
     height: 60vh;
 }
+
+.selected {
+    background-color: #182128;
+}
+
+.over-option {
+    background-color: #1c2023;
+}
+
+.short-input {
+    width: 90%;
+    height: 10vh;
+    color: white;
+}
+
+.large-input {
+    width: 95%;
+    color: white;
+}
+
+.button-form {
+    margin: 10px;
+    width: 50%;
+}
