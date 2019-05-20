@@ -262,7 +262,7 @@
                                     </div>
                                 </div>
                                 <div *ngFor="let item of selectconcat.customFunctions">
-                                    <div style="display: flex; flex-direction: row; flex-flow: row wrap; height: 60px">
+                                    <div *ngIf="item.selectedResult=='1'" style="display: flex; flex-direction: row; flex-flow: row wrap; height: 60px">
                                         <mat-form-field style="width:70%;margin-right: 20px" [floatLabel]="'never'">
                                             <textarea matInput style="height: 45px;" [(ngModel)]="item.customText"></textarea>
                                         </mat-form-field>
