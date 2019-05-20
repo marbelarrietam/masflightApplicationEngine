@@ -81,7 +81,7 @@ export class WebServicesComponent implements OnInit {
   configurationForm = new FormGroup({
     nameValidator: new FormControl("name", [Validators.required])
   });
-  
+
 
 
   argumentsForm = new FormGroup({
@@ -120,7 +120,7 @@ export class WebServicesComponent implements OnInit {
     });
   }
 
-  
+
 
   clear(){
     // var aux = this.tablesInicial.slice(0);
@@ -133,7 +133,7 @@ export class WebServicesComponent implements OnInit {
     this.selectEdit = new QueryWS();
     this.selectTables = new QueryWS();
     this.selectViews = new QueryWS();
-    this.selectconcat = new QueryWS();    
+    this.selectconcat = new QueryWS();
     for (let i = 0; i < this.tables.length; i++) {
       if(this.tables[i].selected===true){
         this.tables[i].id = null;
@@ -221,7 +221,7 @@ export class WebServicesComponent implements OnInit {
 
   verifyArguments() {
     let value = "";
-    if (this.selectconcat.arguments.length!=0){
+    if (this.selectconcat.arguments!=null){
     for (let i = 0; i < this.selectconcat.arguments.length; i++) {
       if (
         this.selectconcat.arguments[i]["label"] == null ||
@@ -322,14 +322,14 @@ export class WebServicesComponent implements OnInit {
   // }
 
   handlerSuccessWS(_this,data) {
-    
+
 
     if (!_this.globals.DialogClose){
       _this.dialogRef.close();
       _this.globals.DialogClose = true;
     }
     _this.showError=false;
-    _this.globals.isLoading = false;   
+    _this.globals.isLoading = false;
     _this.dataErrorStep=data;
     if(data.errors==null){
     _this.globals.currentApplication = "list";
@@ -819,7 +819,7 @@ export class WebServicesComponent implements OnInit {
   }
 
 
-  addColumn(column) {    
+  addColumn(column) {
     if (column.selected) {
       column.selectedResult = "1";
     } else {
@@ -1153,8 +1153,8 @@ export class WebServicesComponent implements OnInit {
   }
 
   //kp20190510
-  openDialog(data): void {  
-    // openDialog(): void {  
+  openDialog(data): void {
+    // openDialog(): void {
     if (this.globals.DialogClose){
     this.globals.DialogClose=false;
     this.dialogRef = this.dialog.open(DialogErrorLogComponent, {

@@ -514,34 +514,10 @@
                                     <div *ngFor="let item of selectconcat.customFunctions" style="margin-left:4px;">
                                         <mat-checkbox color="primary" [(ngModel)]="item.orderByBool" (change)=addOrderByCF(item)>{{item.alias}}({{item.customText}})
                                         </mat-checkbox>
-
-
-
-
-
-
-
-
-
-
-
                                     </div>
-
                                 </div>
                             </div>
-
-
-
-
-
-
-
-
                         </div>
-
-
-
-
                         <div style="width: 65%;padding-top: 30px">
                             <div style="margin-bottom: 18px" class="box-titles">Summary</div>
                             <mat-divider></mat-divider>
@@ -556,15 +532,8 @@
                                                 <mat-option value="DESC">Desc</mat-option>
                                                 <mat-option value="ASC">Asc</mat-option>
                                             </mat-select>
-
-
-
-
-
-
-
-
                                         </div>
+                                        x
                                         <mat-divider *ngIf="item.typePresentation == 'value' && item.orderByBool">
                                         </mat-divider>
                                         <div *ngIf="item.typePresentation=='aggregate'" style="display: flex;flex-direction:column;">
@@ -641,15 +610,9 @@
                                             </mat-divider>
 
                                         </div>
-
-
-
-
                                     </div>
                                 </div>
                                 <div *ngFor="let item of selectconcat.customFunctions">
-
-
                                     <div *ngIf="item.orderByBool" style="display: flex; flex-direction: row; margin-top: 5px; margin-bottom:5px">
                                         <div style="width:40%; color: white; line-height: 30px">{{item.customText}}
 
