@@ -12,11 +12,12 @@
 @import "~codemirror/lib/codemirror.css";
 @import "~codemirror/theme/material.css";
 body {
-  background-image: url("assets/images/fondo.png");
+  background-color: #1e1e1e;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px;
   margin: 0;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .application-class {
@@ -1048,8 +1049,10 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 }
 
 .general-container {
-  width: 100%;
+  width: calc(100% - 60px);
   background-color: #333333;
+  height: calc(100vh - 90px);
+  padding: 0px 30px;
 }
 
 /*Menu*/
@@ -1581,21 +1584,12 @@ app-msf-airport {
   background: #333333;
 }
 
-.mat-table {
-  background: black;
-}
-
-.mat-cell {
-  font-size: 90%;
-}
-
 td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
   text-align: center;
   padding: 10px 0 !important;
 }
 
 .mat-header-cell {
-  background-color: #333333;
   border: 1px solid #777676;
   color: white;
   font-size: 100%;
@@ -1609,7 +1603,6 @@ td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
 }
 
 .mat-row, .mat-header-row {
-  background: white;
   min-width: 1200px;
   color: rgba(0, 0, 0, 0.87);
 }
@@ -3229,7 +3222,6 @@ tr.mat-footer-row, tr.mat-row {
 
 .welcome-table td {
   width: initial !important;
-  font-size: 110%;
   text-align: left;
   padding: 10px !important;
   font-weight: 500;
@@ -3805,11 +3797,10 @@ img.msf-calendar-image {
   display: none;
 }
 
-/*div COMETANDO KP 2019/05/16 DAÑA EL LOGIN 
- *
- *  color: white
- *
- *  font-size: 14px*/
+div {
+  color: white;
+}
+
 .mat-horizontal-stepper-header-container {
   background-color: #1e1e1e;
   height: 50px;
@@ -4085,8 +4076,12 @@ textarea.mat-input-element {
   height: calc(100% - 70px);
 }
 
-.CodeMirror {
+.mostrar2 .CodeMirror, .ocultar2 .CodeMirror {
   height: 300px !important;
+}
+
+.CodeMirror {
+  height: 120px;
 }
 
 .InfoQuery {
@@ -4125,8 +4120,32 @@ textarea.mat-input-element {
 
 .darktable-row {
   background-color: #232323;
-  color: white;
   justify-content: center;
+}
+
+.table_allWebServ {
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  width: 80%;
+  color: white;
+}
+.table_allWebServ .mat-header-cell {
+  border: 0px;
+}
+.table_allWebServ tr.mat-header-row {
+  height: 56px;
+  background: #1e1e1e;
+}
+.table_allWebServ .mat-cell, .table_allWebServ .mat-footer-cell {
+  color: white;
+}
+
+.selected {
+  background-color: #182128;
+}
+
+.over-option {
+  background-color: #1c2023;
 }
 
 /*# sourceMappingURL=styles.css.map */

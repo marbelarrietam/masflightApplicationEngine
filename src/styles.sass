@@ -25,12 +25,13 @@
 
 
 body
-    // background-color: #1e1e1e
-    background-image: url("assets/images/fondo.png") 
+    background-color: #1e1e1e
+    // background-image: url("assets/images/fondo.png") 
     font-family: $msf-font-family
     font-size: $msf-font-size
     margin: 0
     overflow-x: hidden
+    overflow-y: hidden
 
 // kp20190423
 .application-class
@@ -948,8 +949,10 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button
     color: $msf-secondary-color!important
 
 .general-container
-    width: 100%
-    background-color: $msf-primary-color
+    width: calc(100% - 60px)
+    background-color: $msf-primary-color    
+    height: calc(100vh - 90px)
+    padding: 0px 30px
 
 /*Menu*/
 .msf-menu-header
@@ -1433,18 +1436,18 @@ app-msf-airport
     height: 100%
     background: $msf-primary-color
 
-.mat-table
-    background: black
+// .mat-table kp20190517
+//     background: black
 
-.mat-cell
-    font-size: 90%
+// .mat-cell
+//     font-size: 90%
 
 td.mat-cell, td.mat-footer-cell, th.mat-header-cell
     text-align: center
     padding: 10px 0 !important
 
 .mat-header-cell
-    background-color: $msf-primary-color
+    // background-color: $msf-primary-color //kp20190517
     border: 1px solid #777676
     color: white
     font-size: 100%
@@ -1456,7 +1459,7 @@ td.mat-cell, td.mat-footer-cell, th.mat-header-cell
     height: 100%
 
 .mat-row, .mat-header-row
-    background: white
+    // background: white kp20190517
     min-width: 1200px
     color: rgba(0,0,0,.87)
 
@@ -2791,7 +2794,7 @@ tr.mat-footer-row, tr.mat-row
 
 .welcome-table td
     width: initial !important
-    font-size: 110%
+    // font-size: 110%
     text-align: left
     padding: 10px !important
     font-weight: 500
@@ -3309,9 +3312,9 @@ img.msf-calendar-image
     display: none
 
 
-/*div COMETANDO KP 2019/05/16 DAÑA EL LOGIN 
+div 
     color: white
-    font-size: 14px*/
+    // font-size: 14px reviasr como cambiarlo kp20190517
 
 
 .mat-horizontal-stepper-header-container
@@ -3590,8 +3593,12 @@ textarea.mat-input-element
     flex-direction: column
     height: calc(100% - 70px)
 //kp
+.mostrar2 .CodeMirror, .ocultar2 .CodeMirror
+        height: 300px !important
+
 .CodeMirror
-    height: 300px !important
+    height: 120px
+
 //kp
 .InfoQuery
     margin-bottom: 15px
@@ -3634,10 +3641,23 @@ textarea.mat-input-element
 
 .darktable-row
     background-color:#232323
-    color: white
     justify-content: center
 
+.table_allWebServ
+    height: calc(100% - 60px)
+    overflow-y: auto
+    width: 80%
+    color: white
+    .mat-header-cell
+        border: 0px
+    tr.mat-header-row 
+        height: 56px
+        background: #1e1e1e
+    .mat-cell, .mat-footer-cell
+        color: white
 
+.selected
+    background-color: #182128
 
-
-
+.over-option
+    background-color: #1c2023

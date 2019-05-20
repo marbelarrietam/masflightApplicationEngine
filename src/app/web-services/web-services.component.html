@@ -342,14 +342,14 @@
 
             <mat-step>
                 <ng-template matStepLabel>
-                    <p (click)="getSelectedColumns()">Where Condition</p>
+                    <!-- <p (click)="getSelectedColumns()">Where Condition</p> -->
+                    <p>Where Condition</p>
                 </ng-template>
                 <!-- <div [hidden]="queryEdit"> -->
-                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="height: 300px; background-color:#232323; padding: 30px">
+                <div [ngClass]="queryEdit  ? 'ocultar' : 'mostrar'" style="background-color:#232323; padding: 30px">
                     <div style="margin-left:100px;margin-right:100px;margin-top:20px;font-size: 14px">
-                        <div style="margin-bottom: 5px;"><span style="color:#01abec">Select </span>{{selectSentence}}
-                        </div>
-                        <div style="margin-bottom: 5px;"><span style="color:#01abec">From </span>{{fromSentence}}</div>
+                        <!-- <div style="margin-bottom: 5px;"><span style="color:#01abec">Select </span>{{selectSentence}}</div> -->
+                        <!-- <div style="margin-bottom: 5px;"><span style="color:#01abec">From </span>{{fromSentence}}</div> -->
                         <div style="margin-bottom: 5px;"><span style="color:#01abec">Where: </span></div>
                         <ngx-codemirror #codeEditor [(ngModel)]="whereSentence" [options]="options">
                         </ngx-codemirror>
