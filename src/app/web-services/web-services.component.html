@@ -356,12 +356,12 @@
                         <div style="margin-top:20px;overflow: hidden; display: flex; flex-direction: row; flex-flow: row wrap">
                             <div style="width:60%; margin-right: 3%">
                                 <div class="titles-large">Table(s)</div>
-                                <div class="scroll-type" style="margin-top: 10px">
+                                <div class="scroll-type" style="margin-top: 10px; line-height: 1.5;">
                                     <div *ngFor="let item of selectconcat.tables" style="margin-bottom: 5px;">
-                                        <div style="font-size: 18px">{{item.name}}</div>
+                                        <div style="font-size: 16px">{{item.name}}</div>
                                         <div style="overflow: hidden; display: flex; flex-direction: row; flex-flow: row wrap">
                                             <div *ngFor="let cl of item.columns" style="margin-right: 4px">
-                                                <div style="font-size: 12px">{{cl.name}}, </div>
+                                                <div style="font-size: 12px; font-weight: lighter;">{{cl.name}}, </div>
                                             </div>
                                         </div>
                                     </div>
@@ -369,11 +369,11 @@
                             </div>
                             <div style="width:37%">
                                 <div class="titles-large">Arguments</div>
-                                <div style="margin-top:10px" class="scroll-type">
+                                <div style="margin-top:10px;  line-height: 1.5; padding-left: 5px;" class="scroll-type">
                                     <div *ngFor="let arg of selectconcat.arguments">
-                                        <div *ngIf="arg.label" style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 20px; line-height: 20px; color: white; font-size:12px;">
+                                        <div *ngIf="arg.label" style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 20px; line-height: 20px; color: white; font-size: 12px; font-weight: lighter;">
                                             <div style="width:60%">{{arg.label}}</div>
-                                            <div style="width:40%">{{arg.type}}</div>
+                                            <div style="width: calc(40% - 20px); text-align: right; padding-right: 20px;">{{arg.type}}</div>
                                         </div>
                                         <mat-divider></mat-divider>
                                     </div>
