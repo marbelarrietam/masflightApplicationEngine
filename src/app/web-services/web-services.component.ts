@@ -39,6 +39,8 @@ export class WebServicesComponent implements OnInit {
   searchColumn: string;
   searchGroup: string;
   searchOrder: string;
+  checkColumn = '0';
+  checkBool: boolean;
   deletedTables: Array<Tables> = new Array();
   deletedColumns: Array<Columns> = new Array();
   deletedArguments: Array<QueryArgument> = new Array();
@@ -145,7 +147,7 @@ export class WebServicesComponent implements OnInit {
 
   validate(){
     this.clear()
-    this.service.getsetSteps(this,encodeURIComponent(this.queryText),this.handlerSuccessText, this.handlerError)
+    this.service.getsetSteps(this,encodeURIComponent(this.queryText),this.checkColumn,this.handlerSuccessText, this.handlerError)
   }
 
   handlerSuccessText(_this,data){
@@ -243,23 +245,6 @@ export class WebServicesComponent implements OnInit {
       return value;
     }
   }
-
-  // verifyArguments() {
-  //   let value = 0;
-  //   for (let i = 0; i < this.selectconcat.arguments.length; i++) {
-  //     if (
-  //       this.selectconcat.arguments[i]["label"] == null ||
-  //       this.selectconcat.arguments[i]["label"] == ""
-  //     ) {
-  //       value = 1;
-  //     }
-  //   }
-  //   if (value > 0) {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
 
   saveWebService() {
     var merr="";
@@ -387,16 +372,21 @@ export class WebServicesComponent implements OnInit {
     queryJson.tables = this.getTablesColumn();
     queryJson.tables = queryJson.tables.concat(this.deletedTables);
     queryJson.arguments = this.selectconcat.arguments;
+    if(this.selectconcat.arguments!=null){
     queryJson.arguments = queryJson.arguments.concat(this.deletedArguments);
+    }
     queryJson.whereclause = this.whereSentence;
     queryJson.havingclause = this.havingSentence;
     queryJson.query = this.getQueryString();
+    queryJson.sortingSentence = this.selectconcat.sortingList != '1' ? this.orderBySentence : null;
+    queryJson.groupBySentence = this.selectconcat.groupingList != '1' ? this.groupBySentence : null;
     queryJson.method = this.selectconcat.method;
     queryJson.description = this.selectconcat.description;
     queryJson.pageSize = this.selectconcat.pageSize;
     queryJson.wrapped = this.selectconcat.wrapped; //kp20190507
     queryJson.groupingList = this.selectconcat.groupingList;
     queryJson.sortingList = this.selectconcat.sortingList;
+    queryJson.checkColumn = this.checkColumn;
     return queryJson;
   }
 
@@ -1170,6 +1160,14 @@ export class WebServicesComponent implements OnInit {
   else{
     this.dialogRef.close();
   }
+  }
+
+  checkValidate(){
+    if(this.checkBool){
+      this.checkColumn = '1';
+    }else{
+      this.checkColumn = '0';
+    }
   }
 
 }
