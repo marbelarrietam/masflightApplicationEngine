@@ -19,6 +19,11 @@ th.mat-header-cell {
 
 .example-chip-list {
     width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 42px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .mat-cell,
@@ -43,4 +48,12 @@ th.mat-header-cell {
 
 .hide-parameters {
     display: none;
+}
+
+.header-test {
+    height: 110px;
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
 }

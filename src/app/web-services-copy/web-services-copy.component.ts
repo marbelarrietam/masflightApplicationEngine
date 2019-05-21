@@ -143,7 +143,7 @@ export class WebServicesCopyComponent implements OnInit {
 
   validate(){
     this.clear()
-    this.service.getsetSteps(this,encodeURIComponent(this.queryText),this.handlerSuccessText, this.handlerError)
+    this.service.getsetSteps(this,encodeURIComponent(this.queryText),"1",this.handlerSuccessText, this.handlerError)
   }
 
   handlerSuccessText(_this,data){

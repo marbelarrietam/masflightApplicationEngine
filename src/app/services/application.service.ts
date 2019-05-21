@@ -315,9 +315,9 @@ export class ApplicationService {
     this.http.get(_this, url, handlerSucess, handlerError, null);
   }
 
-  getsetSteps(_this,data,handlerSucess,handlerError){
+  getsetSteps(_this,data,check,handlerSucess,handlerError){
       _this.globals.isLoading = true;
-      let url = this.host + "/setSteps?query="+data;
+      let url = this.host + "/setSteps?query="+data+"&checkColumns="+check;
       this.http.get(_this, url, handlerSucess, handlerError, null);
 
   }
@@ -333,6 +333,13 @@ export class ApplicationService {
     let url = this.host + "/getConnections";
     this.http.get(_this, url, handlerSucess, handlerError, null);
   }
+
+  getDatabases(_this, handlerSucess, handlerError){
+    _this.globals.isLoading = true;
+    let url = this.host + "/getDatabases";
+    this.http.get(_this, url, handlerSucess, handlerError, null);
+  }
+
 
   saveWebServices(_this, data, handlerSuccess, handlerError){
     _this.globals.isLoading = true;

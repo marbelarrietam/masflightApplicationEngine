@@ -14,7 +14,7 @@
 
                     <label style="width:94%;margin-bottom: 5px;overflow-x: hidden;">{{item.label}}</label>
                     <div>
-                        <mat-form-field class="example-chip-list" style="margin-top: 20px;margin-bottom: 20px;height: 42px;overflow-y: auto;overflow-x: hidden;">
+                        <mat-form-field class="example-chip-list">
                             <mat-chip-list #chipList style="width:90%;overflow-x: hidden;">
                                 <mat-chip *ngFor="let arg of item.valueArray" [selectable]="selectable" [removable]="removable" (removed)="remove(arg, item.valueArray)">
                                     {{arg}}
@@ -36,10 +36,10 @@
         <mat-icon *ngIf="!viewParameters" style="color: white; margin: auto 0" aria-label="Toogle">keyboard_arrow_right
         </mat-icon>
     </div>
-    <div style="width: 100%">
-        <div class="msf-menu-header" style="height: 110px; display: flex; flex-direction: column; flex-wrap: wrap">
+    <div style="width: 80%">
+        <div class="msf-menu-header header-test">
             <div class="ws-title" style="flex: 1;padding-top: 5px;padding-bottom: 0px">Testing {{ws.name}}</div>
-            <div *ngIf="showUrl" class="ws-title" style="flex: 1; font-size: 12px;padding-top: 5px;padding-bottom: 0px; width: 100%">http://staging.pulse.aspsols.com:8882{{globals.currentURL}}</div>
+            <div *ngIf="showUrl" class="ws-url">http://staging.pulse.aspsols.com:8882{{globals.currentURL}}</div>
         </div>
         <mat-card class="msf-container-table msf-center-container" style="width: 95%">
             <div *ngIf="notFound=='0'">
@@ -52,7 +52,7 @@
                     </div> -->
 
                         <div class="test-container" *ngIf="showTable">
-                            <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 datasource welcome-table" style="font-size: 12px">
+                            <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 datasource welcome-table">
 
                                 <ng-container [matColumnDef]="column.columnName" *ngFor="let column of columns">
                                     <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header>{{column.columnLabel}}</th>

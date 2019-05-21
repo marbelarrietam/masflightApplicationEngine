@@ -18,6 +18,9 @@ export class QueryWS {
   "wrapped": string;
   "groupingList":string;
   "sortingList":string;
+  "groupBySentence":string;
+  "sortingSentence":string;
+  "checkColumn":string;
 
   constructor(){
     this.name = '';
@@ -34,7 +37,9 @@ export class QueryWS {
     this.wrapped = '1';
     this.groupingList = '0';
     this.sortingList = '0';
-
+    this.groupBySentence ='';
+    this.sortingSentence='';
+    this.checkColumn = '0';
   }
 
 }

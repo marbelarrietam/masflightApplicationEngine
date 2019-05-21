@@ -17,7 +17,7 @@ body {
   font-size: 14px;
   margin: 0;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 
 .application-class {
@@ -1049,10 +1049,8 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 }
 
 .general-container {
-  width: calc(100% - 60px);
+  width: 100%;
   background-color: #333333;
-  height: calc(100vh - 90px);
-  padding: 0px 30px;
 }
 
 /*Menu*/
@@ -1582,6 +1580,10 @@ app-msf-airport {
 .mat-tab-body-wrapper {
   height: 100%;
   background: #333333;
+}
+
+.mat-cell {
+  font-size: 12px;
 }
 
 td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
@@ -3757,7 +3759,15 @@ img.msf-calendar-image {
   font-weight: 500;
   font-size: 24px;
   padding: 30px;
-  width: 45px;
+  width: 100%;
+}
+
+.ws-url {
+  flex: 1;
+  font-size: 12px;
+  padding-top: 5px;
+  padding-bottom: 0px;
+  width: 100%;
 }
 
 .activation-form input {
@@ -3869,7 +3879,7 @@ div {
   flex-wrap: wrap;
   max-height: 350px;
   height: 350px;
-  overflow-y: scroll;
+  overflow-y: hidden !important;
   margin-top: 10px;
   width: 90%;
   padding-left: 10px;
@@ -4005,7 +4015,7 @@ textarea.mat-input-element {
 }
 
 .titles-large {
-  font-size: 20px;
+  font-size: 18px;
   background-color: #1e1e1e;
   padding: 5px;
 }

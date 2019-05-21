@@ -5,6 +5,7 @@ export class ConnectionQuery{
     "username":string;
     "password":string
     "nameSchema":string;
+    "db":number;
 
     constructor(){
         this.id='';
@@ -13,5 +14,6 @@ export class ConnectionQuery{
         this.username='';
         this.password='';
         this.nameSchema='';
+        this.db=null;
     }
 }

@@ -22,7 +22,34 @@
     color: white;
 }
 
+.header-new-conn {
+    height: 15%;
+    width: 96%;
+    display: flex;
+    flex-direction: row;
+    padding-left: 4%;
+}
+
 .button-form {
     margin: 10px;
     width: 50%;
+}
+
+.buttons {
+    width: 80%;
+    height: 100%;
+    border: none;
+}
+
+.menu-spacer {
+    flex: 1 1 auto;
+}
+
+.conn-select {
+    width: 44%;
+    display: flex;
+}
+
+.select-connection {
+    width: 100% !important;
 }

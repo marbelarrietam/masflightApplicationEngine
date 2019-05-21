@@ -37,10 +37,18 @@
             <div style="display: flex; flex-direction: column; width:40%; padding-top:10vh">
                 <div class="container-conn" style="width:100%">
                     <form name="connection" style="height:100%">
-                        <div class="darktable" style="height: 15%">
-                            <div>
+                        <div class="darktable header-new-conn">
+                            <div style="line-height: 56px">
+                                Edit connection
                             </div>
-                            <div>
+                            <span class="menu-spacer"></span>
+                            <div class="conn-select">
+                                <p style="line-height: 56px">Database</p>
+                                <mat-select class="select-column select-connection" autocomplete="off" name="connectiondb" [(value)]="optionSelected.db" required>
+                                    <mat-option *ngFor="let db of databases" [value]="db">
+                                        {{ db.name }}
+                                    </mat-option>
+                                </mat-select>
                             </div>
                         </div>
                         <div style="padding:15px; padding-top:5vh; text-align: center">
@@ -50,12 +58,14 @@
                                 <div style="width:50%">
                                     <mat-form-field [formGroup]="connectionForm" class="short-input">
                                         <input matInput placeholder="Host" formControlName="hostValidator" name="host" [(value)]="optionSelected.host" />
+                                        <mat-error *ngIf="connectionForm.get('hostValidator')?.invalid">{{getErrorHostMessage()}}</mat-error>
                                     </mat-form-field>
                                 </div>
 
                                 <div style="width:50%">
                                     <mat-form-field [formGroup]="connectionForm" class="short-input">
                                         <input matInput placeholder="Port" formControlName="portValidator" name="port" [(value)]="optionSelected.port" />
+                                        <mat-error *ngIf="connectionForm.get('portValidator')?.invalid">{{getErrorPortMessage()}}</mat-error>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -64,26 +74,29 @@
                                 <div style="width:50%">
                                     <mat-form-field [formGroup]="connectionForm" class="short-input">
                                         <input matInput placeholder="Username" formControlName="usernameValidator" name="username" [(value)]="optionSelected.username" />
+                                        <mat-error *ngIf="connectionForm.get('usernameValidator')?.invalid">{{getErrorUsernameMessage()}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div style="width:50%">
                                     <mat-form-field [formGroup]="connectionForm" class="short-input">
                                         <input matInput placeholder="Password" formControlName="passwordValidator" name="password" [(value)]="optionSelected.password" />
+                                        <mat-error *ngIf="connectionForm.get('passwordValidator')?.invalid">{{getErrorPasswordMessage()}}</mat-error>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div>
                                 <mat-form-field [formGroup]="connectionForm" class="large-input">
                                     <input matInput placeholder="Schema" formControlName="schemaValidator" name="schema" [(value)]="optionSelected.nameSchema" />
+                                    <mat-error *ngIf="connectionForm.get('schemaValidator')?.invalid">{{getErrorSchemaMessage()}}</mat-error>
                                 </mat-form-field>
                             </div>
 
-                            <div style="margin-top: 10%; display:flex; flex-direction:row">
+                            <div style="display:flex; flex-direction:row">
                                 <div class="button-form">
-                                    <button mat-flat-button class="flat-button button-publish" style="width:80%" (click)="save()">Save</button>
+                                    <button mat-flat-button class="flat-button button-publish buttons" (click)="save()">Save</button>
                                 </div>
                                 <div class="button-form">
-                                    <button mat-flat-button class="flat-button button-publish" style="width:80%" (click)="cancelAndClean()">Cancel</button>
+                                    <button mat-flat-button class="flat-button button-publish buttons" (click)="cancelAndClean()">Cancel</button>
                                 </div>
                             </div>
                         </div>
