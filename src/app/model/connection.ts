@@ -1,5 +1,5 @@
 export class ConnectionQuery{
-    "id":string;
+    "id":number;
     "host":string;
     "port":string;
     "username":string;
@@ -8,12 +8,12 @@ export class ConnectionQuery{
     "db":number;
 
     constructor(){
-        this.id='';
+        this.id=null;
         this.host='';
         this.port='';
         this.username='';
         this.password='';
         this.nameSchema='';
-        this.db=null;
+        this.db=1;
     }
 }
