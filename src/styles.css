@@ -4151,7 +4151,7 @@ textarea.mat-input-element {
   color: #323232;
   font-size: 14px;
   padding: 0px 15px;
-  transition: background-color 0.2s;
+  transition: background-color 0.5s;
 }
 
 .action {
@@ -4237,10 +4237,6 @@ textarea.mat-input-element {
 .header-new-conn .action-img {
   height: 25px;
   width: 25px;
-}
-
-.td-button-delete {
-  width: 7%;
 }
 
 .selected .td-button-delete .button-delete {
