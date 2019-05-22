@@ -1,6 +1,6 @@
 .container-conn {
     background-color: #232323;
-    height: 60vh;
+    height: calc(100% - 56%);
 }
 
 .selected {
@@ -52,4 +52,23 @@
 
 .select-connection {
     width: 100% !important;
+    margin-top: 6%;
+}
+
+.show-delete {}
+
+.hide-delete {
+    display: none;
+}
+
+.table-connections {
+    width: 95%;
+    height: calc(100% - 59%);
+    max-height: calc(100% - 59%);
+    overflow: auto;
+}
+
+.button-delete .mat-icon-button {
+    height: 30px !important;
+    width: 30px !important;
 }

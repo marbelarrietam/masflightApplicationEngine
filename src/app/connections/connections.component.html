@@ -10,7 +10,7 @@
                         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" />
                     </mat-form-field>
                 </div>
-                <div class="container-conn" style="width: 95%; height:calc(100% - 10%)">
+                <div class="container-conn table-connections">
                     <table mat-table matSort [dataSource]="dataSource" class="datasource welcome-table" style="width:100%;font-size: 12px">
                         <ng-container matColumnDef="columnHost">
                             <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header> Host </th>
@@ -28,6 +28,14 @@
                             <td mat-cell style="color:white" *matCellDef="let element"> {{ element.nameSchema }} </td>
                         </ng-container>
 
+                        <ng-container matColumnDef="columnAction">
+                            <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header></th>
+                            <td mat-cell style="color:white" *matCellDef="let element">
+                                <button mat-icon-button class="button-delete" (click)="deleteConnection()">
+                            <mat-icon style="color: white" aria-label="delete">delete</mat-icon>
+                        </button>
+                        </ng-container>
+
                         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns" (mouseover)="overRow(row)" (mouseleave)="optionOver=null" (click)="selectRow(row)" [ngClass]="{ 'selected': row === optionSelected, 'over-option': row===optionOver, 'darktable-row': row != optionSelected  }"></tr>
                     </table>
@@ -38,15 +46,15 @@
                 <div class="container-conn" style="width:100%">
                     <form name="connection" style="height:100%">
                         <div class="darktable header-new-conn">
-                            <div style="line-height: 56px">
+                            <div style="padding-top: 4%;">
                                 Edit connection
                             </div>
                             <span class="menu-spacer"></span>
                             <div class="conn-select">
-                                <p style="line-height: 56px">Database</p>
-                                <mat-select class="select-column select-connection" autocomplete="off" name="connectiondb" [(value)]="optionSelected.db" required>
-                                    <mat-option *ngFor="let db of databases" [value]="db">
-                                        {{ db.name }}
+                                <p style="margin-right: 15px;padding-top: 10%;">Database</p>
+                                <mat-select class="select-column select-connection" autocomplete="off" name="db" [(ngModel)]="optionSelected.db" required>
+                                    <mat-option *ngFor="let dbw of databases" [value]="dbw.id">
+                                        {{ dbw.name }}
                                     </mat-option>
                                 </mat-select>
                             </div>
@@ -57,14 +65,14 @@
 
                                 <div style="width:50%">
                                     <mat-form-field [formGroup]="connectionForm" class="short-input">
-                                        <input matInput placeholder="Host" formControlName="hostValidator" name="host" [(value)]="optionSelected.host" />
+                                        <input matInput autocomplete="off" type="text" placeholder="Host" formControlName="hostValidator" name="host" [(value)]="optionSelected.host" />
                                         <mat-error *ngIf="connectionForm.get('hostValidator')?.invalid">{{getErrorHostMessage()}}</mat-error>
                                     </mat-form-field>
                                 </div>
 
                                 <div style="width:50%">
                                     <mat-form-field [formGroup]="connectionForm" class="short-input">
-                                        <input matInput placeholder="Port" formControlName="portValidator" name="port" [(value)]="optionSelected.port" />
+                                        <input matInput autocomplete="off" type="text" placeholder="Port" formControlName="portValidator" name="port" [(value)]="optionSelected.port" />
                                         <mat-error *ngIf="connectionForm.get('portValidator')?.invalid">{{getErrorPortMessage()}}</mat-error>
                                     </mat-form-field>
                                 </div>
@@ -73,20 +81,20 @@
                             <div style="display:flex; flex-direction:row">
                                 <div style="width:50%">
                                     <mat-form-field [formGroup]="connectionForm" class="short-input">
-                                        <input matInput placeholder="Username" formControlName="usernameValidator" name="username" [(value)]="optionSelected.username" />
+                                        <input matInput autocomplete="off" type="text" placeholder="Username" formControlName="usernameValidator" name="username" [(value)]="optionSelected.username" />
                                         <mat-error *ngIf="connectionForm.get('usernameValidator')?.invalid">{{getErrorUsernameMessage()}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div style="width:50%">
                                     <mat-form-field [formGroup]="connectionForm" class="short-input">
-                                        <input matInput placeholder="Password" formControlName="passwordValidator" name="password" [(value)]="optionSelected.password" />
+                                        <input matInput autocomplete="off" type="password" placeholder="Password" formControlName="passwordValidator" name="password" [(value)]="optionSelected.password" />
                                         <mat-error *ngIf="connectionForm.get('passwordValidator')?.invalid">{{getErrorPasswordMessage()}}</mat-error>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div>
                                 <mat-form-field [formGroup]="connectionForm" class="large-input">
-                                    <input matInput placeholder="Schema" formControlName="schemaValidator" name="schema" [(value)]="optionSelected.nameSchema" />
+                                    <input matInput autocomplete="off" type="text" placeholder="Schema" formControlName="schemaValidator" name="schema" [(value)]="optionSelected.nameSchema" />
                                     <mat-error *ngIf="connectionForm.get('schemaValidator')?.invalid">{{getErrorSchemaMessage()}}</mat-error>
                                 </mat-form-field>
                             </div>
@@ -106,3 +114,4 @@
         </div>
     </mat-card>
 </div>
+ng

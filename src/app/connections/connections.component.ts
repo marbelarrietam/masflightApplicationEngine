@@ -16,9 +16,10 @@ export class ConnectionsComponent implements OnInit {
   connections;
   optionSelected = new ConnectionQuery();
   optionOver;
+  connToDelete;
   databases:any[];
   innerHeight: number;
-connectionForm = new FormGroup({
+  connectionForm = new FormGroup({
   hostValidator:new FormControl('host', [Validators.required]),
   usernameValidator:new FormControl('username', [Validators.required]),
   passwordValidator:new FormControl('password', [Validators.required]),
@@ -31,11 +32,11 @@ connectionForm = new FormGroup({
     private service: ApplicationService) { }
 
 
-  displayedColumns = ['columnHost', 'columnUsername', 'columnSchema'];
+  displayedColumns = ['columnHost', 'columnUsername', 'columnSchema','columnAction'];
 
   ngOnInit() {
     this.innerHeight = window.innerHeight;
-    this.getConnections();
+
     this.getDatabases();
   }
 
@@ -48,7 +49,7 @@ connectionForm = new FormGroup({
 
   handlerDatabases(_this, data){
      _this.databases = data;
-     _this.globals.isLoading = false;
+     _this.getConnections();
 
   }
   errorHandler(_this, error){
@@ -68,14 +69,40 @@ connectionForm = new FormGroup({
   }
 
   save(){
+    console.log(this.optionSelected);
+    this.optionSelected.host = this.connectionForm.get ('hostValidator').value;
+    this.optionSelected.username = this.connectionForm.get ('usernameValidator').value;
+    this.optionSelected.password = this.connectionForm.get ('passwordValidator').value;
+    this.optionSelected.nameSchema = this.connectionForm.get ('schemaValidator').value;
+    this.optionSelected.port = this.connectionForm.get ('portValidator').value;
+    console.log(this.optionSelected);
     if(this.connectionForm.valid){
-      console.log("saved");
+      this.service.saveConnections(this, this.optionSelected, this.handlerNewConn, this.errorHandler);
     }
   }
+
+  handlerNewConn(_this, data){
+    _this.connections = data;
+    _this.dataSource = new MatTableDataSource(_this.connections);
+  }
+
   cancelAndClean(){
     this.optionSelected =  new ConnectionQuery();
   }
 
+  deleteConnection(){
+      this.connToDelete = this.optionSelected;
+      let id = this.connToDelete.id;
+      console.log(this.connToDelete);
+      this.service.deleteConnection(this, id, this.handleSuccessDelete, this.errorHandler);
+
+  }
+
+  handleSuccessDelete(_this, data){
+    let index = _this.connections.findIndex(d => d === _this.connToDelete);
+    _this.connections.splice(index, 1);
+    _this.dataSource = new MatTableDataSource(_this.connections);
+  }
   selectRow(row){
     this.optionSelected = row;
   }
