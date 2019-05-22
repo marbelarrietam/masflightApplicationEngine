@@ -29,8 +29,10 @@ import { DialogErrorLogComponent } from '../dialog-error-log/dialog-error-log.co
   styleUrls: ["./web-services.component.css"]
 })
 export class WebServicesComponent implements OnInit {
-  @ViewChild("codeEditor") codeEditor: CodemirrorComponent;
-  dataError: any;
+  @ViewChild("codeEditorWhere") codeEditorWhere: CodemirrorComponent;
+  @ViewChild("codeEditorQuery") codeEditorQuery: CodemirrorComponent;
+  @ViewChild("codeEditorHaving") codeEditorHaving: CodemirrorComponent;
+   dataError: any;
   dataErrorStep: any
   queryEdit:boolean = true;
   queryText:string;
@@ -1071,9 +1073,33 @@ export class WebServicesComponent implements OnInit {
     mode: { name: "text/x-mariadb" }
   };
 
-  cursorPos: { line: number; ch: number } = { line: 0, ch: 0 };
-  cursorMoved() {
-    this.cursorPos = (this.codeEditor.codeMirror as any).getCursor();
+  cursorPosQuery: { line: number; ch: number } = { line: 0, ch: 6 };
+  cursorMovedQuery() {
+    this.cursorPosQuery = (this.codeEditorQuery.codeMirror as any).getCursor();
+  }
+
+  optionsWhere = {
+    lineNumbers: false,
+    lineWrapping: false,
+    theme: "material",
+    autofocus: true,
+    mode: { name: "text/x-mariadb" }
+  };
+  cursorPosWhere: { line: number; ch: number } = { line: 0, ch: 0 };
+  cursorMovedWhere() {
+    this.cursorPosWhere = (this.codeEditorWhere.codeMirror as any).getCursor();
+  }
+
+  optionsHaving = {
+    lineNumbers: false,
+    lineWrapping: false,
+    theme: "material",
+    autofocus: true,
+    mode: { name: "text/x-mariadb" }
+  };
+  cursorPosHaving: { line: number; ch: number } = { line: 0, ch: 0 };
+  cursorMovedHaving() {
+    this.cursorPosHaving = (this.codeEditorHaving.codeMirror as any).getCursor();
   }
 
   selectRow(row) {

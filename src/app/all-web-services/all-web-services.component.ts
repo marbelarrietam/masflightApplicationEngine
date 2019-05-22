@@ -18,13 +18,17 @@ export class AllWebServicesComponent implements OnInit {
   dataSource;
   tableString: string;
   dataFromService = '';
+  optionOver;
+  optionSelected;
 
   constructor(
     private router: Router,
     public globals: Globals,
     private service: ApplicationService) { }
 
-  displayedColumns = ['columnName', 'columnDescription', 'columnQuery', 'columnTables', 'columnEdit'];
+  // displayedColumns = ['columnName', 'columnDescription', 'columnQuery', 'columnTables', 'columnEdit'];
+
+  displayedColumns = ['columnName', 'columnDescription', 'columnQuery', 'columnTables']; //kp20190517
 
 
   getData(rowNum){
@@ -94,5 +98,37 @@ export class AllWebServicesComponent implements OnInit {
     let index = _this.webServices.findIndex(d => d === _this.globals.currentWebService);
     _this.webServices.splice(index, 1);
     _this.dataSource = new MatTableDataSource(_this.webServices);
+    _this.optionOver = null;
+    _this.optionSelected = null;
   }
+
+  overRow(row){
+      if(this.optionSelected != row){
+        this.optionOver = row;
+      }
+  }
+
+  selectRow(row){
+    if(this.optionSelected==null){
+      this.optionSelected = row;
+      this.optionOver = null;
+    }else{
+      if(this.optionSelected == row){
+        this.optionOver = this.optionSelected;
+        this.optionSelected = null;
+      }else{
+        this.optionSelected = row;
+        this.optionOver = null;
+      }
+    }
+  }
+
+  getBackground(option : any, name: any){
+    if(option!=null){
+      return "../assets/images/"+name+"White.png"
+    }else{
+      return "../assets/images/"+name+".png"
+    }
+  }
+
 }

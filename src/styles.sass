@@ -31,7 +31,7 @@ body
     font-size: $msf-font-size
     margin: 0
     overflow-x: hidden
-    overflow-y: auto
+    overflow-y: hidden
 
 // kp20190423
 .application-class
@@ -138,7 +138,9 @@ body
     padding: 5%
 
 .mat-tab-body-content
-    overflow: hidden!important
+    overflow: hidden !important
+    // height: calc(100% - 50px) !important 
+    
 
 .msf-nav
     width: 165px
@@ -951,6 +953,8 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button
 .general-container
     width: 100%
     background-color: $msf-primary-color
+    color: white
+    height: calc(100vh - 90px)
 
 
 /*Menu*/
@@ -1432,14 +1436,15 @@ app-msf-airport
     font-size: 90%
 
 .mat-tab-body-wrapper
-    height: 100%
+    // height: 100%
+    height: calc(100% - 50px)
     background: $msf-primary-color
 
 // .mat-table kp20190517
 //     background: black
 
-.mat-cell
-    font-size: 12px
+// .mat-cell
+//     font-size: 12px
 
 td.mat-cell, td.mat-footer-cell, th.mat-header-cell
     text-align: center
@@ -3280,6 +3285,7 @@ img.msf-calendar-image
     font-weight: 500
     font-size: 24px
     padding: 30px
+    // width: 45px
     width: 100%
 
 .ws-url
@@ -3310,17 +3316,17 @@ img.msf-calendar-image
 .cm-s-material.CodeMirror
     background-color: #1e1e1e !important
 
-.CodeMirror-gutter
-    display: none
+// .CodeMirror-gutter
+//     display: none
 
-.cm-s-material .CodeMirror-guttermarker, .cm-s-material .CodeMirror-guttermarker-subtle, .cm-s-material .CodeMirror-linenumber
-    color: #333
-    display: none
+// .cm-s-material .CodeMirror-guttermarker, .cm-s-material .CodeMirror-guttermarker-subtle, .cm-s-material .CodeMirror-linenumber
+//     color: #333
+//     display: none
 
 
-div
-    color: white
-    // font-size: 14px reviasr como cambiarlo kp20190517
+// div
+//     color: white
+//     font-size: 14px reviasr como cambiarlo kp20190517
 
 
 .mat-horizontal-stepper-header-container
@@ -3379,14 +3385,6 @@ div
     align-items: center !important
 
 
-.ws-title
-    color: white
-    font-weight: 500
-    font-size: 24px
-    padding: 30px
-    width: 45%
-
-
 .box-container
     display: block
     flex-wrap: wrap
@@ -3418,6 +3416,7 @@ div
 .selected-objects
     background-color: #333333
     height: 20px
+    margin-bottom: 5px
     margin-right: 5px
     padding: 3px
     color: white
@@ -3651,8 +3650,8 @@ textarea.mat-input-element
 .table_allWebServ
     height: calc(100% - 60px)
     overflow-y: auto
-    width: 80%
-    color: white
+    width: calc(84% - 15px)
+    margin-right: 15px
     .mat-header-cell
         border: 0px
     tr.mat-header-row
@@ -3660,9 +3659,64 @@ textarea.mat-input-element
         background: #1e1e1e
     .mat-cell, .mat-footer-cell
         color: white
+        font-weight: lighter
+    td.mat-cell
+        border-color: #323232
+    ::-webkit-scrollbar-thumb
+        background-color: #323232
 
 .selected
     background-color: #182128
 
 .over-option
     background-color: #1c2023
+
+.action-div
+    display: flex
+    flex-direction: row
+    align-items: center
+    width: 50%
+    margin: auto
+    border: 1px solid
+    border-radius: 5px
+    height: 14%
+    color: #323232
+    font-size: 14px
+    padding: 0px 15px
+    transition: background-color 0.2s
+
+.action
+    width: 16%
+    background-color: #1e1e1e
+    height: calc(100% - 60px)
+    h3
+        font-size: 15px
+        font-weight: 500
+        text-align: center
+        height: 25px
+
+.action-body
+    height: calc(100% - 55px)
+    display: flex
+    flex-direction: column
+    align-items: center
+    width: 100%
+
+.action-img
+    height: 30px
+    width: 30px
+    background-size: contain
+    background-repeat: no-repeat
+    // transition: background-image 0.5s ease-in-out
+
+.action-test
+    margin: auto
+    color: #333333
+    font-weight: 500
+
+.action-divSelec
+    @extend  .action-div
+    background-color: $msf-secondary-color 
+    // transition: 1s
+    .action-test
+        color: white !important

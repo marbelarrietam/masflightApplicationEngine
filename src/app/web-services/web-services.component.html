@@ -31,7 +31,7 @@
             <!-- <div [hidden]="!queryEdit" style="height: 300px; background-color:#232323; padding: 30px"> -->
             <div *ngIf="queryEdit" style="width: 70%; margin-right: 30px;">
                 <div Style="font-weight: 500; font-size: 20px; margin: 0px 0px 20px 0px;">Query</div>
-                <ngx-codemirror #codeEditor [(ngModel)]="queryText" [options]="options" (cursorActivity)="cursorMoved()">
+                <ngx-codemirror #codeEditorQuery [(ngModel)]="queryText" [options]="options" (cursorActivity)="cursorMovedQuery()">
                 </ngx-codemirror>
             </div>
             <div *ngIf="queryEdit" Style="width: 30%; text-align: center;">
@@ -354,7 +354,7 @@
                         <!-- <div style="margin-bottom: 5px;"><span style="color:#01abec">Select </span>{{selectSentence}}</div> -->
                         <!-- <div style="margin-bottom: 5px;"><span style="color:#01abec">From </span>{{fromSentence}}</div> -->
                         <div style="margin-bottom: 5px;"><span style="color:#01abec">Where: </span></div>
-                        <ngx-codemirror #codeEditor [(ngModel)]="whereSentence" [options]="options">
+                        <ngx-codemirror #codeEditorWhere [(ngModel)]="whereSentence" [options]="optionsWhere" (cursorActivity)="cursorMovedWhere()"> 
                         </ngx-codemirror>
                         <div style="margin-top:20px;overflow: hidden; display: flex; flex-direction: row; flex-flow: row wrap">
                             <div style="width:60%; margin-right: 3%">
@@ -455,7 +455,7 @@
                     </div>
                     <div style="margin-left:100px; margin-right:100px">
                         <div style="margin-bottom: 5px;"><span style="color:#01abec">Having: </span></div>
-                        <ngx-codemirror #codeEditor [(ngModel)]="havingSentence" [options]="options" (cursorActivity)="cursorMoved()">
+                        <ngx-codemirror #codeEditorHaving [(ngModel)]="havingSentence" [options]="optionsHaving" (cursorActivity)="cursorMovedHaving()">
                         </ngx-codemirror>
                     </div>
                 </div>
