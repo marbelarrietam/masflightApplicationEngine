@@ -347,9 +347,20 @@ export class ApplicationService {
     this.http.post(_this, url, data, handlerSuccess, handlerError);
   }
 
+  saveConnections(_this, data, handlerSuccess, handlerError){
+    //_this.globals.isLoading = true;
+    let url = this.host + "/saveConnections";
+    this.http.post(_this, url, data, handlerSuccess, handlerError);
+  }
+
 
   deleteWebServices(_this, id, handlerSuccess, handlerError){
     let url = this.host + "/deleteWebServices?id="+id;
+    this.http.post(_this, url, id, handlerSuccess, handlerError);
+  }
+
+  deleteConnection(_this, id, handlerSuccess, handlerError){
+    let url = this.host + "/deleteConnection?id="+id;
     this.http.post(_this, url, id, handlerSuccess, handlerError);
   }
 
