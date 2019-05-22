@@ -103,14 +103,34 @@ export class ConnectionsComponent implements OnInit {
     _this.connections.splice(index, 1);
     _this.dataSource = new MatTableDataSource(_this.connections);
   }
-  selectRow(row){
-    this.optionSelected = row;
-  }
+  // selectRow(row){
+  //   this.optionSelected = row;
+  // }
+
+  // overRow(row){
+  //   this.optionOver = row;
+  // }
 
   overRow(row){
-    this.optionOver = row;
-  }
+    if(this.optionSelected != row){
+      this.optionOver = row;
+    }
+}
 
+selectRow(row){
+  if(this.optionSelected==null){
+    this.optionSelected = row;
+    this.optionOver = null;
+  }else{
+    if(this.optionSelected == row){
+      this.optionOver = this.optionSelected;
+      this.cancelAndClean()
+    }else{
+      this.optionSelected = row;
+      this.optionOver = null;
+    }
+  }
+}
 
   getErrorHostMessage() {
     return this.connectionForm.get('hostValidator').hasError('required') ? 'Host is required' : '';

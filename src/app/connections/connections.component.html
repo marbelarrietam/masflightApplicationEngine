@@ -1,117 +1,142 @@
-<div class="general-container" [style.height.px]="getInnerHeight()">
-    <div class="msf-menu-header" style="height: 30px; display: flex; flex-direction: row; flex-wrap: wrap">
-        <div class="ws-title" style="flex: 1;">Web Services Summary</div>
+<!-- <div class="general-container" [style.height.px]="getInnerHeight()"> -->
+<div class="general-container">
+    <div class="msf-menu-header headerAllWs">
+        <h1 class="ws-title">Admin Connection</h1>
     </div>
-    <mat-card class="msf-container-table msf-center-container" style="height: 100%">
-        <div style="display: flex; flex-direction:row">
-            <div style="display: flex; flex-direction: column; width:60%">
-                <div style="display: flex; flex-direction: row; height: 10vh;">
-                    <mat-form-field style="width:95%; float: right; margin-top: 20px">
-                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" />
-                    </mat-form-field>
-                </div>
-                <div class="container-conn table-connections">
-                    <table mat-table matSort [dataSource]="dataSource" class="datasource welcome-table" style="width:100%;font-size: 12px">
-                        <ng-container matColumnDef="columnHost">
-                            <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header> Host </th>
-                            <td mat-cell style="color:white" *matCellDef="let element"> {{ element.host }} </td>
-                        </ng-container>
+    <mat-card class="msf-container-table msf-center-container"
+        style="height: calc(100% - 110px);display: flex;flex-direction: row;flex-wrap: wrap;padding: 0px 30px 50px 30px !important; justify-content: space-between;">
+        <!-- <div style="display: flex; flex-direction:row"> -->
+        <!-- <div style="display: flex; flex-direction: row; height: 10vh;"> -->
+        <!-- <mat-form-field style="width:95%; float: right; margin-top: 20px"> -->
+        <mat-form-field class="containerAllws-filter">
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" />
+        </mat-form-field>
+        <!-- </div> -->
+        <!-- <div style="display: flex; flex-direction: column; width:60%"> -->
+        <div class="container-conn table-connections"
+            style="display: flex; flex-direction: column;width: 59%;max-height: calc(100% - 60px);height: calc(100% - 60px);">
+            <table mat-table matSort [dataSource]="dataSource" class="datasource welcome-table"
+                style="width:100%;font-size: 12px;background-color: inherit">
+                <ng-container matColumnDef="columnHost">
+                    <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header> Host </th>
+                    <td mat-cell style="color:white" *matCellDef="let element"> {{ element.host }} </td>
+                </ng-container>
 
-                        <ng-container matColumnDef="columnUsername">
-                            <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header> Username </th>
-                            <td mat-cell style="color:white" *matCellDef="let element">
-                                {{ element.username }} </td>
-                        </ng-container>
+                <ng-container matColumnDef="columnUsername">
+                    <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header> Username </th>
+                    <td mat-cell style="color:white" *matCellDef="let element">
+                        {{ element.username }} </td>
+                </ng-container>
 
-                        <ng-container matColumnDef="columnSchema">
-                            <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header> Schema </th>
-                            <td mat-cell style="color:white" *matCellDef="let element"> {{ element.nameSchema }} </td>
-                        </ng-container>
+                <ng-container matColumnDef="columnSchema">
+                    <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header> Schema </th>
+                    <td mat-cell style="color:white" *matCellDef="let element"> {{ element.nameSchema }} </td>
+                </ng-container>
 
-                        <ng-container matColumnDef="columnAction">
-                            <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header></th>
-                            <td mat-cell style="color:white" *matCellDef="let element">
-                                <button mat-icon-button class="button-delete" (click)="deleteConnection()">
-                            <mat-icon style="color: white" aria-label="delete">delete</mat-icon>
+                <ng-container matColumnDef="columnAction">
+                    <th mat-header-cell class="darktable" *matHeaderCellDef mat-sort-header></th>
+                    <td mat-cell style="color:white;width: 7% !important;" *matCellDef="let element" class="td-button-delete">
+                        <button mat-icon-button class="button-delete"
+                            (click)="deleteConnection()">
+                            <mat-icon style="color: white; text-align: right;" aria-label="delete">delete</mat-icon>
                         </button>
-                        </ng-container>
+                </ng-container>
 
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns" (mouseover)="overRow(row)" (mouseleave)="optionOver=null" (click)="selectRow(row)" [ngClass]="{ 'selected': row === optionSelected, 'over-option': row===optionOver, 'darktable-row': row != optionSelected  }"></tr>
-                    </table>
-                </div>
-            </div>
-
-            <div style="display: flex; flex-direction: column; width:40%; padding-top:10vh">
-                <div class="container-conn" style="width:100%">
-                    <form name="connection" style="height:100%">
-                        <div class="darktable header-new-conn">
-                            <div style="padding-top: 4%;">
-                                Edit connection
-                            </div>
-                            <span class="menu-spacer"></span>
-                            <div class="conn-select">
-                                <p style="margin-right: 15px;padding-top: 10%;">Database</p>
-                                <mat-select class="select-column select-connection" autocomplete="off" name="db" [(ngModel)]="optionSelected.db" required>
-                                    <mat-option *ngFor="let dbw of databases" [value]="dbw.id">
-                                        {{ dbw.name }}
-                                    </mat-option>
-                                </mat-select>
-                            </div>
-                        </div>
-                        <div style="padding:15px; padding-top:5vh; text-align: center">
-
-                            <div style="display:flex; flex-direction:row">
-
-                                <div style="width:50%">
-                                    <mat-form-field [formGroup]="connectionForm" class="short-input">
-                                        <input matInput autocomplete="off" type="text" placeholder="Host" formControlName="hostValidator" name="host" [(value)]="optionSelected.host" />
-                                        <mat-error *ngIf="connectionForm.get('hostValidator')?.invalid">{{getErrorHostMessage()}}</mat-error>
-                                    </mat-form-field>
-                                </div>
-
-                                <div style="width:50%">
-                                    <mat-form-field [formGroup]="connectionForm" class="short-input">
-                                        <input matInput autocomplete="off" type="text" placeholder="Port" formControlName="portValidator" name="port" [(value)]="optionSelected.port" />
-                                        <mat-error *ngIf="connectionForm.get('portValidator')?.invalid">{{getErrorPortMessage()}}</mat-error>
-                                    </mat-form-field>
-                                </div>
-                            </div>
-
-                            <div style="display:flex; flex-direction:row">
-                                <div style="width:50%">
-                                    <mat-form-field [formGroup]="connectionForm" class="short-input">
-                                        <input matInput autocomplete="off" type="text" placeholder="Username" formControlName="usernameValidator" name="username" [(value)]="optionSelected.username" />
-                                        <mat-error *ngIf="connectionForm.get('usernameValidator')?.invalid">{{getErrorUsernameMessage()}}</mat-error>
-                                    </mat-form-field>
-                                </div>
-                                <div style="width:50%">
-                                    <mat-form-field [formGroup]="connectionForm" class="short-input">
-                                        <input matInput autocomplete="off" type="password" placeholder="Password" formControlName="passwordValidator" name="password" [(value)]="optionSelected.password" />
-                                        <mat-error *ngIf="connectionForm.get('passwordValidator')?.invalid">{{getErrorPasswordMessage()}}</mat-error>
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                            <div>
-                                <mat-form-field [formGroup]="connectionForm" class="large-input">
-                                    <input matInput autocomplete="off" type="text" placeholder="Schema" formControlName="schemaValidator" name="schema" [(value)]="optionSelected.nameSchema" />
-                                    <mat-error *ngIf="connectionForm.get('schemaValidator')?.invalid">{{getErrorSchemaMessage()}}</mat-error>
-                                </mat-form-field>
-                            </div>
-
-                            <div style="display:flex; flex-direction:row">
-                                <div class="button-form">
-                                    <button mat-flat-button class="flat-button button-publish buttons" (click)="save()">Save</button>
-                                </div>
-                                <div class="button-form">
-                                    <button mat-flat-button class="flat-button button-publish buttons" (click)="cancelAndClean()">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns" (mouseover)="overRow(row)"
+                    (mouseleave)="optionOver=null" (click)="selectRow(row)"
+                    [ngClass]="{ 'selected': row === optionSelected, 'over-option': row===optionOver, 'darktable-row': row != optionSelected  }">
+                </tr>
+            </table>
         </div>
+        <!-- </div> -->
+
+        <!-- <div style="display: flex; flex-direction: column; width:40%; padding-top:10vh"> -->
+        <div class="container-conn"
+            style="display: flex; flex-direction: column; width:39%;height: calc(100% - 60px);color: white;     font-weight: 500;">
+            <form name="connection" style="height:100%">
+                <div class="darktable header-new-conn">
+                    <img class="action-img" src="../assets/images/editWhite.png">
+                    <div style="margin-left: 10px; width: calc(50% - 30px)">
+                        Edit connection
+                    </div>
+                    <!-- <span class="menu-spacer"></span> -->
+                    <div class="conn-select">
+                        <p style="margin-right: 15px;">Database</p>
+                        <mat-select class="select-column select-connection" autocomplete="off" name="db"
+                            [(ngModel)]="optionSelected.db" required>
+                            <mat-option *ngFor="let dbw of databases" [value]="dbw.id">
+                                {{ dbw.name }}
+                            </mat-option>
+                        </mat-select>
+                    </div>
+                </div>
+                <div style="padding:15px; padding-top:5vh; text-align: center">
+
+                    <div style="display:flex; flex-direction:row">
+
+                        <div style="width:50%">
+                            <mat-form-field [formGroup]="connectionForm" class="short-input">
+                                <input matInput autocomplete="off" type="text" placeholder="Host"
+                                    formControlName="hostValidator" name="host" [(value)]="optionSelected.host" />
+                                <mat-error *ngIf="connectionForm.get('hostValidator')?.invalid">
+                                    {{getErrorHostMessage()}}</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div style="width:50%">
+                            <mat-form-field [formGroup]="connectionForm" class="short-input">
+                                <input matInput autocomplete="off" type="text" placeholder="Port"
+                                    formControlName="portValidator" name="port" [(value)]="optionSelected.port" />
+                                <mat-error *ngIf="connectionForm.get('portValidator')?.invalid">
+                                    {{getErrorPortMessage()}}</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; flex-direction:row">
+                        <div style="width:50%">
+                            <mat-form-field [formGroup]="connectionForm" class="short-input">
+                                <input matInput autocomplete="off" type="text" placeholder="Username"
+                                    formControlName="usernameValidator" name="username"
+                                    [(value)]="optionSelected.username" />
+                                <mat-error *ngIf="connectionForm.get('usernameValidator')?.invalid">
+                                    {{getErrorUsernameMessage()}}</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div style="width:50%">
+                            <mat-form-field [formGroup]="connectionForm" class="short-input">
+                                <input matInput autocomplete="off" type="password" placeholder="Password"
+                                    formControlName="passwordValidator" name="password"
+                                    [(value)]="optionSelected.password" />
+                                <mat-error *ngIf="connectionForm.get('passwordValidator')?.invalid">
+                                    {{getErrorPasswordMessage()}}</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div>
+                        <mat-form-field [formGroup]="connectionForm" class="large-input">
+                            <input matInput autocomplete="off" type="text" placeholder="Schema"
+                                formControlName="schemaValidator" name="schema" [(value)]="optionSelected.nameSchema" />
+                            <mat-error *ngIf="connectionForm.get('schemaValidator')?.invalid">
+                                {{getErrorSchemaMessage()}}</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div style="display:flex; flex-direction:row">
+                        <div class="button-form">
+                            <button mat-flat-button class="flat-button button-publish buttons"
+                                (click)="save()">Save</button>
+                        </div>
+                        <div class="button-form">
+                            <button mat-flat-button class="flat-button button-publish buttons"
+                                (click)="cancelAndClean()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- </div> -->
+        <!-- </div> -->
     </mat-card>
 </div>
-ng

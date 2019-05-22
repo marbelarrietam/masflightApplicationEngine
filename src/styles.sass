@@ -3662,8 +3662,6 @@ textarea.mat-input-element
         font-weight: lighter
     td.mat-cell
         border-color: #323232
-    ::-webkit-scrollbar-thumb
-        background-color: #323232
 
 .selected
     background-color: #182128
@@ -3720,3 +3718,58 @@ textarea.mat-input-element
     // transition: 1s
     .action-test
         color: white !important
+    
+.headerAllWs
+    @extend .headerWS
+    margin: 0px 30px
+    h1
+        flex: 1
+        padding: 0px !important
+
+.containerAllws
+    height: calc(100% - 110px)
+    display: flex !important
+    padding: 0px !important
+    margin: 0px 30px 50px 30px
+    flex-direction: row
+    flex-wrap: wrap
+    color: white
+
+.containerAllws-Options
+    display: flex
+    flex-direction: row
+    height: 60px
+    width: 100%
+
+.containerAllws-filter
+    width:50%
+    float: right
+    height: 60px
+    // .mat-form-field-wrapper .mat-form-field-underline
+    //     background-color: #323232 !important
+
+.containerAllws-create
+    width:50%
+    justify-content: flex-end
+    display: flex
+    flex-direction: row
+    height: 60px
+    align-items: flex-start
+
+.header-new-conn
+    .action-img
+        height: 25px
+        width: 25px
+        
+.td-button-delete
+    width: 7%
+
+.selected .td-button-delete .button-delete
+    display: flex !important
+    height: 25px
+    width: 100%
+    .mat-button-wrapper
+        line-height: 25px !important
+
+.button-delete
+    display: none !important
