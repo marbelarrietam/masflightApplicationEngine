@@ -22,6 +22,7 @@ import { AggregateFucntions } from "../model/AggregateFunctions";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { CustomFunctions } from '../model/CustomFunctions';
 import { DialogErrorLogComponent } from '../dialog-error-log/dialog-error-log.component';
+import { ConnectionQuery } from '../model/connection';
 
 @Component({
   selector: "app-web-services, FilterPipe",
@@ -41,8 +42,8 @@ export class WebServicesComponent implements OnInit {
   searchColumn: string;
   searchGroup: string;
   searchOrder: string;
-  checkColumn = '0';
-  checkBool: boolean;
+  checkColumn = '1';
+  checkBool: boolean = true;
   deletedTables: Array<Tables> = new Array();
   deletedColumns: Array<Columns> = new Array();
   deletedArguments: Array<QueryArgument> = new Array();
@@ -57,6 +58,7 @@ export class WebServicesComponent implements OnInit {
   orderBySentence: string;
   auxCustomFunction: string;
   groupinglist: string = '0';
+  actualConn: any =null;
   argumentGrouping: string;
   sortingList: string= '0';
   dataSourceForm = new FormGroup({
@@ -67,9 +69,9 @@ export class WebServicesComponent implements OnInit {
     columnsValidator: new FormControl("nameColumn", [Validators.required])
   });
 
-  groupBySelected: Array<Columns> = new Array<Columns>();
-  orderBySelected: Array<Columns> = new Array<Columns>();
-
+  groupBySelected: Array<any> = new Array<any>();
+  orderBySelected: Array<any> = new Array<any>();
+  connections: Array<ConnectionQuery> = new Array<ConnectionQuery>();
   tableSelected: Tables = new Tables();
   selectEdit: QueryWS = new QueryWS();
   selectTables: QueryWS = new QueryWS();
@@ -114,17 +116,39 @@ export class WebServicesComponent implements OnInit {
       this.queryEdit = true;
     }else{
       this.queryEdit = false;
+      this.actualConn = this.globals.currentWebService.connection;
     }
     this.dataError = {errors:[]};
     this.dataErrorStep = {errors:[]};
     this.globals.DialogClose = true;
-    this.getTables();
+    this.getConnections();
+
     this.argForms = this.formBuilder.group({
       items: this.formBuilder.array([])
     });
   }
 
+  getConnections(){
+    this.service.getConnections(this,this.handlerConn, this.handlerError);
+  }
 
+  handlerConn(_this, data){
+     _this.connections = data;
+     if (_this.globals.currentWebService) {
+       _this.selectconcat.connection = _this.actualConn;
+       _this.getTables(_this.selectconcat.connection);
+     }else{
+
+     _this.globals.isLoading = false;
+     }
+
+  }
+
+  changeConnection(){
+    console.log(this.selectconcat);
+    this.actualConn = this.selectconcat.connection;
+    this.getTables(this.selectconcat.connection);
+  }
 
   clear(){
     // var aux = this.tablesInicial.slice(0);
@@ -148,8 +172,18 @@ export class WebServicesComponent implements OnInit {
   }
 
   validate(){
-    this.clear()
-    this.service.getsetSteps(this,encodeURIComponent(this.queryText),this.checkColumn,this.handlerSuccessText, this.handlerError)
+    this.clear();
+    if(this.actualConn!=null && this.queryText!=null && this.queryText!='' ){
+    this.service.getsetSteps(this,encodeURIComponent(this.queryText),
+    this.checkColumn,this.actualConn, this.handlerSuccessText, this.handlerError)
+    }else{
+      const dialogRef = this.dialog.open(MessageComponent, {
+        data: {
+          title: "Error",
+          message: "You must choose a connection and write a query to validate"
+        }
+      });
+    }
   }
 
   handlerSuccessText(_this,data){
@@ -211,9 +245,11 @@ export class WebServicesComponent implements OnInit {
   }
   }
 
-  getTables() {
+  getTables(conn) {
+    this.tables=[];
+    this.views=[];
     this.service.getMetaDataTables(
-      this,
+      this,conn,
       this.handlerSuccessTables,
       this.handlerError
     );
@@ -389,6 +425,7 @@ export class WebServicesComponent implements OnInit {
     queryJson.groupingList = this.selectconcat.groupingList;
     queryJson.sortingList = this.selectconcat.sortingList;
     queryJson.checkColumn = this.checkColumn;
+    queryJson.connection = this.selectconcat.connection;
     return queryJson;
   }
 
@@ -555,10 +592,14 @@ export class WebServicesComponent implements OnInit {
 
 
   loadWebService() {
+    if(this.selectEdit.id==null){
     this.selectEdit = this.globals.currentWebService;
     this.getDataQueryInit();
+    }
   }
   getDataQueryInit() {
+    this.selectconcat.connection = this.actualConn;
+    //this.changeConnection();
     this.selectconcat.arguments = this.selectEdit.arguments;
     if(this.selectconcat.arguments!=null){
     for (let i=0;i<this.selectconcat.arguments.length;i++){
@@ -591,6 +632,12 @@ export class WebServicesComponent implements OnInit {
         this.selectconcat.customFunctions[a].orderByBool = true;
       } else {
         this.selectconcat.customFunctions[a].orderByBool = false;
+      }
+
+      if (this.selectconcat.customFunctions[a].groupBy == "1") {
+        this.selectconcat.customFunctions[a].groupByBool = true;
+      } else {
+        this.selectconcat.customFunctions[a].groupByBool = false;
       }
     }
   }
@@ -709,6 +756,7 @@ export class WebServicesComponent implements OnInit {
                     }
                 } else {
                   columnsToAdd.alias = columnsOrigin.alias;
+                  columnsToAdd.orderDirection = "ASC";
                   columnsToAdd.orderDirection = columnsOrigin.orderDirection;
                 }
               }
@@ -757,7 +805,16 @@ export class WebServicesComponent implements OnInit {
 
   }
 
-
+  addGroupByExpression(exp){
+    if(exp.groupByBool){
+      exp.groupBy="1";
+      this.groupBySelected.push(exp);
+    }else{
+      this.deletedCustomFunctions.push(exp)
+      this.groupBySelected.splice(this.groupBySelected.indexOf(exp),1);
+      exp.groupBy="0";
+    }
+  }
 
   addGroupBy(table, column) {
     let columnAdd = column;
@@ -985,7 +1042,9 @@ export class WebServicesComponent implements OnInit {
       let valueCustom = this.selectconcat.customFunctions[m].alias ? this.selectconcat.customFunctions[m].customText +
       ' '+this.selectconcat.customFunctions[m].alias :
       this.selectconcat.customFunctions[m].customText;
+      if(this.selectconcat.customFunctions[m].selectedResult=="1"){
       selected.push(valueCustom);
+      }
       if(this.selectconcat.customFunctions[m].orderByBool){
         let aggrName;
         if(this.selectconcat.customFunctions[m].alias){
@@ -994,6 +1053,15 @@ export class WebServicesComponent implements OnInit {
           aggrName = this.selectconcat.customFunctions[m].customText;
         }
       orderb.push(aggrName + ' '+this.selectconcat.customFunctions[m].orderDirection);
+      }
+      if(this.selectconcat.customFunctions[m].groupByBool){
+        let aggrName;
+        if(this.selectconcat.customFunctions[m].alias){
+          aggrName = this.selectconcat.customFunctions[m].alias;
+        }else{
+          aggrName = this.selectconcat.customFunctions[m].customText;
+        }
+      group.push(aggrName);
       }
     }
 

@@ -4252,4 +4252,8 @@ textarea.mat-input-element {
   display: none !important;
 }
 
+.mat-select-placeholder {
+  color: #aaa;
+}
+
 /*# sourceMappingURL=styles.css.map */

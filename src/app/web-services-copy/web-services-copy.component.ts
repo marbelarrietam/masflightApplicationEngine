@@ -39,6 +39,8 @@ export class WebServicesCopyComponent implements OnInit {
   searchColumn: string;
   searchGroup: string;
   searchOrder: string;
+  checkColumn = '0';
+  checkBool: boolean;
   deletedTables: Array<Tables> = new Array();
   deletedColumns: Array<Columns> = new Array();
   deletedArguments: Array<QueryArgument> = new Array();
@@ -83,6 +85,7 @@ export class WebServicesCopyComponent implements OnInit {
   });
 
 
+
   argumentsForm = new FormGroup({
     argumentRequired: new FormControl(),
     argumentName: new FormControl("argumentName", [Validators.required]),
@@ -120,6 +123,7 @@ export class WebServicesCopyComponent implements OnInit {
   }
 
 
+
   clear(){
     // var aux = this.tablesInicial.slice(0);
     // this.tables = [];
@@ -143,7 +147,7 @@ export class WebServicesCopyComponent implements OnInit {
 
   validate(){
     this.clear()
-    this.service.getsetSteps(this,encodeURIComponent(this.queryText),"1",this.handlerSuccessText, this.handlerError)
+    this.service.getsetSteps(this,encodeURIComponent(this.queryText),this.checkColumn,"1",this.handlerSuccessText, this.handlerError)
   }
 
   handlerSuccessText(_this,data){
@@ -207,7 +211,7 @@ export class WebServicesCopyComponent implements OnInit {
 
   getTables() {
     this.service.getMetaDataTables(
-      this,
+      this,"conn",
       this.handlerSuccessTables,
       this.handlerError
     );
@@ -219,7 +223,7 @@ export class WebServicesCopyComponent implements OnInit {
 
   verifyArguments() {
     let value = "";
-    if (this.selectconcat.arguments.length!=0){
+    if (this.selectconcat.arguments!=null){
     for (let i = 0; i < this.selectconcat.arguments.length; i++) {
       if (
         this.selectconcat.arguments[i]["label"] == null ||
@@ -241,23 +245,6 @@ export class WebServicesCopyComponent implements OnInit {
       return value;
     }
   }
-
-  // verifyArguments() {
-  //   let value = 0;
-  //   for (let i = 0; i < this.selectconcat.arguments.length; i++) {
-  //     if (
-  //       this.selectconcat.arguments[i]["label"] == null ||
-  //       this.selectconcat.arguments[i]["label"] == ""
-  //     ) {
-  //       value = 1;
-  //     }
-  //   }
-  //   if (value > 0) {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
 
   saveWebService() {
     var merr="";
@@ -321,6 +308,7 @@ export class WebServicesCopyComponent implements OnInit {
 
   handlerSuccessWS(_this,data) {
 
+
     if (!_this.globals.DialogClose){
       _this.dialogRef.close();
       _this.globals.DialogClose = true;
@@ -366,6 +354,9 @@ export class WebServicesCopyComponent implements OnInit {
     if (this.orderBySentence && this.selectconcat.sortingList=='0') {
       queryString += " ORDER BY " + this.orderBySentence;
     }
+
+
+
     return queryString;
   }
 
@@ -381,16 +372,21 @@ export class WebServicesCopyComponent implements OnInit {
     queryJson.tables = this.getTablesColumn();
     queryJson.tables = queryJson.tables.concat(this.deletedTables);
     queryJson.arguments = this.selectconcat.arguments;
+    if(this.selectconcat.arguments!=null){
     queryJson.arguments = queryJson.arguments.concat(this.deletedArguments);
+    }
     queryJson.whereclause = this.whereSentence;
     queryJson.havingclause = this.havingSentence;
     queryJson.query = this.getQueryString();
+    queryJson.sortingSentence = this.selectconcat.sortingList != '1' ? this.orderBySentence : null;
+    queryJson.groupBySentence = this.selectconcat.groupingList != '1' ? this.groupBySentence : null;
     queryJson.method = this.selectconcat.method;
     queryJson.description = this.selectconcat.description;
     queryJson.pageSize = this.selectconcat.pageSize;
     queryJson.wrapped = this.selectconcat.wrapped; //kp20190507
     queryJson.groupingList = this.selectconcat.groupingList;
     queryJson.sortingList = this.selectconcat.sortingList;
+    queryJson.checkColumn = this.checkColumn;
     return queryJson;
   }
 
@@ -997,6 +993,15 @@ export class WebServicesCopyComponent implements OnInit {
         }
       orderb.push(aggrName + ' '+this.selectconcat.customFunctions[m].orderDirection);
       }
+      if(this.selectconcat.customFunctions[m].groupByBool){
+        let aggrName;
+        if(this.selectconcat.customFunctions[m].alias){
+          aggrName = this.selectconcat.customFunctions[m].alias;
+        }else{
+          aggrName = this.selectconcat.customFunctions[m].customText;
+        }
+      group.push(aggrName);
+      }
     }
 
     let groupJoin;
@@ -1063,6 +1068,13 @@ export class WebServicesCopyComponent implements OnInit {
   type(item) {
     if (item.typePresentation == "aggregate") {
       item.functionsAux = new Functions();
+      item.functions = new Array<AggregateFucntions>();
+      item.functions.push({function:'SUM',alias:'',label:'',selected:false,delete:false,orderBy:'0',orderDirection:''});
+      item.functions.push({function:'MAX',alias:'',label:'',selected:false,delete:false,orderBy:'0',orderDirection:''});
+      item.functions.push({function:'MIN',alias:'',label:'',selected:false,delete:false,orderBy:'0',orderDirection:''});
+      item.functions.push({function:'AVG',alias:'',label:'',selected:false,delete:false,orderBy:'0',orderDirection:''});
+      item.functions.push({function:'COUNT',alias:'',label:'',selected:false,delete:false,orderBy:'0',orderDirection:''});
+      item.functions.push({function:'STD',alias:'',label:'',selected:false,delete:false,orderBy:'0',orderDirection:''});
       item.alias=null;
     }
   }
@@ -1164,6 +1176,14 @@ export class WebServicesCopyComponent implements OnInit {
   else{
     this.dialogRef.close();
   }
+  }
+
+  checkValidate(){
+    if(this.checkBool){
+      this.checkColumn = '1';
+    }else{
+      this.checkColumn = '0';
+    }
   }
 
 }

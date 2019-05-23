@@ -22,6 +22,11 @@ div {
     height: 45%;
 }
 
+.search {
+    background-color: #1e1e1e;
+    display: fixed
+}
+
 .mat-horizontal-content-container {
     overflow: hidden;
     padding: 0 0 0 0 !important;
@@ -247,4 +252,21 @@ textarea.mat-input-element {
 
 .placeholder-color.mat-input-placeholder {
     color: red;
+}
+
+.list-tables {
+    margin-top: 15px;
+    max-height: 295px;
+    overflow: auto
+}
+
+.list-for {
+    margin-bottom: 10px;
+    margin-left: 4px
+}
+
+.step-query {
+    height: 100%;
+    background-color: #232323;
+    padding: 20px 30px
 }

@@ -309,15 +309,15 @@ export class ApplicationService {
     this.http.post (_this, url, dashboardIds, handlerSucess, handlerError);
   }
 
-  getMetaDataTables(_this, handlerSucess, handlerError){
+  getMetaDataTables(_this,conn, handlerSucess, handlerError){
     _this.globals.isLoading = true;
-    let url = this.host + "/getMetaDataTables";
+    let url = this.host + "/getMetaDataTables?id="+conn;
     this.http.get(_this, url, handlerSucess, handlerError, null);
   }
 
-  getsetSteps(_this,data,check,handlerSucess,handlerError){
+  getsetSteps(_this,data,check,conn,handlerSucess,handlerError){
       _this.globals.isLoading = true;
-      let url = this.host + "/setSteps?query="+data+"&checkColumns="+check;
+      let url = this.host + "/setSteps?query="+data+"&checkColumns="+check+"&connId="+conn;
       this.http.get(_this, url, handlerSucess, handlerError, null);
 
   }

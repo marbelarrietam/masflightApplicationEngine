@@ -21,6 +21,7 @@ export class QueryWS {
   "groupBySentence":string;
   "sortingSentence":string;
   "checkColumn":string;
+  "connection":number
 
   constructor(){
     this.name = '';
@@ -40,6 +41,7 @@ export class QueryWS {
     this.groupBySentence ='';
     this.sortingSentence='';
     this.checkColumn = '0';
+    this.connection=null;
   }
 
 }

@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Option } from "../model/Option";
 import { MatSort, MatTab } from "@angular/material";
 import { Observable } from "rxjs";
 import { AmChart, AmChartsService } from "@amcharts/amcharts3-angular";
@@ -45,9 +44,9 @@ export class Globals {
   currentAirline: any;
   template: boolean = false;
   isFullscreen: boolean = false;
-   baseUrl = "http://staging.pulse.aspsols.com:8882";
+  baseUrl = "http://192.168.1.122:8882";
   //  baseUrl = "http://192.168.100.112:8882";
-  //  baseUrl = "";
+  //baseUrl = "";
   // baseUrl2 = "http://localhost:8886";
   baseUrl2 = "http://69.64.45.220:8886";
   scheduledata: any;
@@ -57,7 +56,7 @@ export class Globals {
 
   scheduleChart: AmChart;
   schedulepanelinfo: any;
-  
+
   DialogClose: any;
   // dataErrorStep: any;
 
