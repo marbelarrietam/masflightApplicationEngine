@@ -173,6 +173,7 @@ export class WebServicesComponent implements OnInit {
 
   validate(){
     this.clear();
+    this.selectconcat.connection = this.actualConn;
     if(this.actualConn!=null && this.queryText!=null && this.queryText!='' ){
     this.service.getsetSteps(this,encodeURIComponent(this.queryText),
     this.checkColumn,this.actualConn, this.handlerSuccessText, this.handlerError)

@@ -73,7 +73,7 @@
                 <!-- <div [hidden]="queryEdit"> -->
                 <div [ngClass]="queryEdit  ?  'ocultar': 'mostrar'" style="height: 100%; background-color:#232323; padding: 20px 30px">
                     <div style="margin-left: 100px">
-                        <mat-select class="select-dark" style="width: 58%;" placeholder="Connection" autocomplete="off" (selectionChange)="changeConnection($event)" name="tables" required [(value)]=selectconcat.connection>
+                        <mat-select class="select-dark" style="width: 58%;" placeholder="Connection" autocomplete="off" (selectionChange)="changeConnection()" name="tables" required [(value)]=selectconcat.connection>
                             <mat-option>--</mat-option>
                             <mat-option *ngFor="let con of connections" [value]="con.id">
                                 {{ con.host }}:{{con.port}}/{{con.nameSchema}}
