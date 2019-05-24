@@ -77,21 +77,27 @@ export class AllWebServicesComponent implements OnInit {
     return arrayTables.join(", ");
   }
   testWebService(element){
+    if (element!=null){
     this.globals.currentWebService = element;
     this.globals.currentApplication = 'test';
+    }
   }
 
   edit(element){
     console.log(element);
+    if (element!=null){
     this.globals.currentWebService = element;
     this.globals.currentApplication = 'create';
+    }
 
   }
 
   deleteWebServices(element){
+    if (element!=null){
     this.globals.currentWebService = element;;
     let id = this.globals.currentWebService.id;
     this.service.deleteWebServices(this, id, this.handleSuccessDelete, this.handlerError);
+    }
   }
 
   handleSuccessDelete(_this, data){
