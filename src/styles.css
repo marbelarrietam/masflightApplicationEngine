@@ -4188,6 +4188,7 @@ textarea.mat-input-element {
 }
 
 .action-divSelec {
+  cursor: pointer;
   background-color: #01abec;
 }
 .action-divSelec .action-test {
