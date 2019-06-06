@@ -1,4 +1,4 @@
-<div style="height: calc(100% - 84px)">
+<div style="height: calc(100vh - 90px)">
     <div class="msf-menu-header headerWS headerWS_Div">
         <div class="headerWS" style="width: 85%; height: 100%">
             <button mat-button (click)="backToList()">
@@ -107,7 +107,8 @@
                                     <mat-icon style="color: white" aria-label="search">search</mat-icon>
                                 </mat-form-field>
                                 <div style="margin-top: 15px;  max-height: 295px; overflow: auto">
-                                    <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let view of selectViews.tables | filter : searchView">
+                                    <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let view of views | filter : searchView">
+                                        <!-- <div style="margin-bottom: 10px; margin-left:4px;" *ngFor="let view of selectViews.tables | filter : searchView"> -->
                                         <mat-checkbox color="primary" [(ngModel)]="view.selected" (change)=addView(view)>
                                             {{view.name}}
                                         </mat-checkbox>
@@ -142,13 +143,14 @@
                                 <span style="color:#01abec;">Select View(s)</span>
                                 <div class="selected-containers">
                                     <div style="margin-top:10px; width: 100%;" *ngFor="let view of selectViews.tables">
-                                        <div style="display: flex; flex-direction: row; flex-flow: row wrap;margin-top: 5px;margin-bottom: 5px; height: 30px; line-height: 30px; color: white;">
-                                            <div style="width:50%;; margin-right: 10px;">{{view.name}}</div>
-                                            <mat-form-field [floatLabel]="'never'" style="width:40%">
+                                        <div style="display: flex; flex-direction: row; flex-flow:wrap;margin-top: 5px;margin-bottom: 5px; height: auto;  color: white;    align-items: center;">
+                                            <div style="margin-right: 10px;">{{view.name}}</div>
+                                            <!-- <div style="width:50%;; margin-right: 10px;">{{view.name}}</div> -->
+                                            <mat-form-field [floatLabel]="'never'" style="width:40%; height:60px;">
                                                 <input matInput [(ngModel)]="view.alias">
-                                                <mat-placeholder class="placeholder">write an alias</mat-placeholder>
+                                                <mat-placeholder Style="height:60px;" class="placeholder">write an alias</mat-placeholder>
                                             </mat-form-field>
-                                            <button style="background-color: transparent; border: none; color:white" (click)="deleteFromSelectView(view)">x</button>
+                                            <button style="background-color: transparent; border: none; color:white; height:60px;" (click)="deleteFromSelectView(view)">x</button>
                                         </div>
 
                                     </div>

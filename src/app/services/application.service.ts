@@ -354,6 +354,12 @@ export class ApplicationService {
   }
 
 
+  testConnections(_this, data, handlerSuccess, handlerError){
+    //_this.globals.isLoading = true;
+    let url = this.host + "/testConnection";
+    this.http.post(_this, url, data, handlerSuccess, handlerError);
+  }
+
   deleteWebServices(_this, id, handlerSuccess, handlerError){
     let url = this.host + "/deleteWebServices?id="+id;
     this.http.post(_this, url, id, handlerSuccess, handlerError);

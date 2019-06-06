@@ -43,5 +43,4 @@ export class QueryWS {
     this.checkColumn = '0';
     this.connection=null;
   }
-
 }

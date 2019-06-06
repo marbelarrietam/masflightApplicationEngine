@@ -169,6 +169,13 @@ export class WebServicesComponent implements OnInit {
         this.tables[i].alias = null;
       }
     }
+    for (let i = 0; i < this.views.length; i++) {
+      if(this.views[i].selected===true){
+        this.views[i].id = null;
+        this.views[i].selected = false;
+        this.views[i].alias = null;
+      }
+    }
   }
 
   validate(){
@@ -574,9 +581,9 @@ export class WebServicesComponent implements OnInit {
 
   handlerSuccessTables(_this, data) {
     for (let i = 0; i < data.length; i++) {
-      if (data[i].type == "table") {
+      if (data[i].type.toLowerCase() == "table") {
         _this.tables.push(data[i]);
-      } else if (data[i].type == "view") {
+      } else if (data[i].type.toLowerCase() == "view") {
         _this.views.push(data[i]);
       }
     }
@@ -646,6 +653,7 @@ export class WebServicesComponent implements OnInit {
     this.havingSentence = this.selectEdit.havingclause;
     //kp20190508 change order of for to decrease time of search
     for (let j = 0; j < this.selectEdit.tables.length; j++) {
+      if (this.selectEdit.tables[j].type.toLowerCase()==="table"){
       for (let i = 0; i < this.tables.length; i++) {
         if (this.tables[i].name.toLowerCase() == this.selectEdit.tables[j].name.toLowerCase()) {
           this.tables[i].id = this.selectEdit.tables[j].id;
@@ -772,7 +780,136 @@ export class WebServicesComponent implements OnInit {
             return 0;
           });
         }
-      }
+      }//end for tables
+    }else{
+      for (let i = 0; i < this.views.length; i++) {
+        if (this.views[i].name.toLowerCase() == this.selectEdit.tables[j].name.toLowerCase()) {
+          this.views[i].id = this.selectEdit.tables[j].id;
+          this.views[i].selected = true;
+          this.views[i].alias = this.selectEdit.tables[j].alias;
+          this.selectViews.tables.push(this.views[i]);
+          this.selectconcat.tables.push(this.views[i]);
+          for (let k = 0; k < this.views[i].columns.length; k++) {
+            this.views[i].columns[k].order = 0;
+            for (let m = 0; m < this.selectEdit.tables[j].columns.length; m++) {
+              let columnsOrigin = this.selectEdit.tables[j].columns[m];
+              columnsOrigin.order = columnsOrigin.order
+                ? columnsOrigin.order
+                : 0;
+              if (
+                this.views[i].columns[k].name.toLowerCase() ==
+                this.selectEdit.tables[j].columns[m].name.toLowerCase()
+              ) {
+                let columnsToAdd = this.views[i].columns[k];
+
+                columnsToAdd.id = columnsOrigin.id;
+                columnsToAdd.selectedResult = columnsOrigin.selectedResult;
+                columnsToAdd.functionsAux = new Functions();
+                columnsToAdd.functions = columnsOrigin.functions;
+                columnsToAdd.groupBy = columnsOrigin.groupBy;
+                columnsToAdd.orderBy = columnsOrigin.orderBy;
+                if (columnsToAdd.groupBy == "1" && this.groupinglist=='0') {
+                  columnsToAdd.groupByBool = true;
+                  this.groupBySelected.push(columnsToAdd);
+                } else {
+                  columnsToAdd.groupByBool = false;
+                }
+                if (columnsToAdd.orderBy == "1") {
+                  columnsToAdd.orderByBool = true;
+                  this.orderBySelected.push(columnsToAdd);
+                } else {
+                  columnsToAdd.orderBool = false;
+                }
+                columnsToAdd.selected = true;
+                columnsToAdd.typePresentation = columnsOrigin.typePresentation;
+                columnsToAdd.selectedResult = columnsOrigin.selectedResult;
+                columnsToAdd.order = columnsOrigin.order;
+                if (columnsToAdd.typePresentation == "aggregate") {
+                  for (let n = 0; n < columnsToAdd.functions.length; n++) {
+                    console.log(columnsToAdd.functions[n]);
+
+                    switch(columnsToAdd.functions[n].function) {
+                      case "SUM":{
+                        columnsToAdd.functionsAux.sum = true;
+                        columnsToAdd.functionsAux.aliasSum = columnsToAdd.functions[n].alias;
+                        columnsToAdd.functionsAux.idSum = columnsToAdd.functions[n].id;
+                        columnsToAdd.functionsAux.orderDirectionSum = columnsToAdd.functions[n].orderDirection;
+                        if(columnsToAdd.functions[n].orderBy=="1"){
+                        columnsToAdd.functionsAux.orderSum = true;
+                        }else{ columnsToAdd.functionsAux.orderSum = false;}
+                        break;
+                      }
+                      case "MAX":{
+                        columnsToAdd.functionsAux.max = true;
+                        columnsToAdd.functionsAux.aliasMax = columnsToAdd.functions[n].alias;
+                        columnsToAdd.functionsAux.idMax = columnsToAdd.functions[n].id;
+                        columnsToAdd.functionsAux.orderDirectionMax = columnsToAdd.functions[n].orderDirection;
+                        if(columnsToAdd.functions[n].orderBy=="1"){
+                          columnsToAdd.functionsAux.orderMax = true;
+                          }else{ columnsToAdd.functionsAux.orderMax= false;}
+                        break;
+                      }
+                      case "MIN": {
+                        columnsToAdd.functionsAux.min = true;
+                        columnsToAdd.functionsAux.aliasMin = columnsToAdd.functions[n].alias;
+                        columnsToAdd.functionsAux.idMin = columnsToAdd.functions[n].id;
+                        columnsToAdd.functionsAux.orderDirectionMin = columnsToAdd.functions[n].orderDirection;
+                        if(columnsToAdd.functions[n].orderBy=="1"){
+                          columnsToAdd.functionsAux.orderMin = true;
+                          }else{ columnsToAdd.functionsAux.orderMin = false;}
+                        break;
+                      }
+                      case "AVG": {
+                        columnsToAdd.functionsAux.avg = true;
+                        columnsToAdd.functionsAux.aliasAvg = columnsToAdd.functions[n].alias;
+                        columnsToAdd.functionsAux.idAvg = columnsToAdd.functions[n].id;
+                        columnsToAdd.functionsAux.orderDirectionAvg = columnsToAdd.functions[n].orderDirection;
+                        if(columnsToAdd.functions[n].orderBy=="1"){
+                          columnsToAdd.functionsAux.orderAvg = true;
+                          }else{ columnsToAdd.functionsAux.orderAvg = false;}
+                        break;
+                      }
+                      case "COUNT": {
+                        columnsToAdd.functionsAux.count = true;
+                        columnsToAdd.functionsAux.aliasCount = columnsToAdd.functions[n].alias;
+                        columnsToAdd.functionsAux.idCount = columnsToAdd.functions[n].id;
+                        columnsToAdd.functionsAux.orderDirectionCount = columnsToAdd.functions[n].orderDirection;
+                        if(columnsToAdd.functions[n].orderBy=="1"){
+                          columnsToAdd.functionsAux.orderCount = true;
+                          }else{ columnsToAdd.functionsAux.orderCount = false;}
+                        break;
+                      }
+                      case  "STD":{
+                        columnsToAdd.functionsAux.std = true;
+                        columnsToAdd.functionsAux.aliasStd = columnsToAdd.functions[n].alias;
+                        columnsToAdd.functionsAux.idStd = columnsToAdd.functions[n].id;
+                        columnsToAdd.functionsAux.orderDirectionStd = columnsToAdd.functions[n].orderDirection;
+                        if(columnsToAdd.functions[n].orderBy=="1"){
+                          columnsToAdd.functionsAux.orderStd = true;
+                          }else{ columnsToAdd.functionsAux.orderStd= false;}
+                        break;
+                      }
+                    }
+                    }
+                } else {
+                  columnsToAdd.alias = columnsOrigin.alias;
+                  columnsToAdd.orderDirection = "ASC";
+                  columnsToAdd.orderDirection = columnsOrigin.orderDirection;
+                }
+              }
+            }
+          }
+          this.views[i].columns.sort(function(a, b) {
+            if (a.order > b.order) {
+              return 1;
+            } else if (a.order < b.order) {
+              return -1;
+            }
+            return 0;
+          });
+        }
+      }//end for views
+    }
     }
     this.tableSelected = this.selectconcat.tables[0];
     console.log(this.selectconcat.tables);

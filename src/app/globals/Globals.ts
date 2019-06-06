@@ -44,9 +44,9 @@ export class Globals {
   currentAirline: any;
   template: boolean = false;
   isFullscreen: boolean = false;
-  baseUrl = "http://192.168.1.122:8882";
-  //  baseUrl = "http://192.168.100.112:8882";
-  //baseUrl = "";
+  // baseUrl = "http://db07.aspsols.com:8881";
+  //  baseUrl = "http://192.168.1.124:8882";
+  baseUrl = "";
   // baseUrl2 = "http://localhost:8886";
   baseUrl2 = "http://69.64.45.220:8886";
   scheduledata: any;

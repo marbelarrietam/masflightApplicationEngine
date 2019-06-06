@@ -77,8 +77,17 @@ export class ConnectionsComponent implements OnInit {
     this.optionSelected.port = this.connectionForm.get ('portValidator').value;
     console.log(this.optionSelected);
     if(this.connectionForm.valid){
+      // this.service.testConnections(this, this.optionSelected, this.handlerTestConn, this.errorHandlerTest);
       this.service.saveConnections(this, this.optionSelected, this.handlerNewConn, this.errorHandler);
     }
+  }
+
+  handlerTestConn(_this, data){
+    this.service.saveConnections(_this, data, _this.handlerNewConn, _this.errorHandler);
+  }
+
+  errorHandlerTest(_this, error){
+    console.log(error);
   }
 
   handlerNewConn(_this, data){
@@ -103,13 +112,6 @@ export class ConnectionsComponent implements OnInit {
     _this.connections.splice(index, 1);
     _this.dataSource = new MatTableDataSource(_this.connections);
   }
-  // selectRow(row){
-  //   this.optionSelected = row;
-  // }
-
-  // overRow(row){
-  //   this.optionOver = row;
-  // }
 
   overRow(row){
     if(this.optionSelected != row){
