@@ -4234,6 +4234,7 @@ textarea.mat-input-element {
 }
 
 .header-new-conn .action-img {
+  margin-left: 5px;
   height: 25px;
   width: 25px;
 }

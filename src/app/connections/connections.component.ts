@@ -3,8 +3,10 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { Globals } from '../globals/Globals';
 import { ApplicationService } from '../services/application.service';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { FormControl, Validators,ValidatorFn, ValidationErrors, AbstractControl, FormGroup } from '@angular/forms';
+import { MessageComponent } from '../message/message.component';
+import { DialogErrorLogComponent } from '../dialog-error-log/dialog-error-log.component';
 
 @Component({
   selector: 'app-connections',
@@ -12,6 +14,7 @@ import { FormControl, Validators,ValidatorFn, ValidationErrors, AbstractControl,
   styleUrls: ['./connections.component.css']
 })
 export class ConnectionsComponent implements OnInit {
+  dialogRef : any;
   dataSource;
   connections;
   optionSelected = new ConnectionQuery();
@@ -20,16 +23,17 @@ export class ConnectionsComponent implements OnInit {
   databases:any[];
   innerHeight: number;
   connectionForm = new FormGroup({
-  hostValidator:new FormControl('host', [Validators.required]),
-  usernameValidator:new FormControl('username', [Validators.required]),
-  passwordValidator:new FormControl('password', [Validators.required]),
-  schemaValidator:new FormControl('schema', [Validators.required]),
-  portValidator:new FormControl('port', [Validators.required]),
+  hostValidator:new FormControl('', [Validators.required]),
+  usernameValidator:new FormControl('', [Validators.required]),
+  passwordValidator:new FormControl('', [Validators.required]),
+  schemaValidator:new FormControl('', [Validators.required]),
+  portValidator:new FormControl('', [Validators.required]),
 });
   constructor(
     private router: Router,
     public globals: Globals,
-    private service: ApplicationService) { }
+    private service: ApplicationService,
+    public dialog: MatDialog) { }
 
 
   displayedColumns = ['columnHost', 'columnUsername', 'columnSchema','columnAction'];
@@ -70,7 +74,7 @@ export class ConnectionsComponent implements OnInit {
 
   save(){
     console.log(this.optionSelected);
-    this.optionSelected.host = this.connectionForm.get ('hostValidator').value;
+    this.optionSelected.host = this.connectionForm.get('hostValidator').value;
     this.optionSelected.username = this.connectionForm.get ('usernameValidator').value;
     this.optionSelected.password = this.connectionForm.get ('passwordValidator').value;
     this.optionSelected.nameSchema = this.connectionForm.get ('schemaValidator').value;
@@ -82,10 +86,35 @@ export class ConnectionsComponent implements OnInit {
     }
   }
 
+  testConnection(){
+    this.optionSelected.host = this.connectionForm.get('hostValidator').value;
+    this.optionSelected.username = this.connectionForm.get ('usernameValidator').value;
+    this.optionSelected.password = this.connectionForm.get ('passwordValidator').value;
+    this.optionSelected.nameSchema = this.connectionForm.get ('schemaValidator').value;
+    this.optionSelected.port = this.connectionForm.get ('portValidator').value;
+    if(this.connectionForm.valid){
+    this.service.testConnections(this, this.optionSelected, this.handlerTestConn, this.errorHandlerTest);
+  }
+  }
   handlerTestConn(_this, data){
-    this.service.saveConnections(_this, data, _this.handlerNewConn, _this.errorHandler);
+    //mostrar Dialogo
+    if(data.errors==null){
+      const dialogRef = _this.dialog.open(MessageComponent, {
+      data: {
+        title: "Information",
+        message: "Conection Sucessfull"
+      }
+    });
+      }else{
+        const dialogRef = _this.dialog.open(DialogErrorLogComponent, {
+          disableClose: false,
+          hasBackdrop: false
+          ,data: data
+        });
+      }
   }
 
+  
   errorHandlerTest(_this, error){
     console.log(error);
   }
@@ -120,18 +149,25 @@ export class ConnectionsComponent implements OnInit {
 }
 
 selectRow(row){
-  if(this.optionSelected==null){
+  /*if(this.optionSelected==null){
     this.optionSelected = row;
     this.optionOver = null;
-  }else{
+  }else{*/
     if(this.optionSelected == row){
       this.optionOver = this.optionSelected;
       this.cancelAndClean()
     }else{
       this.optionSelected = row;
+      this.connectionForm.patchValue({
+        hostValidator: this.optionSelected.host,
+        usernameValidator: this.optionSelected.username,
+        passwordValidator: this.optionSelected.password,
+        schemaValidator: this.optionSelected.nameSchema,
+        portValidator: this.optionSelected.port
+      });
       this.optionOver = null;
     }
-  }
+  // }
 }
 
   getErrorHostMessage() {

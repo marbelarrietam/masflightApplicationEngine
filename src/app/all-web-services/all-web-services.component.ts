@@ -15,6 +15,7 @@ import { MessageComponent } from '../message/message.component';
 export class AllWebServicesComponent implements OnInit {
 
   webServices: any[] = [];
+  webServicesRouter: any[] = [];
   dataSource;
   tableString: string;
   dataFromService = '';
@@ -49,17 +50,33 @@ export class AllWebServicesComponent implements OnInit {
     this.service.getWebServices(this, this.handlerSuccessWS, this.handlerError);
   }
 
+  handlerError(_this, result){
+    console.log(result);
+    _this.globals.isLoading = false;
+  }
+
+
   handlerSuccessWS(_this,data){
     _this.webServices = data;
     for (let i =0; i < _this.webServices.length; i++ ){
     _this.tableString = _this.stringTables(_this.webServices[i]);
     _this.webServices[i].stringTable = _this.tableString;
     }
+    //  _this.dataSource = new MatTableDataSource(_this.webServices);
+    // _this.globals.isLoading = false;
+    _this.service.getRouters(_this, _this.handlerSuccessWSRouters, _this.handlerErrorRouters);
+  }
+  
+  handlerSuccessWSRouters(_this,data){
+    _this.webServicesRouter = data;
+    for (let i =0; i < _this.webServicesRouter.length; i++ ){
+      _this.webServices.push(_this.webServicesRouter[i])
+    }
     _this.dataSource = new MatTableDataSource(_this.webServices);
     _this.globals.isLoading = false;
   }
 
-  handlerError(_this, result){
+  handlerErrorRouters(_this, result){
     console.log(result);
     _this.globals.isLoading = false;
   }

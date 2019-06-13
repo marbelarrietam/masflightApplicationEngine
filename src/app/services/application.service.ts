@@ -328,6 +328,12 @@ export class ApplicationService {
     this.http.get(_this, url, handlerSucess, handlerError, null);
   }
 
+  getRouters(_this, handlerSucess, handlerError){
+    _this.globals.isLoading = true;
+    let url = this.host + "/getWebServicesRouter";
+    this.http.get(_this, url, handlerSucess, handlerError, null);
+  }
+
   getConnections(_this, handlerSucess, handlerError){
     _this.globals.isLoading = true;
     let url = this.host + "/getConnections";

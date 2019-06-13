@@ -13,6 +13,11 @@
         </mat-form-field>
         <!-- </div> -->
         <!-- <div style="display: flex; flex-direction: column; width:60%"> -->
+        <div (click)="cancelAndClean()" style="color: white; cursor: pointer; display: flex; flex-direction: row; align-items: center; text-align: right;" >
+            <div Style="margin-right: 10px;">Create New Conection</div>
+            <mat-icon aria-label="add">add_circle</mat-icon>
+        </div>
+            
         <div class="container-conn table-connections"
             style="display: flex; flex-direction: column;width: 59%;max-height: calc(100% - 60px);height: calc(100% - 60px);">
             <table mat-table matSort [dataSource]="dataSource" class="datasource welcome-table"
@@ -56,9 +61,14 @@
             style="display: flex; flex-direction: column; width:39%;height: calc(100% - 60px);color: white;     font-weight: 500;">
             <form name="connection" style="height:100%">
                 <div class="darktable header-new-conn">
-                    <img class="action-img" src="../assets/images/editWhite.png">
-                    <div style="margin-left: 10px; width: calc(50% - 30px)">
-                        Edit connection
+                    <mat-icon *ngIf="optionSelected.id == null" style="color: white;" aria-label="add">add_circle</mat-icon>
+                    <div *ngIf="optionSelected.id == null" style="margin-left: 10px; width: calc(50% - 30px)">
+                            New Conection
+                        </div>
+                    <img *ngIf="optionSelected.id != null" 
+                    class="action-img" src="../assets/images/editWhite.png">
+                    <div *ngIf="optionSelected.id != null" style="margin-left: 10px; width: calc(50% - 30px)">
+                        Edit Connection
                     </div>
                     <!-- <span class="menu-spacer"></span> -->
                     <div class="conn-select">
@@ -124,6 +134,10 @@
                     </div>
 
                     <div style="display:flex; flex-direction:row">
+                        <div class="button-form">
+                            <button mat-flat-button class="flat-button button-publish buttons"
+                                (click)="testConnection()">Test Conection</button>
+                        </div>
                         <div class="button-form">
                             <button mat-flat-button class="flat-button button-publish buttons"
                                 (click)="save()">Save</button>
