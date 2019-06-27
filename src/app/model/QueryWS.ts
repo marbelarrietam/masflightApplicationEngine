@@ -8,6 +8,7 @@ export class QueryWS {
   "tables": Array<Tables>;
   "pageSize": number;
   "query": string;
+  "rows": string;
   "whereclause": string;
   "havingclause": string;
   "description": string;
@@ -21,12 +22,14 @@ export class QueryWS {
   "groupBySentence":string;
   "sortingSentence":string;
   "checkColumn":string;
+  "checkQuery":string;
   "connection":number
 
   constructor(){
     this.name = '';
     this.tables = new Array();
     this.pageSize = 0;
+    this.rows = '';
     this.arguments = new Array();
     this.customFunctions = new Array();
     this.whereclause = '';
@@ -40,7 +43,8 @@ export class QueryWS {
     this.sortingList = '0';
     this.groupBySentence ='';
     this.sortingSentence='';
-    this.checkColumn = '0';
+    this.checkColumn = '1';
+    this.checkQuery = '1';
     this.connection=null;
   }
 }

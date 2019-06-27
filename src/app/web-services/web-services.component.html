@@ -1,6 +1,7 @@
 <div style="height: calc(100vh - 90px)">
     <div class="msf-menu-header headerWS headerWS_Div">
-        <div class="headerWS" style="width: 85%; height: 100%">
+        <!-- <div class="headerWS" style="width: 85%; height: 100%"> -->
+        <div class="headerWS" style="width: calc(85% - 20px); height: 100%">
             <button mat-button (click)="backToList()">
                 <mat-icon style="height: 100%;">arrow_back</mat-icon>
             </button>
@@ -60,8 +61,11 @@
                     </div>
                 </div>
                 <div style="display: flex;flex-direction:column;">
-                    <button mat-flat-button class="flat-button button-publish" (click)="validate()" style=" margin: auto; padding: 0px; width: 200px;">Validate</button>
-                    <mat-checkbox [(ngModel)]="checkBool" (change)="checkValidate()">Validate columns</mat-checkbox>
+                    <button mat-flat-button [ngClass]="checkBoolQuery  ?  'flat-button button-publish': 'flat-button-disabled'"
+                     (click)="validate()" 
+                    style=" margin: auto; padding: 0px; width: 200px;" [disabled]="!checkBoolQuery">Validate</button>
+                    <mat-checkbox [(ngModel)]="checkBool" (change)="checkValidate()" [disabled]="!checkBoolQuery">Validate columns</mat-checkbox>
+                    <mat-checkbox [(ngModel)]="checkBoolQuery" (change)="checkValidateQuery()">Validate Query</mat-checkbox>
                 </div>
             </div>
         </div>
@@ -198,13 +202,14 @@
                                 <div style="margin-bottom: 18px" class="box-titles">Summary</div>
                                 <input style="width:85%;height: 30px;background-color: #1e1e1e; margin-left: 40px; padding-left:5px; border-radius: 2px" placeholder="Add a expression" matInput [(ngModel)]="auxCustomFunction">
                                 <div style="display: flex; flex-direction: row;">
-                                    <button mat-icon-button (click)="addCustomFunction()">
+                                    <button mat-icon-button (click)="addCustomFunction()" [disabled]="!checkBoolQuery">
                                         <mat-icon style="color: white" aria-label="add">add_circle</mat-icon>
                                     </button>
                                 </div>
                             </div>
                             <mat-divider></mat-divider>
-                            <div cdkDropList *ngIf="selectconcat.tables.length" class="draggable-list" style="overflow-y: scroll; max-height: 330px" (cdkDropListDropped)="drop($event)">
+                            <!-- <div cdkDropList *ngIf="selectconcat.tables.length" class="draggable-list" style="overflow-y: scroll; max-height: 330px" (cdkDropListDropped)="drop($event)"> -->
+                            <div cdkDropList class="draggable-list" style="overflow-y: scroll; max-height: 330px" (cdkDropListDropped)="drop($event)">
                                 <div *ngFor="let tab of selectconcat.tables">
                                     <div *ngFor="let item of tab.columns" cdkDrag class="draggable-box">
                                         <div *ngIf="item.selected" style="display: flex;margin-top: 5px;margin-bottom: 5px">
@@ -293,7 +298,7 @@
                                             <input matInput [(ngModel)]="item.alias">
                                             <mat-placeholder class="placeholder">write an alias</mat-placeholder>
                                         </mat-form-field>
-                                        <button style="margin-top: 4%" mat-icon-button (click)="deleteCustomFunction(item)">
+                                        <button style="margin-top: 4%" mat-icon-button (click)="deleteCustomFunction(item)" [disabled]="!checkBoolQuery">
                                             <mat-icon style="color: white" aria-label="close">close</mat-icon>
                                         </button>
 
@@ -710,8 +715,9 @@
                             </span>{{havingSentence}}</div>
                         <div *ngIf="orderBySentence" style="margin-bottom: 5px; "><span style="color:#01abec ">Order By
                             </span>{{orderBySentence}}</div>
-                        <div *ngIf="selectconcat.pageSize" style="margin-bottom: 5px; "><span style="color:#01abec ">Limit
-                            </span>{{selectconcat.pageSize}}</div>
+                        <!-- <div *ngIf="selectconcat.pageSize " style="margin-bottom: 5px; "><span style="color:#01abec ">Limit
+                            </span>{{selectconcat.pageSize}}</div> -->
+                        <div *ngIf="selectconcat.pageSize " style="margin-bottom: 5px; ">{{selectconcat.rows}}</div>
                     </div>
                 </div>
             </mat-step>

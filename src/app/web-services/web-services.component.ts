@@ -43,7 +43,9 @@ export class WebServicesComponent implements OnInit {
   searchGroup: string;
   searchOrder: string;
   checkColumn = '1';
+  checkQuery = '1';
   checkBool: boolean = true;
+  checkBoolQuery: boolean = true;
   deletedTables: Array<Tables> = new Array();
   deletedColumns: Array<Columns> = new Array();
   deletedArguments: Array<QueryArgument> = new Array();
@@ -117,6 +119,28 @@ export class WebServicesComponent implements OnInit {
     }else{
       this.queryEdit = false;
       this.actualConn = this.globals.currentWebService.connection;
+      this.queryText = this.globals.currentWebService.query;
+      if (this.globals.currentWebService.tables.length == 0 ){
+        this.checkQuery = '0';
+        this.checkBool=false;
+        this.checkColumn = '0';
+        this.checkBoolQuery=false;
+      }else{
+        //agrego las otras columnas del query para completarlo
+        if (this.globals.currentWebService.groupBySentence!=null && this.globals.currentWebService.groupingList=='0') {
+          this.queryText += " GROUP BY " + this.globals.currentWebService.groupBySentence;
+        }else if(this.globals.currentWebService.groupingList=='1'){
+          for (let i=0;i<this.globals.currentWebService.arguments.length;i++){
+            if(this.globals.currentWebService.arguments[i].grouping=="1"){
+              this.queryText += " GROUP BY :" + this.globals.currentWebService.arguments[i].label;
+              i=this.globals.currentWebService.arguments.length;
+            }
+          }
+        }
+        if (this.globals.currentWebService.sortingSentence!=null && this.globals.currentWebService.sortingList=='0') {
+          this.queryText += " ORDER BY " + this.globals.currentWebService.sortingSentence;
+        }
+      }
     }
     this.dataError = {errors:[]};
     this.dataErrorStep = {errors:[]};
@@ -179,7 +203,6 @@ export class WebServicesComponent implements OnInit {
   }
 
   validate(){
-    this.clear();
     this.selectconcat.connection = this.actualConn;
     if(this.actualConn!=null && this.queryText!=null && this.queryText!='' ){
     this.service.getsetSteps(this,encodeURIComponent(this.queryText),
@@ -196,6 +219,7 @@ export class WebServicesComponent implements OnInit {
 
   handlerSuccessText(_this,data){
     if(data.errors==null){
+       _this.clear();
       _this.selectEdit = data;
       _this.getDataQueryInit();
       _this.queryEdit=false;
@@ -386,7 +410,11 @@ export class WebServicesComponent implements OnInit {
   }
 
   getQueryString() {
-    let queryString =
+    let queryString= "";
+    if (this.checkQuery==='0'){
+      queryString = this.queryText;
+    }else{
+     queryString =
       "SELECT " + this.selectSentence + " FROM " + this.fromSentence;
     if (this.whereSentence) {
       queryString += " WHERE " + this.whereSentence;
@@ -397,10 +425,10 @@ export class WebServicesComponent implements OnInit {
     if (this.havingSentence  && this.selectconcat.groupingList=='0') {
       queryString += " HAVING " + this.havingSentence;
     }
-    if (this.orderBySentence && this.selectconcat.sortingList=='0') {
+    /*if (this.orderBySentence && this.selectconcat.sortingList=='0') {
       queryString += " ORDER BY " + this.orderBySentence;
-    }
-
+    }*/ //SACAR DE LA BD CUANDO SE HACE EL TEST
+  }
 
 
     return queryString;
@@ -429,10 +457,12 @@ export class WebServicesComponent implements OnInit {
     queryJson.method = this.selectconcat.method;
     queryJson.description = this.selectconcat.description;
     queryJson.pageSize = this.selectconcat.pageSize;
+    queryJson.rows = this.selectconcat.rows;
     queryJson.wrapped = this.selectconcat.wrapped; //kp20190507
     queryJson.groupingList = this.selectconcat.groupingList;
     queryJson.sortingList = this.selectconcat.sortingList;
     queryJson.checkColumn = this.checkColumn;
+    queryJson.checkQuery = this.checkQuery;
     queryJson.connection = this.selectconcat.connection;
     return queryJson;
   }
@@ -630,6 +660,7 @@ export class WebServicesComponent implements OnInit {
     this.selectconcat.sortingList = this.selectEdit.sortingList;
     this.selectconcat.id = this.selectEdit.id;
     this.selectconcat.pageSize = this.selectEdit.pageSize;
+    this.selectconcat.rows = this.selectEdit.rows;
     this.selectconcat.method = this.selectEdit.method;
     this.selectconcat.description = this.selectEdit.description;
     this.selectconcat.customFunctions = this.selectEdit.customFunctions;
@@ -923,8 +954,10 @@ export class WebServicesComponent implements OnInit {
       let index = this.selectTables.tables.findIndex(d => d === table);
       let indexConcat = this.selectconcat.tables.findIndex(d => d === table);
       if (index >= 0 && indexConcat >= 0) {
-        table.delete = true;
-        this.deletedTables.push(table);
+        if (table.id != null){
+          table.delete = true;
+          this.deletedTables.push(table);
+        }
         this.selectTables.tables.splice(index, 1);
         this.selectconcat.tables.splice(indexConcat, 1);
       }
@@ -1221,11 +1254,15 @@ export class WebServicesComponent implements OnInit {
   deleteFromSelectView(view) {
     let index = this.selectViews.tables.findIndex(d => d === view);
     let indexConcat = this.selectconcat.tables.findIndex(d => d === view);
-    view.delete = true;
-    this.deletedTables.push(view);
+    if (index >= 0 && indexConcat >= 0) {
+      if (view.id != null){
+        view.delete = true;
+        this.deletedTables.push(view);
+      }
     this.selectViews.tables.splice(index, 1);
     this.selectconcat.tables.splice(indexConcat, 1);
     view.selected = false;
+    }
   }
 
   //modificado kp20190508
@@ -1252,8 +1289,10 @@ export class WebServicesComponent implements OnInit {
       let index = this.selectViews.tables.findIndex(d => d === view);
       let indexConcat = this.selectconcat.tables.findIndex(d => d === view);
       if (index >= 0 && indexConcat >= 0) {
+        if(view.id!=null){
         view.delete = true;
         this.deletedTables.push(view);
+        }
         this.selectViews.tables.splice(index, 1);
         this.selectconcat.tables.splice(indexConcat, 1);
       }
@@ -1402,4 +1441,13 @@ export class WebServicesComponent implements OnInit {
     }
   }
 
+  checkValidateQuery(){
+    if(this.checkBoolQuery){
+      this.checkQuery = '1';
+    }else{
+      this.checkQuery = '0';
+      this.checkBool=false;
+      this.checkColumn = '0';
+    }
+  }
 }

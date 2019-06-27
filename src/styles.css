@@ -3797,6 +3797,7 @@ img.msf-calendar-image {
 .mat-horizontal-stepper-header-container {
   background-color: #1e1e1e;
   height: 50px;
+  padding: 0px 20px;
 }
 
 .mat-stepper-horizontal,
@@ -4031,6 +4032,7 @@ textarea.mat-input-element {
 .editQuery {
   cursor: pointer;
   width: 15%;
+  padding-right: 20px;
   background-color: #232323;
   height: 100%;
 }
@@ -4071,7 +4073,7 @@ textarea.mat-input-element {
 
 .InfoQuery {
   margin-bottom: 15px;
-  height: 207px;
+  height: 183px;
   font-weight: lighter;
   text-align: justify;
   background-color: #1e1e1e;
@@ -4234,7 +4236,6 @@ textarea.mat-input-element {
 }
 
 .header-new-conn .action-img {
-  margin-left: 5px;
   height: 25px;
   width: 25px;
 }
@@ -4254,6 +4255,14 @@ textarea.mat-input-element {
 
 .mat-select-placeholder {
   color: #aaa;
+}
+
+.mat-checkbox-disabled .mat-checkbox-label {
+  color: #333333;
+}
+
+.mat-checkbox-disabled .mat-checkbox-frame {
+  border-color: #333333;
 }
 
 /*# sourceMappingURL=styles.css.map */

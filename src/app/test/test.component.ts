@@ -31,7 +31,7 @@ export class TestComponent implements OnInit {
   dataSource;
   data;
   displayedColumns: string[] = [];
-  urlArguments: string = '?';
+  urlArguments: string = '';
   visible = true;
   selectable = true;
   removable = true;
@@ -46,7 +46,29 @@ export class TestComponent implements OnInit {
     public dialog: MatDialog, ) { }
 
   ngOnInit() {
-    this.ws = this.globals.currentWebService;
+    // this.ws = this.globals.currentWebService;
+    this.ws = {
+      name : this.globals.currentWebService.name,
+      tables : this.globals.currentWebService.tables,
+      pageSize : this.globals.currentWebService.pageSize,
+      rows : this.globals.currentWebService.rows,
+      arguments : this.globals.currentWebService.arguments,
+      customFunctions : this.globals.currentWebService.customFunctions,
+      whereclause : this.globals.currentWebService.whereclause,
+      havingclause : this.globals.currentWebService.havingclause,
+      query : this.globals.currentWebService.query,
+      description : this.globals.currentWebService.description,
+      method : this.globals.currentWebService.method,
+      url : this.globals.currentWebService.url,
+      wrapped : this.globals.currentWebService.wrapped,
+      groupingList : this.globals.currentWebService.groupingList,
+      sortingList : this.globals.currentWebService.sortingList,
+      groupBySentence :this.globals.currentWebService.groupBySentence,
+      sortingSentence:this.globals.currentWebService.sortingSentence,
+      checkColumn : this.globals.currentWebService.checkColumn,
+      checkQuery : this.globals.currentWebService.checkQuery,
+      connection: this.globals.currentWebService.connection
+    } as QueryWS;
     this.wrapped = this.ws.wrapped;
     this.arguments = this.ws.arguments;
     for (let i =0; i< this.arguments.length;i++){
@@ -75,6 +97,7 @@ export class TestComponent implements OnInit {
 }
 
   getJsonRequest(){
+    this.urlArguments = '';
     for (let i = 0; i < this.arguments.length; i++){
       if(this.arguments[i].type=='list'){
         console.log( this.arguments[i].valueArray)
@@ -85,7 +108,7 @@ export class TestComponent implements OnInit {
       this.argumentsJson[this.arguments[i].label] = encodeURIComponent(this.arguments[i].value);
 
       if(i==0){
-      this.urlArguments+=`${this.arguments[i].label}=${this.arguments[i].value}`;
+      this.urlArguments+=`?${this.arguments[i].label}=${this.arguments[i].value}`;
       }else{
         this.urlArguments+=`&${this.arguments[i].label}=${this.arguments[i].value}`;
       }
@@ -157,8 +180,7 @@ export class TestComponent implements OnInit {
       let aux = { columnName: col, columnLabel: col};
       _this.columns.push(aux);
     }
-
-      _this.ws.url=_this.ws.url+_this.urlArguments;
+      _this.ws.url=_this.globals.currentWebService.url+_this.urlArguments;
     console.log(_this.data)
     _this.dataSource = new MatTableDataSource(data.Response.records);
     _this.showTable = true;
@@ -215,7 +237,7 @@ else{
       let aux = { columnName: col, columnLabel: col};
       _this.columns.push(aux);
     }
-      _this.ws.url=_this.ws.url+_this.urlArguments;
+      _this.ws.url=_this.globals.currentWebService.url+_this.urlArguments;
     _this.data = data;
 
     console.log(_this.data)
