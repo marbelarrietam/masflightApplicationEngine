@@ -10,7 +10,7 @@
             <div *ngIf="globals.currentWebService" class="ws-title" style="padding: 0px;margin: auto 0; width: calc(100% - 334px) !important">Edit {{globals.currentWebService.name}}
             </div>
             <div style="display: flex; align-items: center;">
-                <button mat-flat-button class="flat-button button-publish" style="margin: auto 15px; padding: 0px; width: 200px" (click)="saveWebService()">Publish</button>
+                <button mat-flat-button [ngClass]="publish  ?  'flat-button button-publish': 'flat-button-disabled'" style="margin: auto 15px; padding: 0px; width: 200px" (click)="saveWebService()" [disabled]="!publish">Publish</button>
                 <button *ngIf="showError" mat-icon-button>
                     <!-- <mat-icon class ="IconEditQuery'" (click)="openDialog(dataErrorStep)">info</mat-icon> -->
                     <mat-icon [ngClass]="globals.DialogClose? 'IconAct' : 'IconEditQuery'" (click)="openDialog(dataErrorStep)">info</mat-icon>
@@ -46,26 +46,25 @@
                 </ngx-codemirror>
             </div>
             <div *ngIf="queryEdit" Style="width: 30%; text-align: center;">
-                <div Style=" font-weight: 500; font-size: 15px; margin: 0px 0px 20px 0px; text-align: right;">
+                <div *ngIf="checkBoolQuery" Style=" font-weight: 500; font-size: 15px; margin: 0px 0px 20px 0px; text-align: right;">
                     Information
-                    <!-- <mat-icon *ngIf="queryEdit" style="color: white; margin: auto;" aria-label="Toogle">
-                            keyboard_arrow_down
-                        </mat-icon> -->
-                    <!-- <mat-icon style="color: white; margin: auto;" aria-label="Toogle">
-                            keyboard_arrow_up
-                        </mat-icon> -->
                 </div>
-                <div class="InfoQuery">
+                <div [ngClass]="checkBoolQuery  ?  'InfoQuery': 'InfoQuery_disabled'">
                     <div *ngFor="let error of dataError.errors" style="font-size: 12px; display: flex; flex-direction: row;">
                         <p style="color: #ED5C27;">{{error.code}}</p> - - - {{error.message}}
                     </div>
                 </div>
                 <div style="display: flex;flex-direction:column;">
-                    <button mat-flat-button [ngClass]="checkBoolQuery  ?  'flat-button button-publish': 'flat-button-disabled'"
+                    <button *ngIf="checkBoolQuery" mat-flat-button [ngClass]="checkBoolQuery  ?  'flat-button button-publish': 'flat-button-disabled'"
                      (click)="validate()" 
                     style=" margin: auto; padding: 0px; width: 200px;" [disabled]="!checkBoolQuery">Validate</button>
-                    <mat-checkbox [(ngModel)]="checkBool" (change)="checkValidate()" [disabled]="!checkBoolQuery">Validate columns</mat-checkbox>
-                    <mat-checkbox [(ngModel)]="checkBoolQuery" (change)="checkValidateQuery()">Validate Query</mat-checkbox>
+                    <!-- <button *ngIf="!checkBoolQuery" mat-flat-button [ngClass]="!checkBoolQuery  ?  'flat-button button-publish': 'flat-button-disabled'"
+                     (click)="validate()" 
+                    style=" margin: auto; padding: 0px; width: 200px;" [disabled]="checkBoolQuery">Get Columns</button> -->
+                    <div style="display: flex; margin-top: 10px"> 
+                        <mat-checkbox style="margin: auto;" [(ngModel)]="checkBoolQuery" (change)="checkValidateQuery()">Validate Query</mat-checkbox>
+                        <mat-checkbox style="margin: auto;" [(ngModel)]="checkBool" (change)="checkValidate()" [disabled]="!checkBoolQuery">Validate columns</mat-checkbox>
+                   </div>
                 </div>
             </div>
         </div>

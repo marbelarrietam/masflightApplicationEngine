@@ -549,9 +549,15 @@ p {
 .flat-button {
   background-color: #01abec !important;
 }
+.flat-button .mat-button-wrapper {
+  color: white;
+}
 
 .flat-button-disabled {
-  background-color: #343434 !important;
+  background-color: #3D3D3D !important;
+}
+.flat-button-disabled .mat-button-wrapper {
+  color: gray;
 }
 
 .func-button .mat-button-wrapper {
@@ -4073,11 +4079,23 @@ textarea.mat-input-element {
 
 .InfoQuery {
   margin-bottom: 15px;
-  height: 183px;
+  transition: height 0.5s ease-out;
+  height: 203px;
   font-weight: lighter;
   text-align: justify;
   background-color: #1e1e1e;
   padding: 4px 10px;
+  overflow-y: auto;
+}
+
+.InfoQuery_disabled {
+  margin-bottom: 15px;
+  transition: height 0.5s ease-out;
+  height: 0px;
+  font-weight: lighter;
+  text-align: justify;
+  background-color: #3D3D3D;
+  padding: 0px;
   overflow-y: auto;
 }
 

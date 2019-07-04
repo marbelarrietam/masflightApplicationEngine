@@ -80,9 +80,9 @@ export class WebServicesComponent implements OnInit {
   selectViews: QueryWS = new QueryWS();
   selectconcat: QueryWS = new QueryWS();
   tables: any[] = [];
-  tablesInicial: any[] = [];
+  tablesBackup: any[] = [];
   views: any[] = [];
-  viewsInicial: any[] = [];
+  viewsBackup: any[] = [];
   argumentSelected: any;
   argForms: FormGroup;
   items: FormArray;
@@ -100,6 +100,7 @@ export class WebServicesComponent implements OnInit {
 
   showError: boolean;
   dialogRef : any;
+  publish: boolean;
 
   constructor(
     private router: Router,
@@ -116,8 +117,10 @@ export class WebServicesComponent implements OnInit {
     this.showError=false;
     if(!this.globals.currentWebService){
       this.queryEdit = true;
+      this.publish = false;
     }else{
       this.queryEdit = false;
+      this.publish = true;
       this.actualConn = this.globals.currentWebService.connection;
       this.queryText = this.globals.currentWebService.query;
       if (this.globals.currentWebService.tables.length == 0 ){
@@ -127,9 +130,11 @@ export class WebServicesComponent implements OnInit {
         this.checkBoolQuery=false;
       }else{
         //agrego las otras columnas del query para completarlo
+        /* Descomentar cuando mire si realiza bien el group by quitandolo del campo query en la BD
         if (this.globals.currentWebService.groupBySentence!=null && this.globals.currentWebService.groupingList=='0') {
           this.queryText += " GROUP BY " + this.globals.currentWebService.groupBySentence;
-        }else if(this.globals.currentWebService.groupingList=='1'){
+        }else */
+        if(this.globals.currentWebService.groupingList=='1'){
           for (let i=0;i<this.globals.currentWebService.arguments.length;i++){
             if(this.globals.currentWebService.arguments[i].grouping=="1"){
               this.queryText += " GROUP BY :" + this.globals.currentWebService.arguments[i].label;
@@ -175,9 +180,6 @@ export class WebServicesComponent implements OnInit {
   }
 
   clear(){
-    // var aux = this.tablesInicial.slice(0);
-    // this.tables = [];
-    // this.tables = aux;
     this.showError=false;
     this.dataError = {errors:[]};
     this.dataErrorStep = {errors:[]};
@@ -186,20 +188,8 @@ export class WebServicesComponent implements OnInit {
     this.selectTables = new QueryWS();
     this.selectViews = new QueryWS();
     this.selectconcat = new QueryWS();
-    for (let i = 0; i < this.tables.length; i++) {
-      if(this.tables[i].selected===true){
-        this.tables[i].id = null;
-        this.tables[i].selected = false;
-        this.tables[i].alias = null;
-      }
-    }
-    for (let i = 0; i < this.views.length; i++) {
-      if(this.views[i].selected===true){
-        this.views[i].id = null;
-        this.views[i].selected = false;
-        this.views[i].alias = null;
-      }
-    }
+    this.tables = this.tablesBackup;
+    this.views = this.viewsBackup;
   }
 
   validate(){
@@ -217,17 +207,37 @@ export class WebServicesComponent implements OnInit {
     }
   }
 
-  handlerSuccessText(_this,data){
-    if(data.errors==null){
-       _this.clear();
-      _this.selectEdit = data;
+  handlerSuccessText(_this, data) {
+    if (data.errors == null) {
+      _this.clear2();
+      if(!_this.globals.currentWebService){   
+        //si es un nuevo servicio   
+        // _this.clear;
+        _this.selectEdit = data;
+      }else{
+      if (_this.globals.currentWebService.id != null) {
+        //si es un servicio ya guardado
+        // _this.clear2();
+        _this.cleanDataWs(_this, data)
+        _this.CleanArguments(_this, data)
+        _this.CleanCustomFun(_this, data)
+        _this.CleanTables(_this, data)
+      } 
+      // else {
+      //   //si aun no se ha gurdado
+      //   _this.clear;
+      //   _this.selectEdit = data;
+      // }
+    }
       _this.getDataQueryInit();
-      _this.queryEdit=false;
+      _this.queryEdit = false;
       _this.getSelectedColumns();
+      _this.publish=true;
       _this.globals.isLoading = false;
-    }else{
+    } else {
+      _this.publish=false;
       _this.globals.isLoading = false;
-      _this.dataError=data;
+      _this.dataError = data;
       const dialogRef = _this.dialog.open(MessageComponent, {
         data: {
           title: "Error",
@@ -238,7 +248,208 @@ export class WebServicesComponent implements OnInit {
     }
   }
 
+  clear2() {
+    this.showError = false;
+    this.dataError = { errors: [] };
+    this.dataErrorStep = { errors: [] };
+    this.tableSelected = new Tables();
+    this.selectTables = new QueryWS();
+    this.selectViews = new QueryWS();
+    this.selectconcat = new QueryWS();
+    this.groupBySelected = new Array<any>();
+    this.orderBySelected = new Array<any>();
+    this.tables = this.tablesBackup;
+    this.views = this.viewsBackup;
+  }
 
+  
+  cleanDataWs(_this, data) {
+    _this.selectEdit.groupingList = data.groupingList;
+    _this.selectEdit.sortingList = data.sortingList;
+    _this.selectEdit.whereclause = data.whereclause;
+    _this.selectEdit.havingclause = data.havingclause;
+    _this.selectEdit.query = data.query;
+
+    _this.selectEdit.groupBySentence = data.groupBySentence;
+    _this.selectEdit.sortingSentence = data.sortingSentence;
+    _this.selectEdit.stringTable = data.stringTable;
+  }
+  
+  CleanArguments(_this, data) {
+    var aux = _this.globals.currentWebService.arguments.slice();
+    var cont = 0;
+    let index = 0;
+    //marco para borar los arg que estan en el edit y no estan en el data, si el data es null borro todos los arg del edit
+    for (let j = 0; j < _this.globals.currentWebService.arguments.length; j++) {
+      var x = j;
+      x = x - cont;
+      if (data.arguments == null) {
+        index = -1;
+      } else {
+        index = data.arguments.findIndex(d => d.label.toLowerCase() === _this.globals.currentWebService.arguments[j].label.toLowerCase());
+      }
+      if (index == -1) {
+        //si tiene id lo marco para borrar de la BD , sino simplemente lo borro de la lista
+        if (aux[x].id != null) {
+          aux[x].delete = true;
+        } else {
+          aux.splice(x, 1);
+          cont++;
+        }
+      }
+    }
+    //Agrego los argumentos que estan en el data y no estan en el edit
+    if (data.arguments != null) {
+      for (let i = 0; i < data.arguments.length; i++) {
+        let index = aux.findIndex(d => d.label.toLowerCase() === data.arguments[i].label.toLowerCase());
+        if (index == -1) {
+          aux.push(data.arguments[i]);
+        }else{
+          // si lo encuentra lo dejo igual que el data , pero conservo el id
+          data.arguments[i].id=aux[index].id;
+          aux[index]=data.arguments[i];
+        }
+      }
+    }
+    _this.selectEdit.arguments = aux;
+  }
+
+  CleanCustomFun(_this, data) {
+    var aux = _this.globals.currentWebService.customFunctions.slice();
+    var cont = 0;
+    let index = 0;
+    //marco para borar los customFunctions que estan en el edit y no estan en el data, si el data es null borro todos los arg del edit
+    for (let j = 0; j < _this.globals.currentWebService.customFunctions.length; j++) {
+      var x = j;
+      x = x - cont;
+      if (data.customFunctions == null) {
+        index = -1;
+      } else {
+        index = data.customFunctions.findIndex(d => d.customText.toLowerCase() === _this.globals.currentWebService.customFunctions[j].customText.toLowerCase());
+      }
+      if (index == -1) {
+        if (aux[x].id != null) {
+          aux[x].delete = true;
+        } else {
+          aux.splice(x, 1);
+          cont++;
+        }
+      }
+    }
+    //Agrego los argumentos que estan en el data y no estan en el edit
+    if (data.customFunctions != null) {
+      for (let i = 0; i < data.customFunctions.length; i++) {
+        let index = aux.findIndex(d => d.customText.toLowerCase() === data.customFunctions[i].customText.toLowerCase());
+        if (index == -1) {
+          aux.push(data.customFunctions[i]);
+        }else{
+          // si lo encuentra lo dejo igual que el data , pero conservo el id
+          data.customFunctions[i].id=aux[index].id;
+          aux[index]=data.customFunctions[i];
+        }
+      }
+    }
+    _this.selectEdit.customFunctions = aux;
+  }
+
+  CleanTables(_this, data) {
+    var aux = _this.globals.currentWebService.tables.slice();
+    var cont = 0;
+    var contColumn = 0;
+    let index = 0;
+    let indexColumn = 0;
+    //marco para borar los tables que estan en el edit y no estan en el data, si el data es null borro todos los arg del edit
+    for (let j = 0; j < _this.globals.currentWebService.tables.length; j++) {
+      var x = j;
+      x = x - cont;
+      if (data.tables == null) {
+        index = -1;
+      } else {
+        index = data.tables.findIndex(d => d.name.toLowerCase() === _this.globals.currentWebService.tables[j].name.toLowerCase());
+      }
+      //si la tabla no esta
+      if (index == -1) {
+        //si la tabla esta en la BD la marco para borrar
+        if (aux[x].id != null) {
+          aux[x].delete = true;
+          for (let j = 0; j < aux[x].columns.length; j++) {
+            if (aux[x].columns[j].orderBy==='1') {
+              aux[x].columns[j].orderBool = false;
+              _this.addOrderBy(aux[x], aux[x].columns[j]);
+            }else{
+              aux[x].columns[j].orderByBool = false;
+            }
+            if (aux[x].columns[j].groupBy==='1') {
+              aux[x].columns[j].groupByBool = false;
+              _this.addGroupBy(aux[x], aux[x].columns[j]);
+            }else{
+              aux[x].columns[j].orderByBool = false;
+            }
+            _this.addColumn(aux[x].columns[j]);
+          }
+        } else {
+          aux.splice(x, 1);
+          cont++;
+        }
+      } else {
+        aux[x].alias = data.tables[index].alias;
+        //si la tabla existe recorro las columnas del edit y borro las columnas que no esten
+        for (let i = 0; i < _this.globals.currentWebService.tables[j].columns.length; i++) {
+          var y = i;
+          y = y - contColumn;
+          indexColumn = data.tables[index].columns.findIndex(d => d.name.toLowerCase() === _this.globals.currentWebService.tables[j].columns[i].name.toLowerCase());
+          if (indexColumn == -1) {
+            //sino encuentra la columna en el data la borro del auxiliar
+            if (aux[x].columns[y].id != null) {
+              if (aux[x].columns[j].orderBy==='1') {
+                aux[x].columns[j].orderByBool = false;
+                _this.addOrderBy(aux[x], aux[x].columns[j]);
+              }else{
+                aux[x].columns[j].orderByBool = false;
+              }
+              if (aux[x].columns[j].groupBy==='1') {
+                aux[x].columns[j].groupByBool = false;
+                _this.addGroupBy(aux[x], aux[x].columns[j]);
+                // aux[x].columns[j].groupBy='0'
+              }else{
+                aux[x].columns[j].orderByBool = false;
+              }
+              _this.addColumn(aux[x].columns[j]);
+              // aux[x].columns[y].delete = true;
+            } else {
+              aux[x].columns.splice(y, 1);
+              contColumn++;
+            }
+          }else{
+            //si encuentra la columna conservo el id y la remplazo por la columna del data
+            data.tables[index].columns[indexColumn].id = _this.globals.currentWebService.tables[j].columns[i].id;
+            aux[x].columns[y]=data.tables[index].columns[indexColumn];
+          }
+        }
+      }
+    }
+    //Agrego los tablas que estan en el data y no estan en el edit
+    if (data.tables != null) {
+      for (let i = 0; i < data.tables.length; i++) {
+        let index2 = aux.findIndex(d => d.name.toLowerCase() === data.tables[i].name.toLowerCase());
+        if (index2 == -1) {
+          aux.push(data.tables[i]);
+        } else {
+          //si la tabla existe recorro las columnas del data y agrego las colum que no esten
+          for (let j = 0; j < data.tables[i].columns.length; j++) {
+            let indexColumn2 = aux[index2].columns.findIndex(d => d.name.toLowerCase() === data.tables[i].columns[j].name.toLowerCase());
+            //si la columna no existe en el auxiliar la agrego
+            if (indexColumn2 == -1) {
+              aux[index2].columns.push(data.tables[i].columns[j]);
+            }
+          }
+        }
+      }
+    }
+    _this.selectEdit.tables = aux;
+  }
+
+  
   addCustomFunction(){
     let custom = new CustomFunctions();
     custom.customText = this.auxCustomFunction;
@@ -354,8 +565,14 @@ export class WebServicesComponent implements OnInit {
   DisplayEditQuery(){
     if(this.queryEdit){
       this.queryEdit = false;
+      this.publish = true;
     }else{
       this.queryEdit = true;
+      if(this.checkBoolQuery){
+        this.publish = false;
+      }else{
+        this.publish = true;
+      }
     }
   }
 
@@ -449,18 +666,23 @@ export class WebServicesComponent implements OnInit {
     if(this.selectconcat.arguments!=null){
     queryJson.arguments = queryJson.arguments.concat(this.deletedArguments);
     }
-    queryJson.whereclause = this.whereSentence;
-    queryJson.havingclause = this.havingSentence;
-    queryJson.query = this.getQueryString();
+    if (this.checkQuery==='0'){
+      queryJson.whereclause = null;
+      queryJson.havingclause = null
+    }else{
+      queryJson.whereclause = this.whereSentence;
+      queryJson.havingclause = this.havingSentence;
+    }
     queryJson.sortingSentence = this.selectconcat.sortingList != '1' ? this.orderBySentence : null;
     queryJson.groupBySentence = this.selectconcat.groupingList != '1' ? this.groupBySentence : null;
+    queryJson.groupingList = this.selectconcat.groupingList;
+    queryJson.sortingList = this.selectconcat.sortingList;
+    queryJson.query = this.getQueryString();
     queryJson.method = this.selectconcat.method;
     queryJson.description = this.selectconcat.description;
     queryJson.pageSize = this.selectconcat.pageSize;
     queryJson.rows = this.selectconcat.rows;
-    queryJson.wrapped = this.selectconcat.wrapped; //kp20190507
-    queryJson.groupingList = this.selectconcat.groupingList;
-    queryJson.sortingList = this.selectconcat.sortingList;
+    queryJson.wrapped = this.selectconcat.wrapped != null ? this.selectconcat.wrapped : '1';
     queryJson.checkColumn = this.checkColumn;
     queryJson.checkQuery = this.checkQuery;
     queryJson.connection = this.selectconcat.connection;
@@ -617,6 +839,8 @@ export class WebServicesComponent implements OnInit {
         _this.views.push(data[i]);
       }
     }
+    _this.tablesBackup = JSON.parse(JSON.stringify( _this.tables ));
+    _this.viewsBackup = JSON.parse(JSON.stringify( _this.views));
     if (_this.globals.currentWebService) {
       _this.loadWebService();
     }
@@ -630,320 +854,364 @@ export class WebServicesComponent implements OnInit {
 
 
   loadWebService() {
+    //la primera vez no tiene id, cuando camnbio de coneccion y estoy editando ya tengo id , no necesito volver llenar los datos
     if(this.selectEdit.id==null){
     this.selectEdit = this.globals.currentWebService;
     this.getDataQueryInit();
     }
   }
+
   getDataQueryInit() {
     this.selectconcat.connection = this.actualConn;
-    //this.changeConnection();
-    this.selectconcat.arguments = this.selectEdit.arguments;
-    if(this.selectconcat.arguments!=null){
-    for (let i=0;i<this.selectconcat.arguments.length;i++){
-      if(this.selectconcat.arguments[i].required=="true"){
-        this.selectconcat.arguments[i].requiredBool=true;
-
-      }else{
-        this.selectconcat.arguments[i].requiredBool=false;
-      }
-      if(this.selectconcat.arguments[i].grouping=="1"){
-        this.selectconcat.arguments[i].groupingBool = true;
-        this.argumentGrouping = this.selectconcat.arguments[i].label;
-      }else{
-        this.selectconcat.arguments[i].groupingBool=false;
-      }
-    }
-  }
+    this.getArgumentsQuery();
     this.selectconcat.name = this.selectEdit.name;
     this.selectconcat.groupingList = this.selectEdit.groupingList;
     this.selectconcat.sortingList = this.selectEdit.sortingList;
     this.selectconcat.id = this.selectEdit.id;
     this.selectconcat.pageSize = this.selectEdit.pageSize;
-    this.selectconcat.rows = this.selectEdit.rows;
     this.selectconcat.method = this.selectEdit.method;
     this.selectconcat.description = this.selectEdit.description;
-    this.selectconcat.customFunctions = this.selectEdit.customFunctions;
     this.selectconcat.wrapped = this.selectEdit.wrapped; //kp20190508
-    if(this.selectconcat.customFunctions!=null){
-    for (let a = 0; a < this.selectconcat.customFunctions.length;a++){
-      if (this.selectconcat.customFunctions[a].orderBy == "1") {
-        this.selectconcat.customFunctions[a].orderByBool = true;
-      } else {
-        this.selectconcat.customFunctions[a].orderByBool = false;
-      }
-
-      if (this.selectconcat.customFunctions[a].groupBy == "1") {
-        this.selectconcat.customFunctions[a].groupByBool = true;
-      } else {
-        this.selectconcat.customFunctions[a].groupByBool = false;
-      }
-    }
-  }
+    this.getcustomFunctionsQuery();
     this.whereSentence = this.selectEdit.whereclause;
     this.havingSentence = this.selectEdit.havingclause;
     //kp20190508 change order of for to decrease time of search
-    for (let j = 0; j < this.selectEdit.tables.length; j++) {
-      if (this.selectEdit.tables[j].type.toLowerCase()==="table"){
-      for (let i = 0; i < this.tables.length; i++) {
-        if (this.tables[i].name.toLowerCase() == this.selectEdit.tables[j].name.toLowerCase()) {
-          this.tables[i].id = this.selectEdit.tables[j].id;
-          this.tables[i].selected = true;
-          this.tables[i].alias = this.selectEdit.tables[j].alias;
-          this.selectTables.tables.push(this.tables[i]);
-          this.selectconcat.tables.push(this.tables[i]);
-          for (let k = 0; k < this.tables[i].columns.length; k++) {
-            this.tables[i].columns[k].order = 0;
-            for (let m = 0; m < this.selectEdit.tables[j].columns.length; m++) {
-              let columnsOrigin = this.selectEdit.tables[j].columns[m];
-              columnsOrigin.order = columnsOrigin.order
-                ? columnsOrigin.order
-                : 0;
-              if (
-                this.tables[i].columns[k].name.toLowerCase() ==
-                this.selectEdit.tables[j].columns[m].name.toLowerCase()
-              ) {
-                let columnsToAdd = this.tables[i].columns[k];
-
-                columnsToAdd.id = columnsOrigin.id;
-                columnsToAdd.selectedResult = columnsOrigin.selectedResult;
-                columnsToAdd.functionsAux = new Functions();
-                columnsToAdd.functions = columnsOrigin.functions;
-                columnsToAdd.groupBy = columnsOrigin.groupBy;
-                columnsToAdd.orderBy = columnsOrigin.orderBy;
-                if (columnsToAdd.groupBy == "1" && this.groupinglist=='0') {
-                  columnsToAdd.groupByBool = true;
-                  this.groupBySelected.push(columnsToAdd);
-                } else {
-                  columnsToAdd.groupByBool = false;
-                }
-                if (columnsToAdd.orderBy == "1") {
-                  columnsToAdd.orderByBool = true;
-                  this.orderBySelected.push(columnsToAdd);
-                } else {
-                  columnsToAdd.orderBool = false;
-                }
-                columnsToAdd.selected = true;
-                columnsToAdd.typePresentation = columnsOrigin.typePresentation;
-                columnsToAdd.selectedResult = columnsOrigin.selectedResult;
-                columnsToAdd.order = columnsOrigin.order;
-                if (columnsToAdd.typePresentation == "aggregate") {
-                  for (let n = 0; n < columnsToAdd.functions.length; n++) {
-                    console.log(columnsToAdd.functions[n]);
-
-                    switch(columnsToAdd.functions[n].function) {
-                      case "SUM":{
-                        columnsToAdd.functionsAux.sum = true;
-                        columnsToAdd.functionsAux.aliasSum = columnsToAdd.functions[n].alias;
-                        columnsToAdd.functionsAux.idSum = columnsToAdd.functions[n].id;
-                        columnsToAdd.functionsAux.orderDirectionSum = columnsToAdd.functions[n].orderDirection;
-                        if(columnsToAdd.functions[n].orderBy=="1"){
-                        columnsToAdd.functionsAux.orderSum = true;
-                        }else{ columnsToAdd.functionsAux.orderSum = false;}
-                        break;
-                      }
-                      case "MAX":{
-                        columnsToAdd.functionsAux.max = true;
-                        columnsToAdd.functionsAux.aliasMax = columnsToAdd.functions[n].alias;
-                        columnsToAdd.functionsAux.idMax = columnsToAdd.functions[n].id;
-                        columnsToAdd.functionsAux.orderDirectionMax = columnsToAdd.functions[n].orderDirection;
-                        if(columnsToAdd.functions[n].orderBy=="1"){
-                          columnsToAdd.functionsAux.orderMax = true;
-                          }else{ columnsToAdd.functionsAux.orderMax= false;}
-                        break;
-                      }
-                      case "MIN": {
-                        columnsToAdd.functionsAux.min = true;
-                        columnsToAdd.functionsAux.aliasMin = columnsToAdd.functions[n].alias;
-                        columnsToAdd.functionsAux.idMin = columnsToAdd.functions[n].id;
-                        columnsToAdd.functionsAux.orderDirectionMin = columnsToAdd.functions[n].orderDirection;
-                        if(columnsToAdd.functions[n].orderBy=="1"){
-                          columnsToAdd.functionsAux.orderMin = true;
-                          }else{ columnsToAdd.functionsAux.orderMin = false;}
-                        break;
-                      }
-                      case "AVG": {
-                        columnsToAdd.functionsAux.avg = true;
-                        columnsToAdd.functionsAux.aliasAvg = columnsToAdd.functions[n].alias;
-                        columnsToAdd.functionsAux.idAvg = columnsToAdd.functions[n].id;
-                        columnsToAdd.functionsAux.orderDirectionAvg = columnsToAdd.functions[n].orderDirection;
-                        if(columnsToAdd.functions[n].orderBy=="1"){
-                          columnsToAdd.functionsAux.orderAvg = true;
-                          }else{ columnsToAdd.functionsAux.orderAvg = false;}
-                        break;
-                      }
-                      case "COUNT": {
-                        columnsToAdd.functionsAux.count = true;
-                        columnsToAdd.functionsAux.aliasCount = columnsToAdd.functions[n].alias;
-                        columnsToAdd.functionsAux.idCount = columnsToAdd.functions[n].id;
-                        columnsToAdd.functionsAux.orderDirectionCount = columnsToAdd.functions[n].orderDirection;
-                        if(columnsToAdd.functions[n].orderBy=="1"){
-                          columnsToAdd.functionsAux.orderCount = true;
-                          }else{ columnsToAdd.functionsAux.orderCount = false;}
-                        break;
-                      }
-                      case  "STD":{
-                        columnsToAdd.functionsAux.std = true;
-                        columnsToAdd.functionsAux.aliasStd = columnsToAdd.functions[n].alias;
-                        columnsToAdd.functionsAux.idStd = columnsToAdd.functions[n].id;
-                        columnsToAdd.functionsAux.orderDirectionStd = columnsToAdd.functions[n].orderDirection;
-                        if(columnsToAdd.functions[n].orderBy=="1"){
-                          columnsToAdd.functionsAux.orderStd = true;
-                          }else{ columnsToAdd.functionsAux.orderStd= false;}
-                        break;
-                      }
-                    }
-                    }
-                } else {
-                  columnsToAdd.alias = columnsOrigin.alias;
-                  columnsToAdd.orderDirection = "ASC";
-                  columnsToAdd.orderDirection = columnsOrigin.orderDirection;
-                }
-              }
-            }
-          }
-          this.tables[i].columns.sort(function(a, b) {
-            if (a.order > b.order) {
-              return 1;
-            } else if (a.order < b.order) {
-              return -1;
-            }
-            return 0;
-          });
-        }
-      }//end for tables
-    }else{
-      for (let i = 0; i < this.views.length; i++) {
-        if (this.views[i].name.toLowerCase() == this.selectEdit.tables[j].name.toLowerCase()) {
-          this.views[i].id = this.selectEdit.tables[j].id;
-          this.views[i].selected = true;
-          this.views[i].alias = this.selectEdit.tables[j].alias;
-          this.selectViews.tables.push(this.views[i]);
-          this.selectconcat.tables.push(this.views[i]);
-          for (let k = 0; k < this.views[i].columns.length; k++) {
-            this.views[i].columns[k].order = 0;
-            for (let m = 0; m < this.selectEdit.tables[j].columns.length; m++) {
-              let columnsOrigin = this.selectEdit.tables[j].columns[m];
-              columnsOrigin.order = columnsOrigin.order
-                ? columnsOrigin.order
-                : 0;
-              if (
-                this.views[i].columns[k].name.toLowerCase() ==
-                this.selectEdit.tables[j].columns[m].name.toLowerCase()
-              ) {
-                let columnsToAdd = this.views[i].columns[k];
-
-                columnsToAdd.id = columnsOrigin.id;
-                columnsToAdd.selectedResult = columnsOrigin.selectedResult;
-                columnsToAdd.functionsAux = new Functions();
-                columnsToAdd.functions = columnsOrigin.functions;
-                columnsToAdd.groupBy = columnsOrigin.groupBy;
-                columnsToAdd.orderBy = columnsOrigin.orderBy;
-                if (columnsToAdd.groupBy == "1" && this.groupinglist=='0') {
-                  columnsToAdd.groupByBool = true;
-                  this.groupBySelected.push(columnsToAdd);
-                } else {
-                  columnsToAdd.groupByBool = false;
-                }
-                if (columnsToAdd.orderBy == "1") {
-                  columnsToAdd.orderByBool = true;
-                  this.orderBySelected.push(columnsToAdd);
-                } else {
-                  columnsToAdd.orderBool = false;
-                }
-                columnsToAdd.selected = true;
-                columnsToAdd.typePresentation = columnsOrigin.typePresentation;
-                columnsToAdd.selectedResult = columnsOrigin.selectedResult;
-                columnsToAdd.order = columnsOrigin.order;
-                if (columnsToAdd.typePresentation == "aggregate") {
-                  for (let n = 0; n < columnsToAdd.functions.length; n++) {
-                    console.log(columnsToAdd.functions[n]);
-
-                    switch(columnsToAdd.functions[n].function) {
-                      case "SUM":{
-                        columnsToAdd.functionsAux.sum = true;
-                        columnsToAdd.functionsAux.aliasSum = columnsToAdd.functions[n].alias;
-                        columnsToAdd.functionsAux.idSum = columnsToAdd.functions[n].id;
-                        columnsToAdd.functionsAux.orderDirectionSum = columnsToAdd.functions[n].orderDirection;
-                        if(columnsToAdd.functions[n].orderBy=="1"){
-                        columnsToAdd.functionsAux.orderSum = true;
-                        }else{ columnsToAdd.functionsAux.orderSum = false;}
-                        break;
-                      }
-                      case "MAX":{
-                        columnsToAdd.functionsAux.max = true;
-                        columnsToAdd.functionsAux.aliasMax = columnsToAdd.functions[n].alias;
-                        columnsToAdd.functionsAux.idMax = columnsToAdd.functions[n].id;
-                        columnsToAdd.functionsAux.orderDirectionMax = columnsToAdd.functions[n].orderDirection;
-                        if(columnsToAdd.functions[n].orderBy=="1"){
-                          columnsToAdd.functionsAux.orderMax = true;
-                          }else{ columnsToAdd.functionsAux.orderMax= false;}
-                        break;
-                      }
-                      case "MIN": {
-                        columnsToAdd.functionsAux.min = true;
-                        columnsToAdd.functionsAux.aliasMin = columnsToAdd.functions[n].alias;
-                        columnsToAdd.functionsAux.idMin = columnsToAdd.functions[n].id;
-                        columnsToAdd.functionsAux.orderDirectionMin = columnsToAdd.functions[n].orderDirection;
-                        if(columnsToAdd.functions[n].orderBy=="1"){
-                          columnsToAdd.functionsAux.orderMin = true;
-                          }else{ columnsToAdd.functionsAux.orderMin = false;}
-                        break;
-                      }
-                      case "AVG": {
-                        columnsToAdd.functionsAux.avg = true;
-                        columnsToAdd.functionsAux.aliasAvg = columnsToAdd.functions[n].alias;
-                        columnsToAdd.functionsAux.idAvg = columnsToAdd.functions[n].id;
-                        columnsToAdd.functionsAux.orderDirectionAvg = columnsToAdd.functions[n].orderDirection;
-                        if(columnsToAdd.functions[n].orderBy=="1"){
-                          columnsToAdd.functionsAux.orderAvg = true;
-                          }else{ columnsToAdd.functionsAux.orderAvg = false;}
-                        break;
-                      }
-                      case "COUNT": {
-                        columnsToAdd.functionsAux.count = true;
-                        columnsToAdd.functionsAux.aliasCount = columnsToAdd.functions[n].alias;
-                        columnsToAdd.functionsAux.idCount = columnsToAdd.functions[n].id;
-                        columnsToAdd.functionsAux.orderDirectionCount = columnsToAdd.functions[n].orderDirection;
-                        if(columnsToAdd.functions[n].orderBy=="1"){
-                          columnsToAdd.functionsAux.orderCount = true;
-                          }else{ columnsToAdd.functionsAux.orderCount = false;}
-                        break;
-                      }
-                      case  "STD":{
-                        columnsToAdd.functionsAux.std = true;
-                        columnsToAdd.functionsAux.aliasStd = columnsToAdd.functions[n].alias;
-                        columnsToAdd.functionsAux.idStd = columnsToAdd.functions[n].id;
-                        columnsToAdd.functionsAux.orderDirectionStd = columnsToAdd.functions[n].orderDirection;
-                        if(columnsToAdd.functions[n].orderBy=="1"){
-                          columnsToAdd.functionsAux.orderStd = true;
-                          }else{ columnsToAdd.functionsAux.orderStd= false;}
-                        break;
-                      }
-                    }
-                    }
-                } else {
-                  columnsToAdd.alias = columnsOrigin.alias;
-                  columnsToAdd.orderDirection = "ASC";
-                  columnsToAdd.orderDirection = columnsOrigin.orderDirection;
-                }
-              }
-            }
-          }
-          this.views[i].columns.sort(function(a, b) {
-            if (a.order > b.order) {
-              return 1;
-            } else if (a.order < b.order) {
-              return -1;
-            }
-            return 0;
-          });
-        }
-      }//end for views
-    }
-    }
+    this.gettablesQuery();
     this.tableSelected = this.selectconcat.tables[0];
     console.log(this.selectconcat.tables);
+  }
+
+  getArgumentsQuery() {
+    this.selectconcat.arguments = this.selectEdit.arguments.slice();
+    var cont = 0;
+    if (this.selectEdit.arguments != null) {
+      for (let x = 0; x < this.selectEdit.arguments.length; x++) {
+        var i = x;
+        i = i - cont;
+        if (this.selectconcat.arguments[i].delete == true) {
+          //revisar si funciona porque yo coloque delete=true
+          this.deleteArgument(this.selectconcat.arguments[i]);
+          cont++;
+        } else {
+          if (this.selectconcat.arguments[i].required == "true") {
+            this.selectconcat.arguments[i].requiredBool = true;
+
+          } else {
+            this.selectconcat.arguments[i].requiredBool = false;
+          }
+          if (this.selectconcat.arguments[i].grouping == "1") {
+            this.selectconcat.arguments[i].groupingBool = true;
+            this.argumentGrouping = this.selectconcat.arguments[i].label;
+          } else {
+            this.selectconcat.arguments[i].groupingBool = false;
+          }
+        }
+      }//end fot arguments
+    }
+  }
+
+  getcustomFunctionsQuery() {
+    this.selectconcat.customFunctions = this.selectEdit.customFunctions.slice();
+    var cont = 0;
+    if (this.selectEdit.customFunctions != null) {
+      for (let x = 0; x < this.selectconcat.customFunctions.length; x++) {
+        var a = x;
+        a = a - cont;
+        if (this.selectconcat.customFunctions[a].delete == true) {
+          //revisar si funciona porque yo coloque delete=true
+          this.deleteCustomFunction(this.selectconcat.customFunctions[a]);
+          cont++;
+        } else {
+          if (this.selectconcat.customFunctions[a].orderBy == "1") {
+            this.selectconcat.customFunctions[a].orderByBool = true;
+          } else {
+            this.selectconcat.customFunctions[a].orderByBool = false;
+          }
+
+          if (this.selectconcat.customFunctions[a].groupBy == "1") {
+            this.selectconcat.customFunctions[a].groupByBool = true;
+          } else {
+            this.selectconcat.customFunctions[a].groupByBool = false;
+          }
+        }
+      }
+    }
+  }
+
+  
+  gettablesQuery() {
+    for (let j = 0; j < this.selectEdit.tables.length; j++) {
+      if (this.selectEdit.tables[j].delete == true) {
+        this.deletedTables.push(this.selectEdit.tables[j]);
+      } else
+        if (this.selectEdit.tables[j].type.toLowerCase() === "table" && this.selectEdit.tables[j].delete != true) {
+          for (let i = 0; i < this.tables.length; i++) {
+            if (this.tables[i].name.toLowerCase() == this.selectEdit.tables[j].name.toLowerCase()) {
+              this.tables[i].id = this.selectEdit.tables[j].id;
+              this.tables[i].selected = true;
+              this.tables[i].alias = this.selectEdit.tables[j].alias;
+              this.selectTables.tables.push(this.tables[i]);
+              this.selectconcat.tables.push(this.tables[i]);
+              for (let m = 0; m < this.selectEdit.tables[j].columns.length; m++) {
+                  let columnsOrigin = this.selectEdit.tables[j].columns[m];
+                columnsOrigin.order = columnsOrigin.order
+                  ? columnsOrigin.order
+                  : 0;
+                for (let k = 0; k < this.tables[i].columns.length; k++) {
+                  this.tables[i].columns[k].order = 0;
+                  if (
+                    this.tables[i].columns[k].name.toLowerCase() ==
+                    this.selectEdit.tables[j].columns[m].name.toLowerCase()
+                  ) {
+                    let columnsToAdd = this.tables[i].columns[k];
+
+                    columnsToAdd.id = columnsOrigin.id;
+                    columnsToAdd.selectedResult = columnsOrigin.selectedResult;
+                    columnsToAdd.functionsAux = new Functions();
+                    columnsToAdd.functions = columnsOrigin.functions;
+                    columnsToAdd.groupBy = columnsOrigin.groupBy;
+                    columnsToAdd.orderBy = columnsOrigin.orderBy;
+                    if (columnsToAdd.groupBy == "1" && this.groupinglist == '0') {
+                      columnsToAdd.groupByBool = true;
+                      this.groupBySelected.push(columnsToAdd);
+                    } else {
+                      columnsToAdd.groupByBool = false;
+                    }
+                    if (columnsToAdd.orderBy == "1") {
+                      columnsToAdd.orderByBool = true;
+                      this.orderBySelected.push(columnsToAdd);
+                    } else {
+                      columnsToAdd.orderBool = false;
+                    }
+                    if(columnsOrigin.delete===true){
+                      columnsToAdd.selected = false;
+                    }else{
+                      columnsToAdd.selected = true;
+                    }
+                    columnsToAdd.typePresentation = columnsOrigin.typePresentation;
+                    columnsToAdd.selectedResult = columnsOrigin.selectedResult;
+                    columnsToAdd.order = columnsOrigin.order;
+                    if (columnsToAdd.typePresentation == "aggregate") {
+                      for (let n = 0; n < columnsToAdd.functions.length; n++) {
+                        console.log(columnsToAdd.functions[n]);
+
+                        switch (columnsToAdd.functions[n].function) {
+                          case "SUM": {
+                            columnsToAdd.functionsAux.sum = true;
+                            columnsToAdd.functionsAux.aliasSum = columnsToAdd.functions[n].alias;
+                            columnsToAdd.functionsAux.idSum = columnsToAdd.functions[n].id;
+                            columnsToAdd.functionsAux.orderDirectionSum = columnsToAdd.functions[n].orderDirection;
+                            if (columnsToAdd.functions[n].orderBy == "1") {
+                              columnsToAdd.functionsAux.orderSum = true;
+                            } else { columnsToAdd.functionsAux.orderSum = false; }
+                            break;
+                          }
+                          case "MAX": {
+                            columnsToAdd.functionsAux.max = true;
+                            columnsToAdd.functionsAux.aliasMax = columnsToAdd.functions[n].alias;
+                            columnsToAdd.functionsAux.idMax = columnsToAdd.functions[n].id;
+                            columnsToAdd.functionsAux.orderDirectionMax = columnsToAdd.functions[n].orderDirection;
+                            if (columnsToAdd.functions[n].orderBy == "1") {
+                              columnsToAdd.functionsAux.orderMax = true;
+                            } else { columnsToAdd.functionsAux.orderMax = false; }
+                            break;
+                          }
+                          case "MIN": {
+                            columnsToAdd.functionsAux.min = true;
+                            columnsToAdd.functionsAux.aliasMin = columnsToAdd.functions[n].alias;
+                            columnsToAdd.functionsAux.idMin = columnsToAdd.functions[n].id;
+                            columnsToAdd.functionsAux.orderDirectionMin = columnsToAdd.functions[n].orderDirection;
+                            if (columnsToAdd.functions[n].orderBy == "1") {
+                              columnsToAdd.functionsAux.orderMin = true;
+                            } else { columnsToAdd.functionsAux.orderMin = false; }
+                            break;
+                          }
+                          case "AVG": {
+                            columnsToAdd.functionsAux.avg = true;
+                            columnsToAdd.functionsAux.aliasAvg = columnsToAdd.functions[n].alias;
+                            columnsToAdd.functionsAux.idAvg = columnsToAdd.functions[n].id;
+                            columnsToAdd.functionsAux.orderDirectionAvg = columnsToAdd.functions[n].orderDirection;
+                            if (columnsToAdd.functions[n].orderBy == "1") {
+                              columnsToAdd.functionsAux.orderAvg = true;
+                            } else { columnsToAdd.functionsAux.orderAvg = false; }
+                            break;
+                          }
+                          case "COUNT": {
+                            columnsToAdd.functionsAux.count = true;
+                            columnsToAdd.functionsAux.aliasCount = columnsToAdd.functions[n].alias;
+                            columnsToAdd.functionsAux.idCount = columnsToAdd.functions[n].id;
+                            columnsToAdd.functionsAux.orderDirectionCount = columnsToAdd.functions[n].orderDirection;
+                            if (columnsToAdd.functions[n].orderBy == "1") {
+                              columnsToAdd.functionsAux.orderCount = true;
+                            } else { columnsToAdd.functionsAux.orderCount = false; }
+                            break;
+                          }
+                          case "STD": {
+                            columnsToAdd.functionsAux.std = true;
+                            columnsToAdd.functionsAux.aliasStd = columnsToAdd.functions[n].alias;
+                            columnsToAdd.functionsAux.idStd = columnsToAdd.functions[n].id;
+                            columnsToAdd.functionsAux.orderDirectionStd = columnsToAdd.functions[n].orderDirection;
+                            if (columnsToAdd.functions[n].orderBy == "1") {
+                              columnsToAdd.functionsAux.orderStd = true;
+                            } else { columnsToAdd.functionsAux.orderStd = false; }
+                            break;
+                          }
+                        }
+                      }
+                    } else {
+                      columnsToAdd.alias = columnsOrigin.alias;
+                      columnsToAdd.orderDirection = "ASC";
+                      columnsToAdd.orderDirection = columnsOrigin.orderDirection;
+                    }
+                  }
+                }//end for columns
+              // }
+              }
+              this.tables[i].columns.sort(function (a, b) {
+                if (a.order > b.order) {
+                  return 1;
+                } else if (a.order < b.order) {
+                  return -1;
+                }
+                return 0;
+              });
+            }
+          }//end for tables
+        } else if (this.selectEdit.tables[j].type.toLowerCase() === "view" && this.selectEdit.tables[j].delete != true) {
+          for (let i = 0; i < this.views.length; i++) {
+            if (this.views[i].name.toLowerCase() == this.selectEdit.tables[j].name.toLowerCase()) {
+              this.views[i].id = this.selectEdit.tables[j].id;
+              this.views[i].selected = true;
+              this.views[i].alias = this.selectEdit.tables[j].alias;
+              this.selectViews.tables.push(this.views[i]);
+              this.selectconcat.tables.push(this.views[i]);
+              for (let m = 0; m < this.selectEdit.tables[j].columns.length; m++) {
+                let columnsOrigin = this.selectEdit.tables[j].columns[m];
+                columnsOrigin.order = columnsOrigin.order
+                  ? columnsOrigin.order
+                  : 0;
+                for (let k = 0; k < this.views[i].columns.length; k++) {
+                  this.views[i].columns[k].order = 0;
+                  if (
+                    this.views[i].columns[k].name.toLowerCase() ==
+                    this.selectEdit.tables[j].columns[m].name.toLowerCase()
+                  ) {
+                    let columnsToAdd = this.views[i].columns[k];
+
+                    columnsToAdd.id = columnsOrigin.id;
+                    columnsToAdd.selectedResult = columnsOrigin.selectedResult;
+                    columnsToAdd.functionsAux = new Functions();
+                    columnsToAdd.functions = columnsOrigin.functions;
+                    columnsToAdd.groupBy = columnsOrigin.groupBy;
+                    columnsToAdd.orderBy = columnsOrigin.orderBy;
+                    if (columnsToAdd.groupBy == "1" && this.groupinglist == '0') {
+                      columnsToAdd.groupByBool = true;
+                      this.groupBySelected.push(columnsToAdd);
+                    } else {
+                      columnsToAdd.groupByBool = false;
+                    }
+                    if (columnsToAdd.orderBy == "1") {
+                      columnsToAdd.orderByBool = true;
+                      this.orderBySelected.push(columnsToAdd);
+                    } else {
+                      columnsToAdd.orderBool = false;
+                    }
+                    if(columnsOrigin.delete===true){
+                      columnsToAdd.selected = false;
+                    }else{
+                      columnsToAdd.selected = true;
+                    }
+                    columnsToAdd.typePresentation = columnsOrigin.typePresentation;
+                    columnsToAdd.selectedResult = columnsOrigin.selectedResult;
+                    columnsToAdd.order = columnsOrigin.order;
+                    if (columnsToAdd.typePresentation == "aggregate") {
+                      for (let n = 0; n < columnsToAdd.functions.length; n++) {
+                        console.log(columnsToAdd.functions[n]);
+
+                        switch (columnsToAdd.functions[n].function) {
+                          case "SUM": {
+                            columnsToAdd.functionsAux.sum = true;
+                            columnsToAdd.functionsAux.aliasSum = columnsToAdd.functions[n].alias;
+                            columnsToAdd.functionsAux.idSum = columnsToAdd.functions[n].id;
+                            columnsToAdd.functionsAux.orderDirectionSum = columnsToAdd.functions[n].orderDirection;
+                            if (columnsToAdd.functions[n].orderBy == "1") {
+                              columnsToAdd.functionsAux.orderSum = true;
+                            } else { columnsToAdd.functionsAux.orderSum = false; }
+                            break;
+                          }
+                          case "MAX": {
+                            columnsToAdd.functionsAux.max = true;
+                            columnsToAdd.functionsAux.aliasMax = columnsToAdd.functions[n].alias;
+                            columnsToAdd.functionsAux.idMax = columnsToAdd.functions[n].id;
+                            columnsToAdd.functionsAux.orderDirectionMax = columnsToAdd.functions[n].orderDirection;
+                            if (columnsToAdd.functions[n].orderBy == "1") {
+                              columnsToAdd.functionsAux.orderMax = true;
+                            } else { columnsToAdd.functionsAux.orderMax = false; }
+                            break;
+                          }
+                          case "MIN": {
+                            columnsToAdd.functionsAux.min = true;
+                            columnsToAdd.functionsAux.aliasMin = columnsToAdd.functions[n].alias;
+                            columnsToAdd.functionsAux.idMin = columnsToAdd.functions[n].id;
+                            columnsToAdd.functionsAux.orderDirectionMin = columnsToAdd.functions[n].orderDirection;
+                            if (columnsToAdd.functions[n].orderBy == "1") {
+                              columnsToAdd.functionsAux.orderMin = true;
+                            } else { columnsToAdd.functionsAux.orderMin = false; }
+                            break;
+                          }
+                          case "AVG": {
+                            columnsToAdd.functionsAux.avg = true;
+                            columnsToAdd.functionsAux.aliasAvg = columnsToAdd.functions[n].alias;
+                            columnsToAdd.functionsAux.idAvg = columnsToAdd.functions[n].id;
+                            columnsToAdd.functionsAux.orderDirectionAvg = columnsToAdd.functions[n].orderDirection;
+                            if (columnsToAdd.functions[n].orderBy == "1") {
+                              columnsToAdd.functionsAux.orderAvg = true;
+                            } else { columnsToAdd.functionsAux.orderAvg = false; }
+                            break;
+                          }
+                          case "COUNT": {
+                            columnsToAdd.functionsAux.count = true;
+                            columnsToAdd.functionsAux.aliasCount = columnsToAdd.functions[n].alias;
+                            columnsToAdd.functionsAux.idCount = columnsToAdd.functions[n].id;
+                            columnsToAdd.functionsAux.orderDirectionCount = columnsToAdd.functions[n].orderDirection;
+                            if (columnsToAdd.functions[n].orderBy == "1") {
+                              columnsToAdd.functionsAux.orderCount = true;
+                            } else { columnsToAdd.functionsAux.orderCount = false; }
+                            break;
+                          }
+                          case "STD": {
+                            columnsToAdd.functionsAux.std = true;
+                            columnsToAdd.functionsAux.aliasStd = columnsToAdd.functions[n].alias;
+                            columnsToAdd.functionsAux.idStd = columnsToAdd.functions[n].id;
+                            columnsToAdd.functionsAux.orderDirectionStd = columnsToAdd.functions[n].orderDirection;
+                            if (columnsToAdd.functions[n].orderBy == "1") {
+                              columnsToAdd.functionsAux.orderStd = true;
+                            } else { columnsToAdd.functionsAux.orderStd = false; }
+                            break;
+                          }
+                        }
+                      }
+                    } else {
+                      columnsToAdd.alias = columnsOrigin.alias;
+                      columnsToAdd.orderDirection = "ASC";
+                      columnsToAdd.orderDirection = columnsOrigin.orderDirection;
+                    }
+                  }
+                }
+              }
+              this.views[i].columns.sort(function (a, b) {
+                if (a.order > b.order) {
+                  return 1;
+                } else if (a.order < b.order) {
+                  return -1;
+                }
+                return 0;
+              });
+            }
+          }//end for views
+        }
+    }
+
   }
 
   addTable(table) {
@@ -1011,9 +1279,11 @@ export class WebServicesComponent implements OnInit {
       this.orderBySelected.push(columnAdd);
     } else {
       let index = this.orderBySelected.findIndex(d => d === columnAdd);
-      columnAdd.delete = true;
+      if (index != -1){
+        this.orderBySelected.splice(index, 1);
+      }
       this.deletedColumns.push(columnAdd);
-      this.orderBySelected.splice(index, 1);
+      columnAdd.delete = true;
       column.orderBy = "0";
       column.orderDirection = null;
     }
@@ -1444,10 +1714,12 @@ export class WebServicesComponent implements OnInit {
   checkValidateQuery(){
     if(this.checkBoolQuery){
       this.checkQuery = '1';
+      this.publish=false;
     }else{
       this.checkQuery = '0';
       this.checkBool=false;
       this.checkColumn = '0';
+      this.publish=true;
     }
   }
 }
