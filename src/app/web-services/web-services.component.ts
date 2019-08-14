@@ -101,6 +101,7 @@ export class WebServicesComponent implements OnInit {
   showError: boolean;
   dialogRef : any;
   publish: boolean;
+  pagina: any;
 
   constructor(
     private router: Router,
@@ -115,6 +116,7 @@ export class WebServicesComponent implements OnInit {
 
   ngOnInit() {
     this.showError=false;
+    this.pagina=0;
     if(!this.globals.currentWebService){
       this.queryEdit = true;
       this.publish = false;
@@ -142,8 +144,10 @@ export class WebServicesComponent implements OnInit {
             }
           }
         }
-        if (this.globals.currentWebService.sortingSentence!=null && this.globals.currentWebService.sortingList=='0') {
-          this.queryText += " ORDER BY " + this.globals.currentWebService.sortingSentence;
+        if (this.globals.currentWebService.sortingSentence!=null && this.globals.currentWebService.sortingSentence!=""){
+          if(this.globals.currentWebService.sortingList=='0'){
+            this.queryText += " ORDER BY " + this.globals.currentWebService.sortingSentence;
+          }
         }
       }
     }
@@ -165,7 +169,8 @@ export class WebServicesComponent implements OnInit {
      _this.connections = data;
      if (_this.globals.currentWebService) {
        _this.selectconcat.connection = _this.actualConn;
-       _this.getTables(_this.selectconcat.connection);
+       _this.pagina=1;
+       _this.getTables(_this.selectconcat.connection,1,null,null,3);
      }else{
 
      _this.globals.isLoading = false;
@@ -176,7 +181,8 @@ export class WebServicesComponent implements OnInit {
   changeConnection(){
     console.log(this.selectconcat);
     this.actualConn = this.selectconcat.connection;
-    this.getTables(this.selectconcat.connection);
+    this.pagina=1;
+    this.getTables(this.selectconcat.connection,1,null,null,3);
   }
 
   clear(){
@@ -488,11 +494,13 @@ export class WebServicesComponent implements OnInit {
   }
   }
 
-  getTables(conn) {
-    this.tables=[];
-    this.views=[];
+  getTables(conn,pag,nomTable,nomView,search) {
+    if (pag==1 && search==3){
+      this.tables=[];
+      this.views=[];
+    }
     this.service.getMetaDataTables(
-      this,conn,
+      this,conn,pag,nomTable,nomView,search,
       this.handlerSuccessTables,
       this.handlerError
     );
@@ -882,9 +890,9 @@ export class WebServicesComponent implements OnInit {
   }
 
   getArgumentsQuery() {
-    this.selectconcat.arguments = this.selectEdit.arguments.slice();
     var cont = 0;
     if (this.selectEdit.arguments != null) {
+      this.selectconcat.arguments = this.selectEdit.arguments.slice();
       for (let x = 0; x < this.selectEdit.arguments.length; x++) {
         var i = x;
         i = i - cont;
@@ -911,9 +919,9 @@ export class WebServicesComponent implements OnInit {
   }
 
   getcustomFunctionsQuery() {
-    this.selectconcat.customFunctions = this.selectEdit.customFunctions.slice();
     var cont = 0;
     if (this.selectEdit.customFunctions != null) {
+      this.selectconcat.customFunctions = this.selectEdit.customFunctions.slice();
       for (let x = 0; x < this.selectconcat.customFunctions.length; x++) {
         var a = x;
         a = a - cont;
@@ -1700,6 +1708,7 @@ export class WebServicesComponent implements OnInit {
   }
   else{
     this.dialogRef.close();
+    this.globals.DialogClose=true;
   }
   }
 
@@ -1721,5 +1730,13 @@ export class WebServicesComponent implements OnInit {
       this.checkColumn = '0';
       this.publish=true;
     }
+  }
+
+  moreResult(){
+    this.pagina=this.pagina+1;
+    this.getTables(this.selectconcat.connection,this.pagina,this.searchText,this.searchView,3);
+  }
+  SearchTable(){
+    this.getTables(this.selectconcat.connection,1,this.searchText,null,1);
   }
 }

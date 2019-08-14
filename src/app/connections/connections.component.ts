@@ -97,6 +97,7 @@ export class ConnectionsComponent implements OnInit {
   }
   }
   handlerTestConn(_this, data){
+    _this.globals.isLoading = false;
     //mostrar Dialogo
     if(data.errors==null){
       const dialogRef = _this.dialog.open(MessageComponent, {

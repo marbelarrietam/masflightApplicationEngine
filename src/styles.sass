@@ -741,10 +741,10 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button
         background-color: $msf-secondary-color
         color: white
 
-/*.mat-step-icon .mat-icon kp20190516 me daña el login
-    font-size: 16px
-    height: 10px !important
-    width: 16px !important*/
+// .mat-step-icon .mat-icon kp20190516 me daña el login
+//     font-size: 16px
+//     height: 10px !important
+//     width: 16px !important
 
 .msf-medium-title
     color: white
@@ -962,7 +962,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button
     height: calc(100vh - 90px)
 
 
-/*Menu*/
+// Menu
 .msf-menu-header
     width: 100%
     min-height: 60px
@@ -991,6 +991,8 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button
 
 .msf-menu-logo
     width: 70%
+    // width: 100%
+    // height: 45px
     height: 30px
     display: flex
     // background-image: url("assets/images/pulse_welc.png")
@@ -1337,7 +1339,7 @@ button[aria-expanded="true"]
         padding-top: 8px
         padding-bottom: 8px
 
-/*Airport component*/
+// Airport component
 
 .msf-component-airport-icon
     width: 60%
@@ -1536,7 +1538,7 @@ mat-tab-group
     padding-left: 18px
 
 
-/*Font color*/
+// Font color
 
 .msf-primary-color
     color : $msf-primary-color
@@ -1553,7 +1555,7 @@ mat-tab-group
 .msf-surface-color
     color: $msf-surface-color
 
-/*Background color*/
+// Background color
 
 .msf-primary-bg-color
     background-color:  $msf-primary-color
@@ -1570,7 +1572,7 @@ mat-tab-group
 .msf-surface-bg-color
     background-color: $msf-surface-color
 
-/*Media query*/
+// Media query
 
 @media screen and (max-width: 480px)
     .msf-nav
@@ -1615,7 +1617,7 @@ mat-tab-group
         width: 100%
 
 
-/*table*/
+// table
 .mat-sort-header-button
     text-transform: capitalize
 
@@ -2404,6 +2406,7 @@ mat-dialog-container
     top: 0
     width: 100%
     height: 100%
+    // background-color: rgb(31, 31, 31,.9)
     background-color: #1F1F1F
     background-image: url(assets/images/loading_pulse.gif)
     background-repeat: no-repeat
@@ -3144,14 +3147,14 @@ table.datasource
     display: block
     width: 100%
 
-/* kp */
+
 .msf-container-welcome
     @extend  .msf-container
     width: 100% !important
     left: 0px !important
     height: calc(100% - 50px)
 
-/* kp */
+
 .msf-intro-div-image
     align-items: center
     float: right
@@ -3159,7 +3162,7 @@ table.datasource
     width: 90px
     height: 75px
 
-/* kp */
+
 .icon-container-bk
     height: 50px !important
     background-size: contain !important
@@ -3169,7 +3172,7 @@ table.datasource
     width: 100% !important
     background-position: center !important
 
-/* kp */
+
 .footer-container
     height: auto !important
     width: 100%
@@ -3177,7 +3180,7 @@ table.datasource
     padding: 20px 0
     transition: background-image 0.5s ease-in-out
 
-/* kp */
+
 .icon-container
     width: 100.3% !important
     height: calc(100% - 90px) !important
@@ -3187,7 +3190,7 @@ table.datasource
     background-position: center
     transition: background-image 0.5s ease-in-out
 
-/* kp */
+
 .landing-icon-content2
     display: flex
     align-items: center
@@ -3285,6 +3288,11 @@ img.msf-calendar-image
     line-height: 3.125
     font-family: Roboto, "Helvetica Neue", sans-serif
 
+.ws-title-ws
+    padding: 0px !important
+    margin: auto 0
+    width: calc(100% - 330px) !important
+
 .ws-title
     color: white
     font-weight: 500
@@ -3307,13 +3315,8 @@ img.msf-calendar-image
     height: 1px !important
 
 .server-config
-    margin-bottom: 60px
-
-.search-input .mat-form-field-appearance-legacry .mat-form-field-underline
-  display: none
-
-.search-input .mat-form-field-underline
-  display: none
+    margin-bottom: 20px
+    // margin-bottom: 60px
 
 .summary-query
     background-color: red
@@ -3337,7 +3340,7 @@ img.msf-calendar-image
 .mat-horizontal-stepper-header-container
     background-color: #1e1e1e
     //height: 10%
-    height: 50px
+    height: 70px
     padding: 0px 20px
 
 
@@ -3359,11 +3362,12 @@ img.msf-calendar-image
     overflow: hidden
     padding: 0 0 0 0 !important
     width: 100%
+    height: calc(100% - 70px)
 
 
-/*.mat-checkbox-label kp20190516 me daña el login
-    color: $msf-font-color
-    font-size: 14px*/
+// .mat-checkbox-label kp20190516 me daña el login
+//     color: $msf-font-color
+//     font-size: 14px
 
 //kp20190423
 .login-check .mat-checkbox-label
@@ -3391,16 +3395,16 @@ img.msf-calendar-image
     align-items: center !important
 
 
-.box-container
-    display: block
-    flex-wrap: wrap
-    max-height: 350px
-    height: 350px
-    overflow-y: hidden !important
-    margin-top: 10px
-    width: 90%
-    padding-left: 10px
-    background-color: #1e1e1e
+// .box-container
+//     display: block
+//     flex-wrap: wrap
+//     max-height: 350px
+//     height: 350px
+//     overflow-y: hidden !important
+//     margin-top: 10px
+//     width: 90%
+//     padding-left: 10px
+//     background-color: #1e1e1e
 
 
 .container-arg
@@ -3462,8 +3466,8 @@ mat-select
   display: none
 
 
-/*.mat-form-field kp20190519 me esta dañando el login
-    height: */
+// .mat-form-field kp20190519 me esta dañando el login
+//     height: 
 
 
 .mat-select-value
@@ -3472,16 +3476,17 @@ mat-select
     padding-left: 10px
 
 
-/*.mat-icon kp20190519 me daña el login
-    line-height: 10px*/
+// .mat-icon kp20190519 me daña el login
+//     line-height: 10px
 
 
-.search-input
-    color: white !important
-    width: 85% !important
-    padding-left: 10px !important
-    font-size: 14px !important
-    line-height: 35px !important
+
+// .search-input
+//     color: white !important
+//     width: 85% !important
+//     padding-left: 10px !important
+//     font-size: 14px !important
+//     line-height: 35px !important
 
 
 .select-column
@@ -3540,8 +3545,8 @@ textarea.mat-input-element
     padding: 5px
 
 
-/*.mat-form-field-infix kp20190516 me esta dañando el login
-    border-top: 0em solid transparent*/
+// .mat-form-field-infix kp20190516 me esta dañando el login
+//     border-top: 0em solid transparent
 
 
 .placeholder
@@ -3558,10 +3563,9 @@ textarea.mat-input-element
 
 //kp
 .headerWS
-    display: flex
-    flex-direction: row
-    flex-wrap: wrap
-    align-items: center
+    width: calc(88% - 60px)
+    height: 100%
+    padding-right: 20px
 //kp
 .headerWS_Div
     align-items: center
@@ -3573,19 +3577,31 @@ textarea.mat-input-element
 //kp
 .editQuery
     cursor: pointer
-    width: 15%
-    padding-right: 20px
+    width: 12%
+    padding: 0px 20px
     background-color: #232323
     height: 100%
+    justify-content: center
+    span
+        min-width: calc(100% - 89px)
+        align-items: center
+        justify-content: center
+        margin: 0px 9px
     img
         height: 25px
-        margin: auto 0px auto 35px
     div
         margin: 0px auto
         height: 25px
+        display: flex
+        align-items: center
 
 //kp
 .IconAct
+    color: white
+    margin: 0px
+    height: auto !important
+
+.IconInactiv
     color: $msf-secondary-color
     margin: 0px
     height: auto !important
@@ -3593,10 +3609,12 @@ textarea.mat-input-element
 .IconEditQuery
     color: white
     margin: 0px
-    // margin: auto 25px
-    // margin-left: 0px
-    // height: 15px
-    height: auto !important
+    background: #3d3d3d
+    border-radius: 50%
+    display: flex !important
+    /* height: auto !important; */
+    flex-direction: row
+    align-items: center
 
 //kp
 .BodyWS
@@ -3604,8 +3622,11 @@ textarea.mat-input-element
     flex-direction: column
     height: calc(100% - 70px)
 //kp
-.mostrar2 .CodeMirror, .ocultar2 .CodeMirror
-        height: 300px !important
+// .mostrar2 .CodeMirror, .ocultar2 .CodeMirror
+//         height: 100% !important
+
+.mostrar2 .CodeMirror
+    height: 100% !important
 
 .CodeMirror
     height: 120px
@@ -3614,12 +3635,14 @@ textarea.mat-input-element
 .InfoQuery
     margin-bottom: 15px
     transition: height 0.5s ease-out
-    height: 203px
+    height: calc(78% - 15px)
+    max-height: calc(78% - 15px)
     font-weight: lighter
     text-align: justify
     background-color: #1e1e1e
     padding: 4px 10px
     overflow-y: auto
+    width: calc(100% - 20px)
 
 .InfoQuery_disabled
     margin-bottom: 15px
@@ -3648,14 +3671,28 @@ textarea.mat-input-element
 //kp
 .mostrar2
     // display: block
-    height: auto !important
     transition: 0.25s
+    display: Flex
+    flex-direction: column
+    align-items: center
+    background-color: #232323
+    padding: 20px
+    width: calc(100% - 40px)
+    height: calc(100% - 110px) !important
+
+//kp
+.mostrar
+    display: Flex
+    flex-direction: column
+    background-color: rgb(35, 35, 35)
+    padding: 20px
+    width: calc(100% - 40px)    
+    height: calc(100% - 40px)
+
 //kp
 .ocultar
     display: none  !important
-//kp
-.mostrar
-    display: block
+    padding: 0px !important
 
 .darktable
     background-color: #1e1e1e
@@ -3739,7 +3776,7 @@ textarea.mat-input-element
         color: white !important
     
 .headerAllWs
-    @extend .headerWS
+    @extend .flex_row
     margin: 0px 30px
     h1
         flex: 1
@@ -3799,3 +3836,301 @@ textarea.mat-input-element
 
 .mat-checkbox-disabled .mat-checkbox-frame
     border-color: #333333
+
+.flex_row
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    align-items: center
+
+.flex_column
+    display: flex
+    flex-direction: column
+    // flex-wrap: wrap
+
+.one_column
+    width: 100%  
+    padding-bottom: 5px  
+    
+.two_column
+    width: 50%
+    display: flex
+    align-items: center
+    .mat-select-value
+        padding-left: 0px
+
+.two_column_right
+    width: 50%
+    display: flex
+    align-items: center
+    padding-left: 15px
+    .mat-select-value
+        padding-left: 0px
+
+.mat-select-columns
+    width: calc(60% - 17px) !important
+    padding: 0px 15px
+    cursor: pointer
+
+.mat-select-conections
+    width: calc(40% - 47px) !important
+    padding: 0px 15px
+    cursor: pointer
+
+.mat-select-conections-query
+    width: calc(75% - 47px) !important
+    padding: 0px 15px
+    cursor: pointer
+
+.Summary-titles
+    width: calc(60% - 30px) !important
+    padding: 0px 15px
+
+.two_column_forty2
+    width: 40%
+    display: flex 
+    align-items: center
+    .mat-select-value
+        padding-left: 0px
+
+.two_column_sixty2
+    width: calc(60% - 15px)
+    display: flex
+    align-items: center
+    margin: 0px 0px 0px 15px !important
+    .mat-select-value
+        padding-left: 0px
+
+.two_column_forty
+    width: calc(40% - 15px)
+    display: flex 
+    align-items: center
+    margin-right: 15px !important
+    .mat-select-value
+        padding-left: 0px
+
+.two_column_sixty
+    width: 60%
+    display: flex
+    align-items: center
+    .mat-select-value
+        padding-left: 0px
+
+.two_column_eigthy
+    width: calc(75% - 15px)
+    display: flex
+    align-items: flex-start
+    margin-right: 15px !important
+    height: 100%
+    .mat-select-value
+        padding-left: 0px
+
+.two_column_twenty
+    width: 25%
+    height: 100%
+    display: flex
+    align-items: flex-start
+    .mat-select-value
+        padding-left: 0px
+
+.two_column_seventy
+    width: calc(70% - 15px)
+    display: flex
+    margin-left: 15px !important
+    align-items: center
+    .mat-select-value
+        padding-left: 0px
+
+.two_column_thirty
+    width: 30%
+    height: 100%
+    display: flex
+    align-items: center
+    .mat-select-value
+        padding-left: 0px
+
+.height-subtitles
+    height: 35px
+
+.box-titles-background
+    background-color: #1e1e1e
+
+.box-container 
+    display: flex
+    flex-direction: column
+    flex-wrap: nowrap
+    min-height: 270px
+    height: 270px
+    overflow-y: scroll
+    overflow-x: hidden
+    width: 100%
+    padding-top: 10px
+    /*padding: 10px 15px*/
+    background-color: #1e1e1e
+
+.select-container-child
+    display: flex
+    flex-direction: row
+    /*flex-wrap: wrap*/
+    align-items: center
+    /*margin-top: 5px*/
+    /*margin-bottom: 5px*/
+
+.selected-containers-input
+    display: flex !important
+    align-items: center
+    width: calc(50% - 30px)
+    min-width: calc(50% - 30px)
+    max-width: calc(50% - 30px)
+    input
+        height: 24px
+        text-overflow: ellipsis
+        white-space: nowrap
+        overflow: hidden
+    .mat-focused .mat-form-field-wrapper
+        background: #3d3d3d
+    .mat-form-field-wrapper
+        padding-bottom: 0px
+    .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix
+        margin: 0px
+        padding: 3px 5px
+        border: 1px solid #3d3d3d
+        display: flex
+        flex-direction: row
+        align-items: center
+        .mat-form-field-label-wrapper .mat-form-field-label
+            padding: 0px 5px
+            width: calc(100% - 10px)
+    .mat-form-field-wrapper .mat-form-field-underline , .mat-form-field-wrapper  .mat-form-field-subscript-wrapper
+        display: none
+        
+.selected-containers-btn-focus
+    background-color: $msf-secondary-color
+    border: 1px solid $msf-secondary-color
+    margin-left: 5px
+    color: white
+    display: flex
+    height: 20px
+    width: 20px
+
+
+.selected-containers-btn
+    background-color: transparent
+    border: 1px solid #3d3d3d
+    margin-left: 5px
+    color: #3d3d3d
+    display: flex
+    height: 20px
+    width: 20px
+
+.selected-containers-name
+    /*width: calc(50% - 10px)*/
+    margin-right: 10px
+    max-width: calc(50% - 10px)
+    min-width: calc(50% - 10px)    
+    text-overflow: ellipsis
+    white-space: nowrap
+    overflow: hidden
+
+.search-input 
+    width: calc(100% - 10px)
+    padding-left: 10px !important
+    input
+        width: calc(100% - 24px)
+        height: 24px
+    .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix
+        margin: 0px
+        padding: 0px
+        display: flex
+        flex-direction: row
+        align-items: center
+    .iconSearch
+        color: #3d3d3d
+        cursor: pointer
+        line-height: normal
+    .mat-form-field-wrapper .mat-form-field-underline
+        background-color: #3d3d3d !important
+    .mat-form-field-wrapper  .mat-form-field-subscript-wrapper
+        display: none
+
+.items-rows
+    margin: 0px 10px 10px 10px
+    width: calc(100% - 20px)
+    max-width: calc(100% - 20px)
+
+.mat-horizontal-stepper-content
+    height: 100%
+
+.titles_editQuery
+    font-weight: 500
+    font-size: 20px !important
+    text-align: left
+    margin: 10px 0px
+    height: calc(100% - 20px)
+    justify-content: center
+
+.div_codeEditorQuery    
+    overflow-y: auto
+    max-height: 100%
+
+.codEditorQuery
+    height: 100%
+    width: 100%
+
+.input-expression
+    background-color: #1e1e1e !important
+    border: 1px solid #3d3d3d !important
+    padding: 0px 15px !important
+    ::placeholder
+        color: #aaa
+
+.input-expression-btn
+    color: #01abec
+    cursor: pointer
+    display: flex
+    margin-left: 10px
+    height: auto !important
+
+.item-selected-data-column
+    display: flex
+    margin-top: 5px
+    margin-bottom: 5px
+    width: 100%
+    align-items: center
+
+.summary-columns
+    align-items: flex-start
+    justify-content: flex-start
+
+.box-title
+    color: white !important
+    font-size: large
+    font-weight: 500
+
+.select-groupby
+    width: 100% !important
+    margin-right: 0px !important
+    margin-bottom: 15px
+
+
+.box-container-groupby
+    display: flex
+    flex-direction: column
+    flex-wrap: nowrap
+    overflow-y: scroll
+    overflow-x: hidden
+    width: 100%    
+    height: 100%
+    /*padding: 10px 15px*/
+    background-color: #1e1e1e
+
+.mat-divider-width
+    width: 100%
+
+.loading-spinner
+    position: absolute !important
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    margin: auto

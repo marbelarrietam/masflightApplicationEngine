@@ -309,9 +309,18 @@ export class ApplicationService {
     this.http.post (_this, url, dashboardIds, handlerSucess, handlerError);
   }
 
-  getMetaDataTables(_this,conn, handlerSucess, handlerError){
+  getMetaDataTables(_this,conn, pag,nomTable,nomView,search,handlerSucess, handlerError){
     _this.globals.isLoading = true;
-    let url = this.host + "/getMetaDataTables?id="+conn;
+    let url;
+    if(nomTable!=null && nomView!=null){
+      url = this.host + "/getMetaDataTables?id="+conn+"&pag="+pag+"&nomTable="+nomTable+"&nomView="+nomView+"&search="+search;
+    }else if (nomTable===null && nomView===null){
+      url = this.host + "/getMetaDataTables?id="+conn+"&pag="+pag+"&search="+search;
+    }else if (nomTable!=null && nomView===null){
+      url = this.host + "/getMetaDataTables?id="+conn+"&pag="+pag+"&nomTable="+nomTable+"&search="+search;
+    }else if (nomTable===null && nomView!=null){
+      url = this.host + "/getMetaDataTables?id="+conn+"&pag="+pag+"&nomView="+nomView+"&search="+search;
+    }
     this.http.get(_this, url, handlerSucess, handlerError, null);
   }
 
@@ -361,7 +370,7 @@ export class ApplicationService {
 
 
   testConnections(_this, data, handlerSuccess, handlerError){
-    //_this.globals.isLoading = true;
+    _this.globals.isLoading = true;
     let url = this.host + "/testConnection";
     this.http.post(_this, url, data, handlerSuccess, handlerError);
   }

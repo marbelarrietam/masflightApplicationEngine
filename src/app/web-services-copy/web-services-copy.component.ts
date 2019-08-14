@@ -116,10 +116,10 @@ export class WebServicesCopyComponent implements OnInit {
     this.dataError = {errors:[]};
     this.dataErrorStep = {errors:[]};
     this.globals.DialogClose = true;
-    this.getTables();
-    this.argForms = this.formBuilder.group({
-      items: this.formBuilder.array([])
-    });
+    // this.getTables();
+    // this.argForms = this.formBuilder.group({
+    //   items: this.formBuilder.array([])
+    // });
   }
 
 
@@ -209,13 +209,13 @@ export class WebServicesCopyComponent implements OnInit {
   }
   }
 
-  getTables() {
-    this.service.getMetaDataTables(
-      this,"conn",
-      this.handlerSuccessTables,
-      this.handlerError
-    );
-  }
+  // getTables() {
+  //   this.service.getMetaDataTables(
+  //     this,"conn",
+  //     this.handlerSuccessTables,
+  //     this.handlerError
+  //   );
+  // }
 
   backToList() {
     this.globals.currentApplication = "list";
