@@ -39,7 +39,7 @@
         "file-saver": "^2.0.0",
         "jqwidgets-scripts": "^6.1.0",
         "mapbox-gl": "^0.52.0",
-        "moment": "^2.24.0",
+        "moment": "^2.29.2",
         "ng-material-datetimepicker": "^1.18.3",
         "ng-pick-datetime": "7.0.0",
         "ng-pick-datetime-moment": "^1.0.8",
